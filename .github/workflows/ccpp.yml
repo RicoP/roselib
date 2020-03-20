@@ -1,19 +1,16 @@
 name: C/C++ CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+on: [push]
 jobs:
   build:
-
     runs-on: [windows-latest]
     
     steps:
     - uses: actions/checkout@v2
-    - name: build
+      #https://github.com/marketplace/actions/setup-msbuild-exe
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: build      
       working-directory: scripts
       run: ./windows_make.bat
     - name: compile
