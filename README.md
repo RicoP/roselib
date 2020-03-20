@@ -1,5 +1,3 @@
-[![Actions Status](https://github.com/RicoP/ros/workflows/cppci/badge.svg)](https://github.com/RicoP/ros/actions)
-
+![Build Status](https://github.com/RicoP/ros/workflows/cppci/badge.svg)
 # ros
 A collection of single header files
-
