@@ -10,25 +10,28 @@ class refptr {
  private:
   struct Reference {
     size_t count;
-    int byte0; //beginning of object container
+    int byte0;  // beginning of object container
   };
 
   Reference* reference;
 
-  T* get_unchecked() { return reinterpret_cast<T*>(&reference->byte0); }
-  T const* const get_unchecked() const { return reinterpret_cast<T*>(&reference->byte0); }
+  T* ptr_unchecked() { return reinterpret_cast<T*>(&reference->byte0); }
+  T const* const ptr_unchecked() const { return reinterpret_cast<T const* const>(&reference->byte0); }
 
-  T* get() {
+  T* ptr() {
     assert(reference->count);
-    return get_unchecked();
+    return ptr_unchecked();
   }
 
-  T const* const get() const {
+  T const* const ptr() const {
     assert(reference->count);
-    return get_unchecked();
+    return ptr_unchecked();
   }
 
-  void increment() { ++reference->count; }
+  void increment() {
+    assert(reference);
+    ++reference->count;
+  }
 
   void decrement() {
     if (reference) {
@@ -36,7 +39,7 @@ class refptr {
       --reference->count;
       if (reference->count == 0) {
         // call destructor of T
-        get_unchecked()->~T();
+        ptr_unchecked()->~T();
         std::free(reference);
         reference = nullptr;
       }
@@ -50,22 +53,22 @@ class refptr {
     enum { CONTAINER_SIZE = sizeof(size_t) + sizeof(T) };
     reference = reinterpret_cast<Reference*>(std::malloc(CONTAINER_SIZE));
     reference->count = 1;
-    new (&reference->byte0) T(args...);  // construct new Object at adress of container
+    new (ptr()) T(args...);  // construct new Object at adress of container
   }
 
   // copy
-  refptr(const refptr<T>& ptr) : reference(ptr.reference) { increment(); }
+  refptr(const refptr<T>& rhs) : reference(rhs.reference) { increment(); }
 
   // move
-  refptr(refptr<T>&& ptr) : reference(ptr.reference) { ptr.reference = nullptr; }
+  refptr(refptr<T>&& rhs) : reference(rhs.reference) { rhs.reference = nullptr; }
 
-  //destructor
+  // destructor
   ~refptr() { decrement(); }
 
-  T* operator->() { return get(); }
-  T& operator*() { return *get(); }
-  const T* operator->() const { return get(); }
-  const T& operator*() const { return *get(); }
+  T* operator->() { return ptr(); }
+  T& operator*() { return *ptr(); }
+  const T* operator->() const { return ptr(); }
+  const T& operator*() const { return *ptr(); }
 
   refptr<T>& operator=(const refptr<T>&) = delete;
   const refptr<T>& operator=(const refptr<T>&) const = delete;
