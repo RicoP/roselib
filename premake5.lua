@@ -38,11 +38,19 @@ project "_root"
   removefiles { "**.cpp", "**.h", "**.c" }
 
 project "ros"
+  kind "None"
   files { "include/**.h" }
 
-project "test"
+project "test.range"
   kind "ConsoleApp"
   language "C++"
   warnings "Extra"
   includedirs { "include" }
-  files { "test/**.h", "test/**.c", "test/**.cpp" }
+  files { "test/range.cpp" }
+
+project "test.refptr"
+  kind "ConsoleApp"
+  language "C++"
+  warnings "Extra"
+  includedirs { "include" }
+  files { "test/refptr.cpp" }
