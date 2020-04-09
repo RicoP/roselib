@@ -1,4 +1,7 @@
-#include <assert.h>
+#include <cassert>
+#include <cstddef>
+#include <cstdlib>
+#include <new>
 
 namespace ros {
 
@@ -34,7 +37,7 @@ class refptr {
       if (reference->count == 0) {
         // call destructor of T
         get_unchecked()->~T();
-        free(reference);
+        std::free(reference);
         reference = nullptr;
       }
     }
