@@ -136,7 +136,7 @@ int main() {
     ros::refptr<vector3> ptr3 = ptr2;
     {
       ros::refptr<vector3> ptr4 = ptr3;
-      printptr(ptr4);
+      printptr(*ptr2 + *ptr3);
     }
     printptr(ptr3);
 
