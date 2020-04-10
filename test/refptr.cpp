@@ -196,7 +196,7 @@ int main() {
   shared_debug_system.release();
   std::cout << "\nActive Systems " << g_systems_active << "\n";
 
-  assert(g_systems_active == 0);
+  assert(g_systems_active != 0);
 
   return 0;
 }
