@@ -95,22 +95,16 @@ class refptr {
   const T* operator->() const { return ptr(); }
   const T& operator*() const { return *ptr(); }
 
-  refptr<T>& operator=(const refptr<T>& rhs) {
-    assert(rhs.reference != nullptr);
-    decrement();
+#define ASSIGNMENT()                \
+  assert(rhs.reference != nullptr); \
+  decrement();                      \
+  reference = rhs.reference;        \
+  increment();                      \
+  return *this;
 
-    reference = rhs.reference;
-    increment();
-    return *this;
-  }
-
-  const refptr<T>& operator=(const refptr<T>&) const {
-    assert(reference == nullptr);
-    assert(rhs.reference != nullptr);
-    reference = rhs.reference;
-    increment();
-    return *this;
-  }
+  refptr<T>& operator=(const refptr<T>& rhs) { ASSIGNMENT(); }
+  const refptr<T>& operator=(const refptr<T>&) const { ASSIGNMENT(); }
+#undef ASSIGNMENT
 };
 
 }  // namespace ros
