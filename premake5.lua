@@ -3,7 +3,6 @@ local is_visual_studio = _ACTION:find("^vs") ~= nil
 workspace "ROS"
   characterset ("MBCS")
   configurations { "Debug", "Release" }
-  startproject "test"
   location ".build/projects"
   targetdir ".build/bin/%{cfg.buildcfg}"
   debugdir "bin"
@@ -12,12 +11,6 @@ workspace "ROS"
   warnings "Off"
   architecture "x64"
   cppdialect "C++17"
-
-  if is_visual_studio then
-    linkoptions {
-      "/ignore:4006", -- F already defined in X.lib; second definition ignored
-    }
-  end
 
   filter "configurations:Debug"
     defines { "DEBUG", "EA_DEBUG" }
