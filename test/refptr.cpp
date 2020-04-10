@@ -64,26 +64,19 @@ struct PhysicsSystem;
 struct UISystem;
 
 struct DebugSystem : ISystem {
-  ros::refptr<GameMessangerSystem> gameMessangerSystem;
-
   virtual const char* name() const override { return "DebugSystem"; }
-
   virtual ~DebugSystem() override { std::cout << name() << " destruct \n"; }
-
-  DebugSystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_) : gameMessangerSystem(gameMessangerSystem_) {
-    std::cout << name() << " construct \n";
-  }
+  DebugSystem() { std::cout << name() << " construct \n"; }
 };
 
 struct GameMessangerSystem : ISystem {
-  // ros::refptr<DebugSystem> debugSystem;
+  ros::refptr<DebugSystem> debugSystem;
 
   virtual const char* name() const override { return "GameMessangerSystem"; }
-
   virtual ~GameMessangerSystem() override { std::cout << name() << " destruct \n"; }
-
-  // GameMessangerSystem(ros::refptr<DebugSystem> debugSystem_) : debugSystem(debugSystem_) {}
-  GameMessangerSystem() { std::cout << name() << " construct \n"; }
+  GameMessangerSystem(ros::refptr<DebugSystem> debugSystem_) : debugSystem(debugSystem_) {
+    std::cout << name() << " construct \n";
+  }
 };
 
 struct PhysicsSystem : ISystem {
@@ -94,6 +87,7 @@ struct PhysicsSystem : ISystem {
 
   virtual ~PhysicsSystem() override { std::cout << name() << " destruct \n"; }
 
+  PhysicsSystem() = delete;
   PhysicsSystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_, ros::refptr<DebugSystem> debugSystem_)
       : gameMessangerSystem(gameMessangerSystem_), debugSystem(debugSystem_) {
     std::cout << name() << " construct \n";
@@ -117,14 +111,13 @@ struct UISystem : ISystem {
 };
 
 ros::refptr<UISystem> CreateUISystem() {
-  ros::refptr<GameMessangerSystem> gameMessangerSystem;
-  ros::refptr<DebugSystem> debugSystem(gameMessangerSystem);
-  ros::refptr<PhysicsSystem> physicsSystem(gameMessangerSystem, debugSystem);
-  ros::refptr<UISystem> uiSystem(gameMessangerSystem, debugSystem, physicsSystem);
+  ros::refptr<DebugSystem> debugSystem = ros::refptr<DebugSystem>::make();
+  ros::refptr<GameMessangerSystem> gameMessangerSystem = ros::refptr<GameMessangerSystem>::make(debugSystem);
+  ros::refptr<PhysicsSystem> physicsSystem = ros::refptr<PhysicsSystem>::make(gameMessangerSystem, debugSystem);
+  ros::refptr<UISystem> uiSystem = ros::refptr<UISystem>::make(gameMessangerSystem, debugSystem, physicsSystem);
 
   return uiSystem;
-} 
-
+}
 
 int main() {
   {
@@ -143,9 +136,42 @@ int main() {
     printptr(ptr2);
   }
 
+  putc('\n', stdout);
+
   // game context
-  ros::refptr<UISystem> uiSystem = CreateUISystem();
-  ros::refptr<UISystem> uiSystem2(uiSystem->gameMessangerSystem, uiSystem->debugSystem, uiSystem->physicsSystem);
+
+  ros::refptr<DebugSystem> shared_debug_system;
+
+  {
+    ros::refptr<UISystem> uiSystem = CreateUISystem();
+    std::cout << "UISystem uses " << uiSystem.use_count() << "\n"
+              << "physicsSystem uses " << uiSystem->physicsSystem.use_count() << "\n"
+              << "debugSystem uses " << uiSystem->debugSystem.use_count() << "\n"
+              << "gameMessangerSystem uses " << uiSystem->gameMessangerSystem.use_count() << "\n"
+              << "\n";
+
+    // steal old debug system and reuse it later
+    shared_debug_system = uiSystem->debugSystem;
+  }
+
+  putc('\n', stdout);
+
+  {
+    ros::refptr<UISystem> uiSystem = CreateUISystem();
+    ros::refptr<UISystem> uiSystem2 = uiSystem;
+    uiSystem.release();
+
+    // replace new debug messanger with old one.
+    uiSystem2->physicsSystem->debugSystem = shared_debug_system;
+    uiSystem2->gameMessangerSystem->debugSystem = shared_debug_system;
+    uiSystem2->debugSystem = shared_debug_system;
+
+    std::cout << "UISystem uses " << uiSystem2.use_count() << "\n"
+              << "physicsSystem uses " << uiSystem2->physicsSystem.use_count() << "\n"
+              << "debugSystem uses " << uiSystem2->debugSystem.use_count() << "\n"
+              << "gameMessangerSystem uses " << uiSystem2->gameMessangerSystem.use_count() << "\n"
+              << "\n";
+  }
 
   return 0;
 }
