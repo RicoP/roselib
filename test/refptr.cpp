@@ -198,5 +198,5 @@ int main() {
 
   assert(g_systems_active == 0);
 
-  return 1;
+  return 0;
 }
