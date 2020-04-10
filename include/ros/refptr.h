@@ -61,7 +61,7 @@ class refptr {
   refptr(refptr<T>&& rhs) : reference(rhs.reference) { rhs.reference = nullptr; }
 
   // destructor
-  ~refptr() { decrement(); }
+  ~refptr() { release(); }
 
   // static make function. Necessary for constructors with zero parameter.
   template <class... Ts>
@@ -95,16 +95,14 @@ class refptr {
   const T* operator->() const { return ptr(); }
   const T& operator*() const { return *ptr(); }
 
-#define ASSIGNMENT()                \
-  assert(rhs.reference != nullptr); \
-  decrement();                      \
-  reference = rhs.reference;        \
-  increment();                      \
-  return *this;
-
-  refptr<T>& operator=(const refptr<T>& rhs) { ASSIGNMENT(); }
-  const refptr<T>& operator=(const refptr<T>&) const { ASSIGNMENT(); }
-#undef ASSIGNMENT
+  refptr<T>& operator=(const refptr<T>& rhs) {
+    assert(rhs.reference != nullptr);
+    decrement();
+    reference = rhs.reference;
+    increment();
+    return *this;
+  }
+  const refptr<T>& operator=(const refptr<T>&) const = delete;
 };
 
 }  // namespace ros
