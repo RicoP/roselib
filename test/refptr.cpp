@@ -52,9 +52,11 @@ struct noncopy {
   noncopy& operator=(const noncopy&) = delete;
 };
 
+static int g_systems_active = 0;
+
 struct ISystem : noncopy {
-  ISystem() {}
-  virtual ~ISystem() {}
+  ISystem() { g_systems_active++; }
+  virtual ~ISystem() { g_systems_active--; }
   virtual const char* name() const = 0;
 };
 
@@ -87,7 +89,6 @@ struct PhysicsSystem : ISystem {
 
   virtual ~PhysicsSystem() override { std::cout << name() << " destruct \n"; }
 
-  PhysicsSystem() = delete;
   PhysicsSystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_, ros::refptr<DebugSystem> debugSystem_)
       : gameMessangerSystem(gameMessangerSystem_), debugSystem(debugSystem_) {
     std::cout << name() << " construct \n";
@@ -110,8 +111,7 @@ struct UISystem : ISystem {
   }
 };
 
-ros::refptr<UISystem> CreateUISystem() {
-  ros::refptr<DebugSystem> debugSystem = ros::refptr<DebugSystem>::make();
+ros::refptr<UISystem> CreateUISystem(ros::refptr<DebugSystem> debugSystem = ros::refptr<DebugSystem>::make()) {
   ros::refptr<GameMessangerSystem> gameMessangerSystem = ros::refptr<GameMessangerSystem>::make(debugSystem);
   ros::refptr<PhysicsSystem> physicsSystem = ros::refptr<PhysicsSystem>::make(gameMessangerSystem, debugSystem);
   ros::refptr<UISystem> uiSystem = ros::refptr<UISystem>::make(gameMessangerSystem, debugSystem, physicsSystem);
@@ -136,7 +136,7 @@ int main() {
     printptr(ptr2);
   }
 
-  putc('\n', stdout);
+  std::cout << "Active Systems " << g_systems_active << "\n";
 
   // game context
 
@@ -144,6 +144,9 @@ int main() {
 
   {
     ros::refptr<UISystem> uiSystem = CreateUISystem();
+
+    std::cout << "\nActive Systems " << g_systems_active << "\n";
+
     std::cout << "UISystem uses " << uiSystem.use_count() << "\n"
               << "physicsSystem uses " << uiSystem->physicsSystem.use_count() << "\n"
               << "debugSystem uses " << uiSystem->debugSystem.use_count() << "\n"
@@ -154,7 +157,7 @@ int main() {
     shared_debug_system = uiSystem->debugSystem;
   }
 
-  putc('\n', stdout);
+  std::cout << "\nActive Systems " << g_systems_active << "\n";
 
   {
     ros::refptr<UISystem> uiSystem = CreateUISystem();
@@ -166,12 +169,34 @@ int main() {
     uiSystem2->gameMessangerSystem->debugSystem = shared_debug_system;
     uiSystem2->debugSystem = shared_debug_system;
 
+    std::cout << "\nActive Systems " << g_systems_active << "\n";
+
     std::cout << "UISystem uses " << uiSystem2.use_count() << "\n"
               << "physicsSystem uses " << uiSystem2->physicsSystem.use_count() << "\n"
               << "debugSystem uses " << uiSystem2->debugSystem.use_count() << "\n"
               << "gameMessangerSystem uses " << uiSystem2->gameMessangerSystem.use_count() << "\n"
               << "\n";
   }
+
+  std::cout << "\nActive Systems " << g_systems_active << "\n";
+
+  {
+    ros::refptr<UISystem> uiSystem = CreateUISystem(shared_debug_system);
+
+    std::cout << "\nActive Systems " << g_systems_active << "\n";
+
+    std::cout << "UISystem uses " << uiSystem.use_count() << "\n"
+              << "physicsSystem uses " << uiSystem->physicsSystem.use_count() << "\n"
+              << "debugSystem uses " << uiSystem->debugSystem.use_count() << "\n"
+              << "gameMessangerSystem uses " << uiSystem->gameMessangerSystem.use_count() << "\n"
+              << "\n";
+  }
+
+  std::cout << "\nActive Systems " << g_systems_active << "\n";
+  shared_debug_system.release();
+  std::cout << "\nActive Systems " << g_systems_active << "\n";
+
+  assert(g_systems_active == 0);
 
   return 0;
 }
