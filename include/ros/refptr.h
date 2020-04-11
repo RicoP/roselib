@@ -7,19 +7,28 @@ namespace ros {
 
 template <class T>
 class refptr {
- private:
   struct Reference {
     size_t count;
     int byte0;  // beginning of object container
+
+    T* ptr_unchecked() { return reinterpret_cast<T*>(&byte0); }
+    const T* ptr_unchecked() const { return reinterpret_cast<const T*>(&byte0); }
+
+    T* ptr() {
+      assert(count);
+      return ptr_unchecked();
+    }
+
+    const T* ptr() const {
+      assert(count);
+      return ptr_unchecked();
+    }
   };
 
   Reference* reference;
 
-  T* ptr_unchecked() { return reinterpret_cast<T*>(&reference->byte0); }
-  T const* const ptr_unchecked() const { return reinterpret_cast<T const* const>(&reference->byte0); }
-
   void increment() {
-    assert(reference);
+    assert(reference && reference->count);
     ++reference->count;
   }
 
@@ -29,7 +38,7 @@ class refptr {
       --reference->count;
       if (reference->count == 0) {
         // call destructor of T
-        ptr_unchecked()->~T();
+        reference->ptr_unchecked()->~T();
         std::free(reference);
         reference = nullptr;
       }
@@ -71,18 +80,6 @@ class refptr {
     return p;
   }
 
-  T* ptr() {
-    assert(reference);
-    assert(reference->count);
-    return ptr_unchecked();
-  }
-
-  T const* const ptr() const {
-    assert(reference);
-    assert(reference->count);
-    return ptr_unchecked();
-  }
-
   size_t use_count() const { return reference ? reference->count : 0; }
 
   void release() {
@@ -90,12 +87,27 @@ class refptr {
     reference = nullptr;
   }
 
-  T* operator->() { return ptr(); }
-  T& operator*() { return *ptr(); }
-  const T* operator->() const { return ptr(); }
-  const T& operator*() const { return *ptr(); }
+  T* operator->() {
+    assert(reference);
+    return reference->ptr();
+  }
 
-  refptr<T>& operator=(const refptr<T>& rhs) {
+  T& operator*() {
+    assert(reference);
+    return *reference->ptr();
+  }
+
+  const T* operator->() const {
+    assert(reference);
+    return reference->ptr();
+  }
+
+  const T& operator*() const {
+    assert(reference);
+    return *reference->ptr();
+  }
+
+  refptr<T>& operator=(refptr<T>& rhs) {
     assert(rhs.reference != nullptr);
     decrement();
     reference = rhs.reference;
@@ -103,6 +115,50 @@ class refptr {
     return *this;
   }
   const refptr<T>& operator=(const refptr<T>&) const = delete;
+
+  // view for circular references
+  class refview {
+    Reference* reference;
+
+   public:
+    refview() : reference(nullptr) {}
+
+    refview(refptr<T>& ptr) : reference(ptr.reference) {}
+    refview(refptr<T>&& ptr) : reference(ptr.reference) {}
+
+    refview(refview& ptr) : reference(ptr.reference) { ptr.reference = nullptr; }
+    refview(refview&& ptr) : reference(ptr.reference) { ptr.reference = nullptr; }
+
+    refview& operator=(refptr<T>& rhs) {
+      reference = rhs.reference;
+      return *this;
+    }
+
+    refview& operator=(refptr<T>&& rhs) {
+      reference = rhs.reference;
+      return *this;
+    }
+
+    T* operator->() {
+      assert(reference);
+      return reference->ptr();
+    }
+
+    T& operator*() {
+      assert(reference);
+      return *reference->ptr();
+    }
+
+    const T* operator->() const {
+      assert(reference);
+      return reference->ptr();
+    }
+
+    const T& operator*() const {
+      assert(reference);
+      return *reference->ptr();
+    }
+  };
 };
 
 }  // namespace ros
