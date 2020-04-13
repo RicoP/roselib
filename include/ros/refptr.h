@@ -114,6 +114,17 @@ class refptr {
     increment();
     return *this;
   }
+
+  refptr<T>& operator=(refptr<T>&& rhs) {
+    assert(rhs.reference != nullptr);
+    decrement();
+    reference = rhs.reference;
+    rhs.reference = nullptr;
+    return *this;
+  }
+
+
+
   const refptr<T>& operator=(const refptr<T>&) const = delete;
 
   // view for circular references
