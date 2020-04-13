@@ -5,7 +5,6 @@ workspace "ROS"
   configurations { "Debug", "Release" }
   location ".build/projects"
   targetdir ".build/bin/%{cfg.buildcfg}"
-  debugdir "bin"
   kind "StaticLib"
   language "C++"
   warnings "Off"
