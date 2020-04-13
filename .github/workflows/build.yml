@@ -11,11 +11,10 @@ jobs:
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
     - name: build      
-      working-directory: scripts
-      run: ./windows_make.bat
+      run: .\tools\premake\windows\premake5.exe vs2019
     - name: compile
-      working-directory: scripts
-      run: ./windows_compile.bat
-    - name: test
-      working-directory: scripts
-      run: ./windows_test.bat
+      run: msbuild .build\projects\ROS.sln
+    - name: test range
+      run: .build\bin\Debug\test.range-d.exe
+    - name: test refptr
+      run: .build\bin\Debug\test.refptr-d.exe
