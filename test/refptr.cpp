@@ -1,6 +1,6 @@
-#include <ros/refptr.h>
-
 #include <iostream>
+
+#include <ros/refptr.h>
 
 struct vector3_t {
   union {
@@ -201,6 +201,10 @@ int main() {
   std::cout << "\nActive Systems " << g_systems_active << "\n";
 
   assert(g_systems_active == 0);
+
+  //this will correctly destroy DebugSystem but will leave a dangeling weak ptr
+  //ros::refptr<DebugSystem>::refview debugSystem_null_view = ros::refptr<DebugSystem>::make();
+  //assert(debugSystem_null_view.use_count() == 0);
 
   return 0;
 }
