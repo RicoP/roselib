@@ -46,3 +46,10 @@ project "test.refptr"
   warnings "Extra"
   includedirs { "include" }
   files { "test/refptr.cpp" }
+
+project "test.cast"
+  kind "ConsoleApp"
+  language "C++"
+  warnings "Extra"
+  includedirs { "include" }
+  files { "test/cast.cpp" }
