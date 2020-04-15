@@ -3,9 +3,36 @@
 #include <cstdint>
 #include <cstdlib>
 #include <new>
+#include <type_traits>
+
+#ifdef _WIN32
+#include <malloc.h> //_aligned_malloc, _aligned_free
+#endif
 
 namespace ros {
+
+namespace internal {
 constexpr std::uint64_t i_am_ok = 30240007572758601UL;
+
+//https://developercommunity.visualstudio.com/solutions/473365/view.html
+#ifdef _WIN32
+inline void * refptr_aligned_alloc(size_t alignment, size_t size) {
+  return _aligned_malloc(size, alignment);
+}
+
+inline void refptr_aligned_free(void * ptr) {
+  _aligned_free(ptr);
+}
+#else
+inline void * refptr_aligned_alloc(size_t alignment, size_t size) {
+  return std::alligned_alloc(alignment, size);
+}
+
+inline void refptr_aligned_free(void * ptr) {
+  std::free(ptr);
+}
+#endif
+}
 
 template <class T>
 class refptr {
@@ -19,7 +46,7 @@ class refptr {
 
     T* ptr() noexcept {
       assert(count);
-      assert(check == i_am_ok);
+      assert(check == internal::i_am_ok);
       return ptr_unchecked();
     }
 
@@ -30,7 +57,7 @@ class refptr {
     }
 
     size_t use_count() const noexcept {
-      assert(check == i_am_ok);
+      assert(check == internal::i_am_ok);
       return count;
     }
   };
@@ -51,7 +78,7 @@ class refptr {
         reference->check = 0;
         // call destructor of T
         reference->ptr_unchecked()->~T();
-        std::free(reference);
+        internal::refptr_aligned_free(reference);
         reference = nullptr;
       }
     }
@@ -60,9 +87,9 @@ class refptr {
   template <class... Ts>
   static Reference* make_reference(Ts... args) {
     enum { CONTAINER_SIZE = sizeof(size_t) + sizeof(uint64_t) + sizeof(T) };
-    Reference* reference = reinterpret_cast<Reference*>(std::malloc(CONTAINER_SIZE));
+    Reference* reference = reinterpret_cast<Reference*>(internal::refptr_aligned_alloc(std::alignment_of<T>::value, CONTAINER_SIZE));
     reference->count = 1;
-    reference->check = i_am_ok;
+    reference->check = internal::i_am_ok;
     new (&reference->byte0) T(args...);  // construct new Object at adress of container
     return reference;
   }
