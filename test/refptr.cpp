@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include <ros/refptr.h>
+
+#include <iostream>
 
 struct vector3_t {
   union {
@@ -162,21 +162,26 @@ int main() {
   std::cout << "\nActive Systems " << g_systems_active << "\n";
 
   {
-    ros::refptr<UISystem> uiSystem = CreateUISystem();
-    ros::refptr<UISystem> uiSystem2 = std::move(uiSystem);
-    //uiSystem.release();
+    ros::refptr<UISystem> uiSystem;
+    uiSystem = CreateUISystem();
+    {
+      ros::refptr<UISystem> uiSystem2 = std::move(uiSystem);
+      uiSystem = CreateUISystem();
+      uiSystem = std::move(uiSystem2);
+    }
+    // uiSystem.release();
 
     // replace new debug messanger with old one.
-    uiSystem2->physicsSystem->debugSystem = shared_debug_system;
-    uiSystem2->gameMessangerSystem->debugSystem = shared_debug_system;
-    uiSystem2->debugSystem = shared_debug_system;
+    uiSystem->physicsSystem->debugSystem = shared_debug_system;
+    uiSystem->gameMessangerSystem->debugSystem = shared_debug_system;
+    uiSystem->debugSystem = shared_debug_system;
 
     std::cout << "\nActive Systems " << g_systems_active << "\n";
 
-    std::cout << "UISystem uses " << uiSystem2.use_count() << "\n"
-              << "physicsSystem uses " << uiSystem2->physicsSystem.use_count() << "\n"
-              << "debugSystem uses " << uiSystem2->debugSystem.use_count() << "\n"
-              << "gameMessangerSystem uses " << uiSystem2->gameMessangerSystem.use_count() << "\n"
+    std::cout << "UISystem uses " << uiSystem.use_count() << "\n"
+              << "physicsSystem uses " << uiSystem->physicsSystem.use_count() << "\n"
+              << "debugSystem uses " << uiSystem->debugSystem.use_count() << "\n"
+              << "gameMessangerSystem uses " << uiSystem->gameMessangerSystem.use_count() << "\n"
               << "\n";
   }
 
@@ -202,9 +207,9 @@ int main() {
 
   assert(g_systems_active == 0);
 
-  //this will correctly destroy DebugSystem but will leave a dangeling weak ptr
-  //ros::refptr<DebugSystem>::refview debugSystem_null_view = ros::refptr<DebugSystem>::make();
-  //assert(debugSystem_null_view.use_count() == 0);
+  // this will correctly destroy DebugSystem but will leave a dangeling weak ptr
+  // ros::refptr<DebugSystem>::refview debugSystem_null_view = ros::refptr<DebugSystem>::make();
+  // assert(debugSystem_null_view.use_count() == 0);
 
   return 0;
 }

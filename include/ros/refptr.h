@@ -122,17 +122,17 @@ class refptr {
 
   refptr<T>& operator=(refptr<T>& rhs) {
     assert(rhs.reference != nullptr);
-    decrement();
+    release();
     reference = rhs.reference;
     increment();
     return *this;
   }
 
-  refptr<T>& operator=(refptr<T>&& rhs) {
+  refptr<T>& operator=(refptr<T>&& rhs) noexcept {
     assert(rhs.reference != nullptr);
-    release();
-    reference = rhs.reference;
-    rhs.reference = nullptr;
+    // we can actually just swap the two refrences because right after that the destructor of rhs will
+    // be called, dealocating our old resource. Also this enables us marking this function as noexcept.
+    std::swap(reference, rhs.reference);
     return *this;
   }
 
