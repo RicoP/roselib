@@ -6,58 +6,59 @@
 #include <type_traits>
 
 #ifdef _WIN32
-#include <malloc.h> //_aligned_malloc, _aligned_free
+#include <malloc.h>  //_aligned_malloc, _aligned_free
 #endif
 
 namespace ros {
 
 namespace internal {
-constexpr std::uint64_t i_am_ok = 30240007572758601UL;
+typedef unsigned long long ref_int;
+constexpr ref_int okay_check = 0x0'BAD'C0DE'BABE;
+constexpr size_t ideal_alignment = std::alignment_of<std::max_align_t>::value;
 
-//https://developercommunity.visualstudio.com/solutions/473365/view.html
+static_assert(std::alignment_of<ref_int>::value == ideal_alignment, "ref_int is not most aligned");
+
+// https://developercommunity.visualstudio.com/solutions/473365/view.html
 #ifdef _WIN32
-inline void * refptr_aligned_alloc(size_t alignment, size_t size) {
-  return _aligned_malloc(size, alignment);
-}
-
-inline void refptr_aligned_free(void * ptr) {
-  _aligned_free(ptr);
-}
+// we always align our memory space to make sure the count and check members are
+// aligned, which is fine because we plan to use refptr for mostly "heavy" objects.
+inline void* refptr_aligned_alloc(size_t size) { return _aligned_malloc(size, ideal_alignment); }
+inline void refptr_aligned_free(void* ptr) { _aligned_free(ptr); }
 #else
-inline void * refptr_aligned_alloc(size_t alignment, size_t size) {
-  return std::alligned_alloc(alignment, size);
-}
-
-inline void refptr_aligned_free(void * ptr) {
-  std::free(ptr);
-}
+inline void* refptr_aligned_alloc(size_t size) { return std::aligned_alloc(ideal_alignment, size); }
+inline void refptr_aligned_free(void* ptr) { std::free(ptr); }
 #endif
-}
+}  // namespace internal
 
 template <class T>
 class refptr {
   struct Reference {
-    size_t count;
-    std::uint64_t check;  // checksum to find bad pointer
-    int byte0;            // beginning of object container
+    internal::ref_int count;  // reference counter
+    internal::ref_int check;  // checksum to find bad pointer
+    internal::ref_int byte0;  // beginning of object container
 
-    T* ptr_unchecked() noexcept { return reinterpret_cast<T*>(&byte0); }
-    const T* ptr_unchecked() const noexcept { return reinterpret_cast<const T*>(&byte0); }
+    T* ptr_unchecked() noexcept {
+      return reinterpret_cast<T*>(check == internal::okay_check ? &byte0 : 0);
+    }
+
+    const T* ptr_unchecked() const noexcept {
+      return reinterpret_cast<const T*>(check == internal::okay_check ? &byte0 : 0);
+    }
 
     T* ptr() noexcept {
       assert(count);
-      assert(check == internal::i_am_ok);
+      assert(check == internal::okay_check);
       return ptr_unchecked();
     }
 
     const T* ptr() const noexcept {
       assert(count);
-      assert(check == i_am_ok);
+      assert(check == internal::okay_check);
       return ptr_unchecked();
     }
 
     size_t use_count() const noexcept {
-      assert(check == internal::i_am_ok);
+      assert(check == internal::okay_check);
       return count;
     }
   };
@@ -75,9 +76,9 @@ class refptr {
       assert(reference->count);
       --reference->count;
       if (reference->count == 0) {
-        reference->check = 0;
         // call destructor of T
         reference->ptr_unchecked()->~T();
+        reference->check = 0x0'DEAD'BABE'0000;
         internal::refptr_aligned_free(reference);
         reference = nullptr;
       }
@@ -86,10 +87,10 @@ class refptr {
 
   template <class... Ts>
   static Reference* make_reference(Ts... args) {
-    enum { CONTAINER_SIZE = sizeof(size_t) + sizeof(uint64_t) + sizeof(T) };
-    Reference* reference = reinterpret_cast<Reference*>(internal::refptr_aligned_alloc(std::alignment_of<T>::value, CONTAINER_SIZE));
+    enum { CONTAINER_SIZE = 2 * sizeof(internal::ref_int) + sizeof(T) };
+    Reference* reference = reinterpret_cast<Reference*>(internal::refptr_aligned_alloc(CONTAINER_SIZE));
     reference->count = 1;
-    reference->check = internal::i_am_ok;
+    reference->check = internal::okay_check;
     new (&reference->byte0) T(args...);  // construct new Object at adress of container
     return reference;
   }
