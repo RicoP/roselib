@@ -143,9 +143,11 @@ int main() {
   // game context
 
   ros::refptr<DebugSystem> shared_debug_system;
+  assert(!shared_debug_system);
 
   {
     ros::refptr<UISystem> uiSystem = CreateUISystem();
+    assert(uiSystem);
 
     std::cout << "\nActive Systems " << g_systems_active << "\n";
 
