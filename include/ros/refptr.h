@@ -168,6 +168,8 @@ class refptr {
 
   const refptr<T>& operator=(const refptr<T>&) const = delete;
 
+  operator bool() const { return reference != nullptr; }
+
   // view for circular references
   class refview {
     Reference* reference;
