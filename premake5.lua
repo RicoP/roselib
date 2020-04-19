@@ -33,6 +33,20 @@ project "ros"
   kind "None"
   files { "include/**.h" }
 
+project "test.cast"
+  kind "ConsoleApp"
+  language "C++"
+  warnings "Extra"
+  includedirs { "include" }
+  files { "test/cast.cpp" }
+
+project "test.hash"
+  kind "ConsoleApp"
+  language "C++"
+  warnings "Extra"
+  includedirs { "include" }
+  files { "test/hash.cpp" }
+
 project "test.range"
   kind "ConsoleApp"
   language "C++"
@@ -47,9 +61,3 @@ project "test.refptr"
   includedirs { "include" }
   files { "test/refptr.cpp" }
 
-project "test.cast"
-  kind "ConsoleApp"
-  language "C++"
-  warnings "Extra"
-  includedirs { "include" }
-  files { "test/cast.cpp" }
