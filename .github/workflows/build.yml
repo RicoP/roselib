@@ -20,3 +20,5 @@ jobs:
       run: .build\bin\Debug\test.refptr-d.exe
     - name: test $ cast
       run: .build\bin\Debug\test.cast-d.exe
+    - name: test hash
+      run: .build\bin\Debug\test.hash-d.exe
