@@ -20,21 +20,11 @@ int main() {
   while (*string_iter) {
     const char* s = *string_iter;
     switch (ros::hash(s)) {
-      case ros::hash("Hello"):
-        c++;
-        break;
-      case ros::hash("World"):
-        c++;
-        break;
-      case ros::hash("Foo"):
-        c++;
-        break;
-      case ros::hash("foo"):
-        c++;
-        break;
-      case ros::hash("bar"):
-        c++;
-        break;
+      case ros::hash("Hello"): c++; break;
+      case ros::hash("World"): c++; break;
+      case ros::hash("Foo"): c++; break;
+      case ros::hash("foo"): c++; break;
+      case ros::hash("bar"): c++; break;
     }
     ++string_iter;
   }

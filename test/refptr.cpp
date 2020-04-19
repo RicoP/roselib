@@ -76,9 +76,7 @@ struct GameMessangerSystem : ISystem {
 
   virtual const char* name() const override { return "GameMessangerSystem"; }
   virtual ~GameMessangerSystem() override { std::cout << name() << " destruct \n"; }
-  GameMessangerSystem(ros::refptr<DebugSystem> debugSystem_) : debugSystem(debugSystem_) {
-    std::cout << name() << " construct \n";
-  }
+  GameMessangerSystem(ros::refptr<DebugSystem> debugSystem_) : debugSystem(debugSystem_) { std::cout << name() << " construct \n"; }
 };
 
 struct PhysicsSystem : ISystem {
@@ -105,7 +103,8 @@ struct UISystem : ISystem {
 
   virtual ~UISystem() override { std::cout << name() << " destruct \n"; }
 
-  UISystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_, ros::refptr<DebugSystem> debugSystem_,
+  UISystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_,
+           ros::refptr<DebugSystem> debugSystem_,
            ros::refptr<PhysicsSystem> physicsSystem_)
       : gameMessangerSystem(gameMessangerSystem_), debugSystem(debugSystem_), physicsSystem(physicsSystem_) {
     std::cout << name() << " construct \n";

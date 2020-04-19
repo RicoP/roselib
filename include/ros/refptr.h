@@ -8,27 +8,27 @@
 #include <type_traits>
 
 #ifdef _WIN32
-#include <malloc.h>  //_aligned_malloc, _aligned_free
+#  include <malloc.h>  //_aligned_malloc, _aligned_free
 #endif
 
 namespace ros {
 
 namespace internal {
-typedef unsigned long long ref_int;
-constexpr ref_int okay_check = 0x0'BAD'C0DE'BABE;
-constexpr size_t ideal_alignment = std::alignment_of<std::max_align_t>::value;
+  typedef unsigned long long ref_int;
+  constexpr ref_int okay_check = 0x0'BAD'C0DE'BABE;
+  constexpr size_t ideal_alignment = std::alignment_of<std::max_align_t>::value;
 
-static_assert(std::alignment_of<ref_int>::value == ideal_alignment, "ref_int is not most aligned");
+  static_assert(std::alignment_of<ref_int>::value == ideal_alignment, "ref_int is not most aligned");
 
 // https://developercommunity.visualstudio.com/solutions/473365/view.html
 #ifdef _WIN32
-// we always align our memory space to make sure the count and check members are
-// aligned, which is fine because we plan to use refptr for mostly "heavy" objects.
-inline void* refptr_aligned_alloc(size_t size) { return _aligned_malloc(size, ideal_alignment); }
-inline void refptr_aligned_free(void* ptr) { _aligned_free(ptr); }
+  // we always align our memory space to make sure the count and check members are
+  // aligned, which is fine because we plan to use refptr for mostly "heavy" objects.
+  inline void* refptr_aligned_alloc(size_t size) { return _aligned_malloc(size, ideal_alignment); }
+  inline void refptr_aligned_free(void* ptr) { _aligned_free(ptr); }
 #else
-inline void* refptr_aligned_alloc(size_t size) { return std::aligned_alloc(ideal_alignment, size); }
-inline void refptr_aligned_free(void* ptr) { std::free(ptr); }
+  inline void* refptr_aligned_alloc(size_t size) { return std::aligned_alloc(ideal_alignment, size); }
+  inline void refptr_aligned_free(void* ptr) { std::free(ptr); }
 #endif
 }  // namespace internal
 
@@ -39,13 +39,8 @@ class refptr {
     internal::ref_int check;  // checksum to find bad pointer
     internal::ref_int byte0;  // beginning of object container
 
-    T* ptr_unchecked() noexcept {
-      return reinterpret_cast<T*>(check == internal::okay_check ? &byte0 : 0);
-    }
-
-    const T* ptr_unchecked() const noexcept {
-      return reinterpret_cast<const T*>(check == internal::okay_check ? &byte0 : 0);
-    }
+    T* ptr_unchecked() noexcept { return reinterpret_cast<T*>(check == internal::okay_check ? &byte0 : 0); }
+    const T* ptr_unchecked() const noexcept { return reinterpret_cast<const T*>(check == internal::okay_check ? &byte0 : 0); }
 
     T* ptr() noexcept {
       assert(count);

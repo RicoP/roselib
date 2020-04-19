@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef ROS_USE_EA
-#include <EAStdC/EAStopwatch.h>
+#  include <EAStdC/EAStopwatch.h>
 #endif
 
 namespace ros {
@@ -48,17 +48,17 @@ inline hash_value new_hash() { return EA::StdC::Stopwatch::GetCPUCycle(); }
 }
 
 namespace internal {
-template <class T>
-inline hash_value hash_simple(T value) {
-  static_assert(sizeof(T) <= sizeof(hash_value), "type can't be bigger than hash");
-  union {
-    hash_value u_h;
-    T u_f;
-  };
-  u_h = 0;
-  u_f = value;
-  return u_h;
-}
+  template <class T>
+  inline hash_value hash_simple(T value) {
+    static_assert(sizeof(T) <= sizeof(hash_value), "type can't be bigger than hash");
+    union {
+      hash_value u_h;
+      T u_f;
+    };
+    u_h = 0;
+    u_f = value;
+    return u_h;
+  }
 }  // namespace internal
 
 constexpr hash_value hash(unsigned char v) { return v; }

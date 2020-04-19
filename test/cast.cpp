@@ -1,7 +1,7 @@
 #include <ros/cast.h>
 
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 int main() {
   float f = 3.14f;
