@@ -11,7 +11,7 @@ typedef unsigned long long hash_value;
 // https://en.wikipedia.org/wiki/Xorshift#Xorshift.2A
 // http://www.jstatsoft.org/article/view/v008i14/xorshift.pdf page 4
 constexpr hash_value xor64(hash_value h) {
-  h ^= 88172645463325252LL;
+  h ^= 88172645463325252ULL;
   h ^= (h << 13);
   h ^= (h >> 7);
   h ^= (h << 17);
@@ -21,7 +21,7 @@ constexpr hash_value xor64(hash_value h) {
 constexpr void next(hash_value& h) { h = xor64(h); }
 
 #ifdef ROS_USE_EA
-inline hash_value new_hash() { return EA::StdC::Stopwatch::GetCPUCycle(); }
+inline hash_value hash_from_clock() { return EA::StdC::Stopwatch::GetCPUCycle(); }
 #endif
 
 [[nodiscard]] constexpr hash_value next_range(hash_value& h, hash_value min, hash_value max) {
