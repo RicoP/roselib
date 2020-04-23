@@ -21,7 +21,11 @@ constexpr hash_value xor64(hash_value h) {
 constexpr void next(hash_value& h) { h = xor64(h); }
 
 #ifdef ROS_USE_EA
-inline hash_value hash_from_clock() { return EA::StdC::Stopwatch::GetCPUCycle(); }
+inline hash_value hash_from_clock() {
+  hash_value h = EA::StdC::Stopwatch::GetCPUCycle();
+  next(h);
+  return h;
+}
 #endif
 
 [[nodiscard]] constexpr hash_value next_range(hash_value& h, hash_value min, hash_value max) {
@@ -50,7 +54,7 @@ inline hash_value hash_from_clock() { return EA::StdC::Stopwatch::GetCPUCycle();
 namespace internal {
   template <class T>
   inline hash_value hash_simple(T value) {
-    static_assert(sizeof(T) <= sizeof(hash_value), "type can't be bigger than hash");
+    static_assert(sizeof(T) <= sizeof(hash_value), "sizeof(T) can't be bigger than sizeof(hash_value)");
     union {
       hash_value u_h;
       T u_f;
