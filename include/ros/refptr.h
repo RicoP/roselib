@@ -102,7 +102,7 @@ class refptr {
   }
 
   // copy
-  refptr(const refptr<T>& rhs) noexcept : reference(rhs.reference) { increment(); }
+  refptr(const refptr<T>& rhs) noexcept : reference(rhs.reference) { if(reference) increment(); }
 
   // move
   refptr(refptr<T>&& rhs) noexcept : reference(rhs.reference) { rhs.reference = nullptr; }
@@ -154,7 +154,6 @@ class refptr {
   }
 
   refptr<T>& operator=(refptr<T>&& rhs) noexcept {
-    assert(rhs.reference != nullptr);
     // we can actually just swap the two refrences because right after that the destructor of rhs will
     // be called, dealocating our old resource. Also this enables us marking this function as noexcept.
     std::swap(reference, rhs.reference);
