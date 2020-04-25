@@ -1,5 +1,7 @@
 #pragma once
 
+//DEPRECATED for now because it causes some issues in glmovement:af0512ce4ccf9925fcc66ae7257fc39fac7552f9
+
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -9,6 +11,14 @@
 
 #ifdef _WIN32
 #  include <malloc.h>  //_aligned_malloc, _aligned_free
+#endif
+
+#ifdef ROS_LOG_REFPTR
+// when you wanna log refptr then you must define g_refptr_line in ONE cpp file
+extern int g_refptr_line;
+#  define LOG(frmt, ...) printf("%d\t>" frmt, 0, __VA_ARGS__)
+#else
+#  define LOG(...)
 #endif
 
 namespace ros {
@@ -73,6 +83,7 @@ class refptr {
       assert(reference->count);
       --reference->count;
       if (reference->count == 0) {
+        LOG("count reached zero. dealloc \n");
         // call destructor of T
         reference->ptr_unchecked()->~T();
         reference->check = 0x0'DEAD'BABE'0000;
@@ -85,6 +96,7 @@ class refptr {
   template <class... Ts>
   static Reference* make_reference(Ts... args) {
     enum { CONTAINER_SIZE = 2 * sizeof(internal::ref_int) + sizeof(T) };
+    LOG("make_reference(%d) \n", CONTAINER_SIZE);
     Reference* reference = reinterpret_cast<Reference*>(internal::refptr_aligned_alloc(CONTAINER_SIZE));
     reference->count = 1;
     reference->check = internal::okay_check;
@@ -93,26 +105,37 @@ class refptr {
   }
 
  public:
-  constexpr refptr() noexcept : reference(nullptr) {}
+  constexpr refptr() noexcept : reference(nullptr) { LOG("refptr() \n"); }
 
   // construct new object with parameter
   template <class... Ts>
   refptr(Ts... args) {
+    LOG("refptr(Ts... args) \n");
     reference = make_reference(args...);
   }
 
   // copy
-  refptr(const refptr<T>& rhs) noexcept : reference(rhs.reference) { increment(); }
+  refptr(const refptr<T>& rhs) noexcept : reference(rhs.reference) {
+    LOG("refptr(const refptr<T>& rhs) \n");
+    increment();
+  }
 
   // move
-  refptr(refptr<T>&& rhs) noexcept : reference(rhs.reference) { rhs.reference = nullptr; }
+  refptr(refptr<T>&& rhs) noexcept : reference(rhs.reference) {
+    LOG("refptr(refptr<T>&& rhs) \n");
+    rhs.reference = nullptr;
+  }
 
   // destructor
-  ~refptr() { release(); }
+  ~refptr() {
+    LOG("~refptr() %l \n", use_count());
+    release();
+  }
 
   // static make function. Necessary for constructors with zero parameter.
   template <class... Ts>
   static refptr<T> make(Ts... args) {
+    LOG("make(Ts... args) \n");
     refptr<T> p;
     p.reference = make_reference(args...);
     return p;
