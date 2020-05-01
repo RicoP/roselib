@@ -2,15 +2,12 @@
 
 namespace ros {
 
-//helper class that prohibits copying of class
-class nocopy {
- public:
-  nocopy() {}
-  ~nocopy() {}
-
- private:
+//helper class that prohibits copying of object
+struct nocopy {
+  nocopy() = default;
+  ~nocopy() = default;
   nocopy(const nocopy &) = delete;
-  const nocopy &operator=(const nocopy &) = delete;
+  nocopy &operator=(const nocopy &) = delete;
 };
 
 }
