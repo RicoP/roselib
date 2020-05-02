@@ -8,14 +8,16 @@ namespace ros {
 
 typedef unsigned long long hash_value;
 
-// https://en.wikipedia.org/wiki/Xorshift#Xorshift.2A
+static_assert(sizeof(hash_value) == 8 && sizeof(hash_value) == sizeof(size_t));
+
 // http://www.jstatsoft.org/article/view/v008i14/xorshift.pdf page 4
+// https://en.wikipedia.org/wiki/Xorshift#xorshift*
 constexpr hash_value xor64(hash_value h) {
-  h ^= 88172645463325252ULL;
-  h ^= (h << 13);
-  h ^= (h >> 7);
-  h ^= (h << 17);
-  return h;
+  h ^= 88172645463325252ULL;  // xor with a constant so a seed of 0 will not result in a infinite loop
+  h ^= h >> 12;
+  h ^= h << 25;
+  h ^= h >> 27;
+  return h * 0x2545F4914F6CDD1DULL;
 }
 
 constexpr void next(hash_value& h) { h = xor64(h); }
