@@ -30,6 +30,32 @@ int main() {
   }
 
   assert(c == 5);
+  {
+    char const* strings[] = {"Hello", "World", "Foo", "foo", "bar", 0};
+
+    int i = 0;
+    bool a = ros::hash(strings[i++]) == ros::hash("Hello");
+    bool b = ros::hash(strings[i++]) == ros::hash("World");
+    bool c = ros::hash(strings[i++]) == ros::hash("Foo");
+    bool d = ros::hash(strings[i++]) == ros::hash("foo");
+    bool e = ros::hash(strings[i++]) == ros::hash("bar");
+
+    assert(a);
+    assert(b);
+    assert(c);
+    assert(d);
+    assert(e);
+  }
+
+  assert(c == 5);
+  {
+    ros::hash_value a = ros::hash("Skybox", 1);
+    ros::hash_value b = ros::hash("skybox", 2);
+    ros::hash_value c = ros::hash("Hero", 1);
+    ros::hash_value d = ros::hash("hero", 2);
+
+    assert(a ^ b != c ^ d);
+  }
 
   ros::hash_value h1 = ros::hash((char)'a');
   ros::hash_value h2 = ros::hash(1.0);
