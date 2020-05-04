@@ -20,6 +20,16 @@ constexpr hash_value xor64(hash_value h) {
   return h * 0x2545F4914F6CDD1DULL;
 }
 
+// https://de.wikipedia.org/wiki/FNV_(Informatik)
+constexpr hash_value hash_fnv(const char* string) {
+  hash_value MagicPrime = 0x00000100000001b3ULL;
+  hash_value Hash       = 0xcbf29ce484222325ULL;
+
+  for (; *string; string++) Hash = (Hash ^ *string) * MagicPrime;
+
+  return Hash;
+}
+
 constexpr void next(hash_value& h) { h = xor64(h); }
 
 #ifdef ROS_USE_EA
@@ -30,13 +40,13 @@ inline hash_value hash_from_clock() {
 }
 #endif
 
-[[nodiscard]] constexpr hash_value next_range(hash_value& h, hash_value min, hash_value max) {
+constexpr hash_value next_range(hash_value& h, hash_value min, hash_value max) {
   next(h);
   hash_value r = h % (max - min);
   return r + min;
 }
 
-[[nodiscard]] inline float nextf(hash_value& h) {
+inline float nextf(hash_value& h) {
   next(h);
 
   union {
@@ -86,8 +96,6 @@ inline hash_value hash(float v) { return internal::hash_simple(v); }
 inline hash_value hash(long double v) { return internal::hash_simple(v); }
 inline hash_value hash(wchar_t v) { return internal::hash_simple(v); }
 
-constexpr hash_value hash(char const* input, hash_value seed = 0) {
-  return *input == 0 ? seed : (*input) ^ xor64(hash(input + 1, seed));
-}
+constexpr hash_value hash(char const* input, hash_value seed = 0) { return *input == 0 ? seed : (*input) ^ xor64(hash(input + 1, seed)); }
 
 }  // namespace ros
