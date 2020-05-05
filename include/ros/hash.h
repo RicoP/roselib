@@ -1,7 +1,10 @@
 #pragma once
 
 #ifdef ROS_USE_EA
+#  include "preprocessor.h"
+   ROS_EXTERNALS_BEGIN
 #  include <EAStdC/EAStopwatch.h>
+   ROS_EXTERNALS_END
 #endif
 
 namespace ros {
