@@ -47,17 +47,6 @@ int main() {
     assert(e);
   }
 
-  assert(c == 5);
-  {
-    ros::hash_value a = ros::hash("Skybox", 1);
-    ros::hash_value b = ros::hash("skybox", 2);
-    ros::hash_value c = ros::hash("Hero", 1);
-    ros::hash_value d = ros::hash("hero", 2);
-
-    assert(a ^ b != c ^ d);
-  }
-
-  assert(c == 5);
   {
     ros::hash_value a = ros::hash_fnv("Skybox");
     ros::hash_value b = ros::hash_fnv("skybox");

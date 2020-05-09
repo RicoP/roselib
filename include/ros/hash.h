@@ -2,9 +2,9 @@
 
 #ifdef ROS_USE_EA
 #  include "preprocessor.h"
-   ROS_EXTERNALS_BEGIN
+ROS_EXTERNALS_BEGIN
 #  include <EAStdC/EAStopwatch.h>
-   ROS_EXTERNALS_END
+ROS_EXTERNALS_END
 #endif
 
 namespace ros {
@@ -26,7 +26,7 @@ constexpr hash_value xor64(hash_value h) {
 // https://de.wikipedia.org/wiki/FNV_(Informatik)
 constexpr hash_value hash_fnv(const char* string) {
   hash_value MagicPrime = 0x00000100000001b3ULL;
-  hash_value Hash       = 0xcbf29ce484222325ULL;
+  hash_value Hash = 0xcbf29ce484222325ULL;
 
   for (; *string; string++) Hash = (Hash ^ *string) * MagicPrime;
 
@@ -99,6 +99,6 @@ inline hash_value hash(float v) { return internal::hash_simple(v); }
 inline hash_value hash(long double v) { return internal::hash_simple(v); }
 inline hash_value hash(wchar_t v) { return internal::hash_simple(v); }
 
-constexpr hash_value hash(char const* input, hash_value seed = 0) { return *input == 0 ? seed : (*input) ^ xor64(hash(input + 1, seed)); }
+constexpr hash_value hash(char const* input) { return hash_fnv(input); }
 
 }  // namespace ros
