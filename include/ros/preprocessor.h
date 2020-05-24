@@ -28,3 +28,5 @@
 
 // expands to something like "file.cpp:42"
 #define ROS_FILE_LINE __FILE__ ":" ROS_STRINGIFY(__LINE__)
+
+#define ROS_UNUSED(VALUE) ((void)(VALUE))
