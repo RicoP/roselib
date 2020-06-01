@@ -96,7 +96,7 @@ inline hash_value hash(short int v) { return internal::hash_simple(v); }
 
 inline hash_value hash(double v) { return internal::hash_simple(v); }
 inline hash_value hash(float v) { return internal::hash_simple(v); }
-inline hash_value hash(long double v) { return internal::hash_simple(v); }
+//inline hash_value hash(long double v) { return internal::hash_simple(v); }
 inline hash_value hash(wchar_t v) { return internal::hash_simple(v); }
 
 constexpr hash_value hash(char const* input) { return hash_fnv(input); }
