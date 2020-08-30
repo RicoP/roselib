@@ -1,20 +1,21 @@
 #pragma once
 
+#include <cstddef>
+
 #include "assert.h"
 #include "hash.h"
-#include <cstddef>
 
 #ifdef ROS_USE_EA
 #  define ROSE_CONTAINER_STD eastl
 #else
-#  include<algorithm>
+#  include <algorithm>
 #  define ROSE_CONTAINER_STD std
 #endif
 
 namespace rose {
 
 template <size_t MAX, class T>
-struct arrayPOD {
+struct vectorPOD {
   constexpr size_t capacity() const { return MAX; }
   void clear() { size = 0; }
   T* begin() { return elements; }
@@ -59,8 +60,8 @@ struct arrayPOD {
 };
 
 template <size_t MAX, class T>
-struct array : arrayPOD<MAX, T> {
-  array() : size(0) {}
+struct vector : vectorPOD<MAX, T> {
+  vector() : size(0) {}
 };
 
 template <class TKey, class TValue>
@@ -69,21 +70,19 @@ struct CKeyValuePair {
   TValue value;
 };
 
-template<class T>
+template <class T>
 struct RoseHasher {
-  ros::hash_value hash;
-
-  constexpr RoseHasher(const T& val) : hash(ros::hash(val)) {}
+  constexpr ros::hash_value operator()(const T& val) const { return ros::hash(val); }
 };
 
 // This Hashmap assumes all hashes are unique. There must be a overload
 // of ros::hash for the key type. Never store a pointer to a value in hashmap
 // because the values will be reordered when new key-value pair is inserted.
-template <size_t MAX, class TKey, class TValue, class hasher = RoseHasher<TKey> >
+template <size_t MAX, class TKey, class TValue, class hasher = RoseHasher<TKey>>
 struct CHashmapPOD {
   typedef CKeyValuePair<ros::hash_value, TValue> KVP;
 
-  arrayPOD<MAX, KVP> map;
+  vectorPOD<MAX, KVP> map;
 
   constexpr size_t capacity() const { return MAX; }
   KVP* begin() { return map.begin(); }
@@ -91,6 +90,8 @@ struct CHashmapPOD {
   KVP* end() { return map.end(); }
   const KVP* end() const { return map.end(); }
   void clear() { map.clear(); }
+
+  auto hashing(const TKey & value) { return hasher()(value); }
 
   class search_comparator {
    public:
@@ -101,7 +102,10 @@ struct CHashmapPOD {
   KVP* binary_search(ros::hash_value hash) { return ROSE_CONTAINER_STD::lower_bound(map.begin(), map.end(), hash, search_comparator()); }
 
   KVP& emplace_back(const TKey& key, const TValue& value) {
-    ros::hash_value hash = ros::hash(key);
+    return emplace_back(hashing(key), value);
+  }
+
+  KVP& emplace_back(ros::hash_value hash, const TValue& value) {
     auto kvpi = binary_search(hash);
     // when kvp points to first element that is bigger, so we must shift
     // all other elements back one element so we can fit in new KVP.
@@ -113,13 +117,13 @@ struct CHashmapPOD {
     for (auto it = map.back(); it != kvpi; --it) {
       *it = *(it - 1);
     }
-    kvpi->key = ros::hash(key);
+    kvpi->key = hash;
     kvpi->value = value;
     return *kvpi;
   }
 
   bool contains(const TKey& key) {
-    auto kvp = binary_search(ros::hash(key));
+    auto kvp = binary_search(hashing(key));
     return kvp != map.end() && kvp->key == key;
   }
 
@@ -130,7 +134,7 @@ struct CHashmapPOD {
   }
 
   TValue& getOrDefault(const TKey& key, const TValue& defaultValue) {
-    ros::hash_value hash = ros::hash(key);
+    ros::hash_value hash = hashing(key);
     auto kvpi = binary_search(hash);
     if (kvpi == map.end() || kvpi->key != hash) {
       return emplace_back(key, defaultValue).value;
@@ -138,19 +142,22 @@ struct CHashmapPOD {
     return kvpi->value;
   }
 
-  TValue& operator[](const TKey& key) {
-    ros::hash_value hash = ros::hash(key);
+  TValue& operator[](const TKey& key) { return operator[](hashing(key)); }
+
+  TValue& operator[](ros::hash_value hash) {
     auto kvpi = binary_search(hash);
     ROSE_ASSERT(kvpi != map.end() && kvpi->key == hash);
     // C++ behaviour
-    // if (kvpi == map.end() || kvpi->key != ros::hash(key)) {
+    // if (kvpi == map.end() || kvpi->key != hashing(key)) {
     //  return emplace_back(key, TValue()).value;
-    //}
+    // }
     return kvpi->value;
   }
 
-  const TValue& operator[](size_t i) const {
-    auto kvpi = binary_search(ros::hash(key));
+  const TValue& operator[](const TKey& key) const { return operator[](hashing(key)); }
+
+  const TValue& operator[](ros::hash_value hash) const {
+    auto kvpi = binary_search(hash);
     ROSE_ASSERT(kvpi != map.end() && kvpi->key == hash);
     return kvpi->value;
   }
