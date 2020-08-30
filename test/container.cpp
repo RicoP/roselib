@@ -3,7 +3,7 @@
 #include <cassert>
 
 int main() {
-  rose::CHashmap<16, const char *, long long> map;
+  rose::Hashmap<16, const char *, long long> map;
   map.emplace_back("hello", 12);
   map.emplace_back("world", 24);
   map.emplace_back("Hallo", 2);

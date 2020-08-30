@@ -61,7 +61,7 @@ struct vectorPOD {
 
 template <size_t MAX, class T>
 struct vector : vectorPOD<MAX, T> {
-  vector() : size(0) {}
+  vector() { this->size = 0; }
 };
 
 template <class TKey, class TValue>
@@ -79,7 +79,7 @@ struct RoseHasher {
 // of ros::hash for the key type. Never store a pointer to a value in hashmap
 // because the values will be reordered when new key-value pair is inserted.
 template <size_t MAX, class TKey, class TValue, class hasher = RoseHasher<TKey>>
-struct CHashmapPOD {
+struct HashmapPOD {
   typedef CKeyValuePair<ros::hash_value, TValue> KVP;
 
   vectorPOD<MAX, KVP> map;
@@ -164,7 +164,7 @@ struct CHashmapPOD {
 };
 
 template <size_t MAX, class TKey, class TValue>
-struct CHashmap : CHashmapPOD<MAX, TKey, TValue> {
-  CHashmap() { map.size = 0; }
+struct Hashmap : HashmapPOD<MAX, TKey, TValue> {
+  Hashmap() { this->map.size = 0; }
 };
 }  // namespace rose
