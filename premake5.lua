@@ -15,7 +15,6 @@ workspace "ROS"
     defines { "DEBUG", "EA_DEBUG" }
     symbols "Full"
     optimize "Off"
-    targetsuffix "-d"
 
   filter "configurations:Release"
     defines { "RELEASE", "NDEBUG" }
@@ -32,13 +31,20 @@ project "_root"
 project "ros"
   kind "None"
   files { "include/**.h" }
-
+  
 project "test.cast"
   kind "ConsoleApp"
   language "C++"
   warnings "Extra"
   includedirs { "include" }
   files { "test/cast.cpp" }
+
+project "test.container"
+  kind "ConsoleApp"
+  language "C++"
+  warnings "Extra"
+  includedirs { "include" }
+  files { "test/container.cpp" }
 
 project "test.hash"
   kind "ConsoleApp"
