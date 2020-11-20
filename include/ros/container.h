@@ -64,6 +64,19 @@ struct vector : vectorPOD<MAX, T> {
   vector() { this->size = 0; }
 };
 
+template <size_t TN, size_t TM, class T>
+inline bool operator==(const vectorPOD<TN, T>& lhs, const vectorPOD<TM, T>& rhs) {
+  if(lhs.size != rhs.size) return false;
+
+  for(size_t i = 0; i != lhs.size; ++i) {
+    if(!(lhs.elements[i] == rhs.elements[i])) return false;
+  }
+  return true;
+}
+
+template <size_t N, class T>
+inline ros::hash_value hash(const vectorPOD<N, T>& v); //TODO implement me
+
 template <class TKey, class TValue>
 struct CKeyValuePair {
   TKey key;
@@ -168,3 +181,12 @@ struct Hashmap : HashmapPOD<MAX, TKey, TValue> {
   Hashmap() { this->map.size = 0; }
 };
 }  // namespace rose
+
+
+namespace ros {
+
+//backwards compatible with old namespace
+template <size_t N, class T>
+inline ros::hash_value hash(const rose::vectorPOD<N, T>& v);  // TODO implement me
+
+}
