@@ -10,6 +10,9 @@ jobs:
       #https://github.com/marketplace/actions/setup-msbuild-exe
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
+      #https://github.com/actions/toolkit/issues/641#issuecomment-728973445
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
     - name: build      
       run: .\tools\premake\windows\premake5.exe vs2019
     - name: compile
