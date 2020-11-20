@@ -33,6 +33,15 @@ constexpr hash_value hash_fnv(const char* string) {
   return Hash;
 }
 
+constexpr hash_value hash_fnv(const char* string, const char* end) {
+  hash_value MagicPrime = 0x00000100000001b3ULL;
+  hash_value Hash = 0xcbf29ce484222325ULL;
+
+  for (; string != end; string++) Hash = (Hash ^ *string) * MagicPrime;
+
+  return Hash;
+}
+
 constexpr void next(hash_value& h) { h = xor64(h); }
 
 #ifdef ROS_USE_EA
