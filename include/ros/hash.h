@@ -52,10 +52,12 @@ inline hash_value hash_from_clock() {
 }
 #endif
 
-constexpr hash_value next_range(hash_value& h, hash_value min, hash_value max) {
+template<typename T>
+T next_range(hash_value& h, T min, T max) {
+  if (max < min) return next_range(h, max, min);
   next(h);
-  hash_value r = h % (max - min);
-  return r + min;
+  min += h % (max - min);
+  return min;
 }
 
 inline float nextf(hash_value& h) {
