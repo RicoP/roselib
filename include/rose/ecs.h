@@ -53,9 +53,7 @@ namespace ecs {
       return object;
     }
 
-
-    //Camera &get_component(const std::vector<int> &is, const std::vector<Camera> &vector, const rose::ecs::Entity &entity);
-
+    // Camera &get_component(const std::vector<int> &is, const std::vector<Camera> &vector, const rose::ecs::Entity &entity);
     template <typename T>
     const T &get_component(const std::vector<int> &component_index,
                            const std::vector<T> &components,
@@ -68,15 +66,23 @@ namespace ecs {
     }
 
     template <typename T>
-    T &get_component(std::vector<int> &component_index,
-                     std::vector<T> &components,
-                     const rose::ecs::Entity &entity) {
+    T &get_component(std::vector<int> &component_index, std::vector<T> &components, const rose::ecs::Entity &entity) {
       assert(entity.index >= 0);
       assert(component_index.size() < entity.index);
       assert(components.size() < component_index[entity.index]);
       assert(components[component_index[entity.index]].entity == entity);
       return components[component_index[entity.index]];
     }
+
+    // Component getter
+    template <typename T>
+    T &get(rose::ecs::Entity entity);  // Not implemented -> unknown type
+
+    template <typename T>
+    const T &get(rose::ecs::Entity entity) const;  // Not implemented -> unknown type
+
+    template <typename T>
+    T &attach_component(rose::ecs::Entity entity);
   };
 }  // namespace ecs
 }  // namespace rose
