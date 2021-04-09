@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ros {
+namespace rose {
 
 template <class T>
 struct RangeIterator_ {
@@ -48,8 +48,8 @@ struct Range_ {
 // constexpr Range_<T> range = Range_<from, to, increment>();
 
 template <class T>
-Range_<T> Range(T from, T to, T inc = 1) {
+Range_<T> range(T from, T to, T inc = 1) {
   return Range_<T>(from, to, inc);
 }
 
-}  // namespace ros
+}  // namespace rose
