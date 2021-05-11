@@ -48,6 +48,11 @@ struct vectorPOD {
     erase_at(it - begin());
   }
 
+  void pop() {
+    ROSE_ASSERT(size != 0);
+    --size;
+  }
+
   T& operator[](size_t i) {
     ROSE_ASSERT(i >= 0 && i < size);
     return elements[i];
