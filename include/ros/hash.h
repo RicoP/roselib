@@ -1,11 +1,7 @@
 #pragma once
 
-#ifdef ROS_USE_EA
-#  include "preprocessor.h"
-ROS_EXTERNALS_BEGIN
-#  include <EAStdC/EAStopwatch.h>
-ROS_EXTERNALS_END
-#endif
+//__rdtsc
+#include <intrin.h>
 
 namespace ros {
 
@@ -44,13 +40,11 @@ constexpr hash_value hash_fnv(const char* string, const char* end) {
 
 constexpr void next(hash_value& h) { h = xor64(h); }
 
-#ifdef ROS_USE_EA
 inline hash_value hash_from_clock() {
-  hash_value h = EA::StdC::Stopwatch::GetCPUCycle();
+  hash_value h = __rdtsc();
   next(h);
   return h;
 }
-#endif
 
 template<typename T>
 T next_range(hash_value& h, T min, T max) {
