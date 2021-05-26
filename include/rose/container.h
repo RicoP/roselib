@@ -36,6 +36,10 @@ struct vectorPOD {
     return ret;
   }
 
+  void push_back(T value) {
+    emplace_back() = value;
+  }
+
   void erase_at(ptrdiff_t i) {
     ROSE_ASSERT(i >= 0 && i < size);
     ROSE_ASSERT(size != 0);
