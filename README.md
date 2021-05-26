@@ -1,5 +1,5 @@
 ![Build Status](https://github.com/RicoP/ros/workflows/build/badge.svg)
-# ros
+# roselib
 A collection of single header files
 
 `include/refptr.h`
