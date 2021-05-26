@@ -1,12 +1,12 @@
 #pragma once
 
-#include <ros/preprocessor.h>
+#include <rose/preprocessor.h>
 
-ROS_EXTERNALS_BEGIN
+ROSE_EXTERNALS_BEGIN
 #include <inttypes.h>
 
 #include <cstdio>
-ROS_EXTERNALS_END
+ROSE_EXTERNALS_END
 
 namespace ros {
 namespace intern {

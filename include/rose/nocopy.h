@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ros {
+namespace rose {
 
 //helper class that prohibits copying of object
 struct nocopy {

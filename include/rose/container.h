@@ -5,7 +5,7 @@
 #include "assert.h"
 #include "hash.h"
 
-#ifdef ROS_USE_EA
+#ifdef ROSE_USE_EA
 #  define ROSE_CONTAINER_STD eastl
 #else
 #  include <algorithm>
@@ -80,7 +80,7 @@ inline bool operator==(const vectorPOD<TN, T>& lhs, const vectorPOD<TM, T>& rhs)
 }
 
 template <size_t N, class T>
-inline ros::hash_value hash(const vectorPOD<N, T>& v); //TODO implement me
+inline rose::hash_value hash(const vectorPOD<N, T>& v); //TODO implement me
 
 template <class TKey, class TValue>
 struct CKeyValuePair {
@@ -90,15 +90,15 @@ struct CKeyValuePair {
 
 template <class T>
 struct RoseHasher {
-  constexpr ros::hash_value operator()(const T& val) const { return ros::hash(val); }
+  constexpr rose::hash_value operator()(const T& val) const { return rose::hash(val); }
 };
 
 // This Hashmap assumes all hashes are unique. There must be a overload
-// of ros::hash for the key type. Never store a pointer to a value in hashmap
+// of rose::hash for the key type. Never store a pointer to a value in hashmap
 // because the values will be reordered when new key-value pair is inserted.
 template <size_t MAX, class TKey, class TValue, class hasher = RoseHasher<TKey>>
 struct HashmapPOD {
-  typedef CKeyValuePair<ros::hash_value, TValue> KVP;
+  typedef CKeyValuePair<rose::hash_value, TValue> KVP;
 
   vectorPOD<MAX, KVP> map;
 
@@ -113,17 +113,17 @@ struct HashmapPOD {
 
   class search_comparator {
    public:
-    bool operator()(const KVP& a, const ros::hash_value& b) const { return a.key < b; }
-    bool operator()(const ros::hash_value& a, const KVP& b) const { return a < b.key; }
+    bool operator()(const KVP& a, const rose::hash_value& b) const { return a.key < b; }
+    bool operator()(const rose::hash_value& a, const KVP& b) const { return a < b.key; }
   };
 
-  KVP* binary_search(ros::hash_value hash) { return ROSE_CONTAINER_STD::lower_bound(map.begin(), map.end(), hash, search_comparator()); }
+  KVP* binary_search(rose::hash_value hash) { return ROSE_CONTAINER_STD::lower_bound(map.begin(), map.end(), hash, search_comparator()); }
 
   KVP& emplace_back(const TKey& key, const TValue& value) {
     return emplace_back(hashing(key), value);
   }
 
-  KVP& emplace_back(ros::hash_value hash, const TValue& value) {
+  KVP& emplace_back(rose::hash_value hash, const TValue& value) {
     auto kvpi = binary_search(hash);
     // when kvp points to first element that is bigger, so we must shift
     // all other elements back one element so we can fit in new KVP.
@@ -152,7 +152,7 @@ struct HashmapPOD {
   }
 
   TValue& getOrDefault(const TKey& key, const TValue& defaultValue) {
-    ros::hash_value hash = hashing(key);
+    rose::hash_value hash = hashing(key);
     auto kvpi = binary_search(hash);
     if (kvpi == map.end() || kvpi->key != hash) {
       return emplace_back(key, defaultValue).value;
@@ -162,7 +162,7 @@ struct HashmapPOD {
 
   TValue& operator[](const TKey& key) { return operator[](hashing(key)); }
 
-  TValue& operator[](ros::hash_value hash) {
+  TValue& operator[](rose::hash_value hash) {
     auto kvpi = binary_search(hash);
     ROSE_ASSERT(kvpi != map.end() && kvpi->key == hash);
     // C++ behaviour
@@ -174,7 +174,7 @@ struct HashmapPOD {
 
   const TValue& operator[](const TKey& key) const { return operator[](hashing(key)); }
 
-  const TValue& operator[](ros::hash_value hash) const {
+  const TValue& operator[](rose::hash_value hash) const {
     auto kvpi = binary_search(hash);
     ROSE_ASSERT(kvpi != map.end() && kvpi->key == hash);
     return kvpi->value;
@@ -192,6 +192,6 @@ namespace ros {
 
 //backwards compatible with old namespace
 template <size_t N, class T>
-inline ros::hash_value hash(const rose::vectorPOD<N, T>& v);  // TODO implement me
+inline rose::hash_value hash(const rose::vectorPOD<N, T>& v);  // TODO implement me
 
 }

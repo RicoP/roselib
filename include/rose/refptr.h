@@ -2,6 +2,8 @@
 
 //DEPRECATED for now because it causes some issues in glmovement:af0512ce4ccf9925fcc66ae7257fc39fac7552f9
 
+#if 0
+
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -13,7 +15,7 @@
 #  include <malloc.h>  //_aligned_malloc, _aligned_free
 #endif
 
-#ifdef ROS_LOG_REFPTR
+#ifdef ROSE_LOG_REFPTR
 // when you wanna log refptr then you must define g_refptr_line in ONE cpp file
 extern int g_refptr_line;
 #  define LOG(frmt, ...) printf("%d\t>" frmt, 0, __VA_ARGS__)
@@ -21,7 +23,7 @@ extern int g_refptr_line;
 #  define LOG(...)
 #endif
 
-namespace ros {
+namespace rose {
 
 namespace internal {
   typedef unsigned long long ref_int;
@@ -235,4 +237,6 @@ class refptr {
   };
 };
 
-}  // namespace ros
+}  // namespace rose
+
+#endif

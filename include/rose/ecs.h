@@ -1,8 +1,11 @@
 #pragma once
 
-#include <ros/nocopy.h>
+#include <rose/nocopy.h>
+#include <rose/hash.h>
 
+#if 0
 #include <vector>
+
 
 namespace rose {
 namespace ecs {
@@ -19,7 +22,7 @@ namespace ecs {
 
   constexpr Entity NULL_ENTITY = {0, 0};
 
-  struct World : ros::nocopy {
+  struct World : rose::nocopy {
     // entity
     std::vector<rose::ecs::Entity> entities;
     // std::vector<rose::ecs::Entity> entitiyParent; //Does this make sense?
@@ -32,7 +35,7 @@ namespace ecs {
     }
 
     template <class T>
-    T &attach_component_to_vector(std::vector<int> &component_index, std::vector<T> &components, rose::ecs::Entity entity) {
+    T &attach_component_to_::vector(std::vector<int> &component_index, std::vector<T> &components, rose::ecs::Entity entity) {
       assert(is_valid(entity));
 
       if (entity.index >= component_index.size()) component_index.resize(entity.index + 1, -1);
@@ -88,11 +91,11 @@ namespace ecs {
 }  // namespace rose
 
 namespace ros {
-inline ros::hash_value hash(const rose::ecs::Entity &e) { return e.generation ^ e.index; }
+inline rose::hash_value hash(const rose::ecs::Entity &e) { return e.generation ^ e.index; }
 }  // namespace ros
 
 inline void serialize(rose::ecs::Entity &o, ISerializer &s) {
-  if (s.node_begin("Entity", ros::hash("Entity"), &o)) {
+  if (s.node_begin("Entity", rose::hash("Entity"), &o)) {
     s.node_end();
   }
   s.end();
@@ -108,4 +111,6 @@ inline void deserialize(rose::ecs::Entity &o, IDeserializer &s) {
   }
 }
 
-inline void randomize(rose::ecs::Entity &e, ros::hash_value &h) {}
+inline void randomize(rose::ecs::Entity &e, rose::hash_value &h) {}
+
+#endif
