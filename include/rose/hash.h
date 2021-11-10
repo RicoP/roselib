@@ -106,4 +106,16 @@ inline hash_value hash(wchar_t v) { return internal::hash_simple(v); }
 
 constexpr hash_value hash(char const* input) { return hash_fnv(input); }
 
+#ifndef ROSE_NO_STL
+template<class T>
+constexpr hash_value hash(const std::vector<T>& v) {
+  rose::hash_value h = 0;
+  for (auto& o : v) {
+    h ^= rose::hash(o);
+    h = rose::xor64(h);
+  }
+  return h;
+}
+#endif
+
 }  // namespace rose
