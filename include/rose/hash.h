@@ -3,6 +3,10 @@
 //__rdtsc
 #include <intrin.h>
 
+#ifndef ROSE_NO_STL
+#include <vector>
+#endif
+
 namespace rose {
 
 typedef unsigned long long hash_value;
