@@ -17,13 +17,14 @@ namespace json {
 template<class COMPONENT>
 int write(COMPONENT & component, ::rose::io::Folder folder, const char* name) {
   assert(folder == ::rose::io::Folder::Working);
-  FILE* f = fopen(name, "w");
+  FILE* f = fopen(name, "wb");
   if(!f) return 1;
   JsonSerializer jsons(f);
   rose::ecs::serialize(component, jsons);
   fclose(f);
   return 0;
 }
+
 
 template <class COMPONENT>
 void read_from_string(COMPONENT& component, char * json) {
