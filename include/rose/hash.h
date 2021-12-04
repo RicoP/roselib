@@ -75,6 +75,19 @@ inline float nextf(hash_value& h) {
   return u_f - 1.0f;
 }
 
+inline float nexti(hash_value& h) {
+  next(h);
+
+  union {
+    hash_value u_x;
+    int u_i;
+  };
+
+  u_x = h;
+
+  return u_i;
+}
+
 namespace internal {
   template <class T>
   inline hash_value hash_simple(T value) {
