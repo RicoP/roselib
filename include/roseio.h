@@ -32,14 +32,14 @@ void read_from_string(COMPONENT& component, char * json) {
 }
 
 template <class COMPONENT>
-void read(COMPONENT& component, ::rose::io::Folder folder, const char* name) {
+bool read(COMPONENT& component, ::rose::io::Folder folder, const char* name) {
   assert(folder == ::rose::io::Folder::Working);
   FILE* f = fopen(name, "rb");
 
   if (!f) {
     // TODO: have an option to just return default value if file doesn't exist.
     construct_defaults(component);
-    return;
+    return false;
   }
 
   assert(f);
@@ -59,6 +59,8 @@ void read(COMPONENT& component, ::rose::io::Folder folder, const char* name) {
   read_from_string(component, buffer);
 
   std::free(buffer);
+
+  return true;
 }
 
 template<class COMPONENT>
