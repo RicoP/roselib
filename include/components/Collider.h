@@ -13,8 +13,8 @@
 namespace rose {
 namespace ecs {
 struct Collider {
-  bool active;
   rose::vectorPOD<16, ObjectID> intersections;
+  bool active;
   vector3 pivot;
   vector3 scale;
 

@@ -12,8 +12,8 @@ namespace rose {
 namespace ecs {
 struct MicroSystem {
   Camera camera;
-  rose::hash_value hash;
   rose::string<64> name;
+  rose::hash_value hash;
 
   bool equals(const MicroSystem & rhs) const {
     return

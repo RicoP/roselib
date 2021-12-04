@@ -16,8 +16,8 @@ namespace ecs {
 struct CubeWorld {
   vector3 cam_position;
   vector3 cam_up;
-  Camera camera;
   Cubehero hero;
+  Camera camera;
   int max_cubes;
   rose::hash_value seed;
 

@@ -18,18 +18,18 @@
 namespace rose {
 namespace ecs {
 struct Kraxler {
+  Transform transform;
   vector3 barycentric;
   vector3 cam_offset;
-  vector2 cam_speed;
-  float heroRunSpeed;
-  float heroWalkSpeed;
   vector3 inputv;
-  bool jump;
+  vector3 velocity;
+  vector2 cam_speed;
   SoundAssetRef jump_sound;
   ObjectID renderObject;
-  Transform transform;
+  float heroRunSpeed;
+  float heroWalkSpeed;
   int triangle;
-  vector3 velocity;
+  bool jump;
 
   bool equals(const Kraxler & rhs) const {
     return

@@ -25,6 +25,7 @@
 #include <components/microsystem.h>
 #include <components/shaderassetref.h>
 #include <components/raytracer.h>
+#include <components/roseoptions.h>
 #include <components/textureassetref.h>
 #include <components/sceneobject.h>
 #include <components/wheelchairsystemstate.h>

@@ -16,8 +16,8 @@ namespace ecs {
 struct Transform {
   matrix4 mvt;
   vector3 position;
-  quaternion rotation;
   vector3 scale;
+  quaternion rotation;
 
   bool equals(const Transform & rhs) const {
     return

@@ -17,16 +17,16 @@
 namespace rose {
 namespace ecs {
 struct Hero {
+  Transform transform;
   vector3 cam_offset;
-  vector2 cam_speed;
-  float heroRunSpeed;
-  float heroWalkSpeed;
   vector3 inputv;
-  bool jump;
+  vector3 velocity;
+  vector2 cam_speed;
   SoundAssetRef jump_sound;
   ObjectID renderObject;
-  Transform transform;
-  vector3 velocity;
+  float heroWalkSpeed;
+  float heroRunSpeed;
+  bool jump;
 
   bool equals(const Hero & rhs) const {
     return
