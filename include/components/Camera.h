@@ -12,11 +12,11 @@
 namespace rose {
 namespace ecs {
 struct Camera {
-  matrix4 projection;
-  matrix4 lookat;
   float far_plane;
-  float near_plane;
   float fov;
+  matrix4 lookat;
+  float near_plane;
+  matrix4 projection;
 
   bool equals(const Camera & rhs) const {
     return

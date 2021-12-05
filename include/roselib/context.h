@@ -1,6 +1,8 @@
 #pragma once
 
 #include <rosemath.h>
+#include <components/components.h>
+#include <components/padevents.h>
 
 #define ROSE_EXPORT extern "C" __declspec(dllexport)
 

@@ -12,9 +12,9 @@
 namespace rose {
 namespace ecs {
 struct RoseOptions {
+  bool raytracer;
   vector2 window_position;
   vector2 window_size;
-  bool raytracer;
 
   bool equals(const RoseOptions & rhs) const {
     return
