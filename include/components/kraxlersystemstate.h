@@ -71,7 +71,7 @@ inline void randomize(KraxlerSystemState &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::KraxlerSystemState &o) {
+  inline hash_value hash(const ecs::KraxlerSystemState &o) {
     hash_value h = hash(o.object);
     return h;
   }

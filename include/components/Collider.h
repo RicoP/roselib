@@ -99,7 +99,7 @@ inline void randomize(Collider &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::Collider &o) {
+  inline hash_value hash(const ecs::Collider &o) {
     hash_value h = hash(o.active);
     h = xor64(h);
     h ^= hash(o.intersections);

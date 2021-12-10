@@ -99,7 +99,7 @@ inline void randomize(Cubehero &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::Cubehero &o) {
+  inline hash_value hash(const ecs::Cubehero &o) {
     hash_value h = hash(o.destination);
     h = xor64(h);
     h ^= hash(o.position);

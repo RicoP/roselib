@@ -158,7 +158,7 @@ inline void randomize(Scene &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::Scene &o) {
+  inline hash_value hash(const ecs::Scene &o) {
     hash_value h = hash(o.activeCamera);
     h = xor64(h);
     h ^= hash(o.cameras);

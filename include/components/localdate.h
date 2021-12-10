@@ -77,7 +77,7 @@ inline void randomize(LocalDate &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::LocalDate &o) {
+  inline hash_value hash(const ecs::LocalDate &o) {
     hash_value h = hash(o.date);
     h = xor64(h);
     h ^= hash(o.time);

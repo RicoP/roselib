@@ -52,7 +52,7 @@ inline void randomize(matrix4 &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(matrix4 &o) {
+  inline hash_value hash(const matrix4 &o) {
     hash_value h = hash(o.v);
     return h;
   }

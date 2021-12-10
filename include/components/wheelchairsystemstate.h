@@ -71,7 +71,7 @@ inline void randomize(WheelchairSystemState &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::WheelchairSystemState &o) {
+  inline hash_value hash(const ecs::WheelchairSystemState &o) {
     hash_value h = hash(o.object);
     return h;
   }

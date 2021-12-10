@@ -29,7 +29,7 @@ int write(COMPONENT & component, ::rose::io::Folder folder, const char* name) {
 template <class COMPONENT>
 void read_from_string(COMPONENT& component, char * json) {
   JsonDeserializer jsond(json);
-  deserialize(component, jsond);
+  rose::ecs::deserialize(component, jsond);
 }
 
 template <class COMPONENT>

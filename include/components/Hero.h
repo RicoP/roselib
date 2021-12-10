@@ -157,7 +157,7 @@ inline void randomize(Hero &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::Hero &o) {
+  inline hash_value hash(const ecs::Hero &o) {
     hash_value h = hash(o.cam_offset);
     h = xor64(h);
     h ^= hash(o.cam_speed);

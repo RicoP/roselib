@@ -90,7 +90,7 @@ inline void randomize(RoseOptions &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::RoseOptions &o) {
+  inline hash_value hash(const ecs::RoseOptions &o) {
     hash_value h = hash(o.raytracer);
     h = xor64(h);
     h ^= hash(o.window_position);

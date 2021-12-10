@@ -52,7 +52,7 @@ inline void randomize(SoundAssetRef &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(SoundAssetRef &o) {
+  inline hash_value hash(const SoundAssetRef &o) {
     hash_value h = hash(o.id);
     return h;
   }

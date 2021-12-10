@@ -108,7 +108,7 @@ inline void randomize(Camera &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::Camera &o) {
+  inline hash_value hash(const ecs::Camera &o) {
     hash_value h = hash(o.far_plane);
     h = xor64(h);
     h ^= hash(o.fov);

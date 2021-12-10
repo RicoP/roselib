@@ -69,7 +69,7 @@ inline void randomize(WindowOptions &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::WindowOptions &o) {
+  inline hash_value hash(const ecs::WindowOptions &o) {
     hash_value h = hash(o.popped);
     return h;
   }

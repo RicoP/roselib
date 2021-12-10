@@ -101,7 +101,7 @@ inline void randomize(Transform &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::Transform &o) {
+  inline hash_value hash(const ecs::Transform &o) {
     hash_value h = hash(o.mvt);
     h = xor64(h);
     h ^= hash(o.position);

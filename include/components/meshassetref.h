@@ -52,7 +52,7 @@ inline void randomize(MeshAssetRef &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(MeshAssetRef &o) {
+  inline hash_value hash(const MeshAssetRef &o) {
     hash_value h = hash(o.id);
     return h;
   }

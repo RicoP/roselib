@@ -52,7 +52,7 @@ inline void randomize(TextureAssetRef &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(TextureAssetRef &o) {
+  inline hash_value hash(const TextureAssetRef &o) {
     hash_value h = hash(o.id);
     return h;
   }

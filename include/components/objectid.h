@@ -52,7 +52,7 @@ inline void randomize(ObjectID &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ObjectID &o) {
+  inline hash_value hash(const ObjectID &o) {
     hash_value h = hash(o.id);
     return h;
   }

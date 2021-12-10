@@ -36,8 +36,11 @@ bool operator!=(const PadEvent &lhs, const PadEvent &rhs);
 
 #ifdef IMPL_SERIALIZER
 
+    #ifndef IMPL_SERIALIZER_UTIL
+    #define IMPL_SERIALIZER_UTIL
     #include <cstring>
 
+    namespace {
     //internal helper methods
     template<class T>
     bool rose_parser_equals(const T& lhs, const T& rhs) {
@@ -79,6 +82,8 @@ bool operator!=(const PadEvent &lhs, const PadEvent &rhs);
     void construct_default(std::vector<T> & v) {
       c.clear();
     }
+    }
+    #endif
   
 const char * to_string(const PadEventButton & e) {
     switch(e) {

@@ -118,7 +118,7 @@ inline void randomize(CubeWorld &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::CubeWorld &o) {
+  inline hash_value hash(const ecs::CubeWorld &o) {
     hash_value h = hash(o.cam_position);
     h = xor64(h);
     h ^= hash(o.cam_up);

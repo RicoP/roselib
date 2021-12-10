@@ -52,7 +52,7 @@ inline void randomize(ShaderAssetRef &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ShaderAssetRef &o) {
+  inline hash_value hash(const ShaderAssetRef &o) {
     hash_value h = hash(o.id);
     return h;
   }

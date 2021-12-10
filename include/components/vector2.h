@@ -58,7 +58,7 @@ inline void randomize(vector2 &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(vector2 &o) {
+  inline hash_value hash(const vector2 &o) {
     hash_value h = hash(o.x);
     h = xor64(h);
     h ^= hash(o.y);

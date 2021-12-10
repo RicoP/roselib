@@ -87,7 +87,7 @@ inline void randomize(MicroSystem &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(ecs::MicroSystem &o) {
+  inline hash_value hash(const ecs::MicroSystem &o) {
     hash_value h = hash(o.camera);
     h = xor64(h);
     h ^= hash(o.hash);
