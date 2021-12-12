@@ -3,7 +3,7 @@
 // Check https://docs.microsoft.com/en-us/windows/win32/api/xinput/ns-xinput-xinput_gamepad
 // for bit masks
 
-//@Flags
+//@Flag
 enum class PadEventButton : int {
   NONE = 0,
   // DPad
