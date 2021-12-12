@@ -17,7 +17,7 @@ namespace rose {
     void        serialize(PadEventButton &o, ISerializer &s);
   }
   hash_value         hash(const PadEventButton &o);
-  void construct_defaults(      PadEventButton &o); //TODO: implement me
+  void construct_defaults(      PadEventButton &o); //implement me
 }
 
 
@@ -28,7 +28,7 @@ namespace rose {
     void      deserialize(PadEvent &o, IDeserializer &s);
   }
   hash_value         hash(const PadEvent &o);
-  void construct_defaults(      PadEvent &o); //TODO: implement me
+  void construct_defaults(      PadEvent &o); // implement me
 }
 bool operator==(const PadEvent &lhs, const PadEvent &rhs);
 bool operator!=(const PadEvent &lhs, const PadEvent &rhs);
@@ -277,7 +277,7 @@ void rose::ecs::serialize(PadEvent &o, ISerializer &s) {
 }
 
 void rose::ecs::deserialize(PadEvent &o, IDeserializer &s) {
-  //TODO: implement me
+  //implement me
   //construct_defaults(o);
 
   while (s.next_key()) {
