@@ -32,6 +32,6 @@ PROC_SIG(meta,                            request_camera_ownership, ()          
 
 //Workaround functions until we have a propper system
 FUNC_SIG(input,    PadEvent,      pad,    ()                                  , ()                        )
+FUNC_SIG(input,    PadEvent,      pad_raw,()                                  , ()                        )
 FUNC_SIG(input,    vector2,       stick,  ()                                  , ()                        )
 FUNC_SIG(input,    bool,          action, ()                                  , ()                        )
-
