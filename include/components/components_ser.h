@@ -19,7 +19,7 @@ namespace rose {
   }
   template<>
   struct type_id<PadEventButton> {
-    hash_value VALUE = 13001520524004003403ULL;
+    static inline hash_value VALUE = 13001520524004003403ULL;
   };
   hash_value         hash(const PadEventButton &o);
   void construct_defaults(      PadEventButton &o); //implement me
@@ -41,7 +41,7 @@ namespace rose {
   hash_value         hash(const PadEvent &o);
   template<>
   struct type_id<PadEvent> {
-    hash_value VALUE = 918484592891382733ULL;
+    static inline hash_value VALUE = 918484592891382733ULL;
   };
   void construct_defaults(      PadEvent &o); // implement me
 }
