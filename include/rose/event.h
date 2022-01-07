@@ -1,5 +1,6 @@
 #pragma once
 
+#include <new> //std::launder
 #include <rose/hash.h>
 #include <rose/typetraits.h>
 
@@ -9,12 +10,12 @@ namespace rose {
 struct Event {
   rose::hash_value event_id = 0;
   size_t padded_event_size = 0;
-  char *data = nullptr;  // pointing on first byte of event struct
+  unsigned char *data = nullptr;  // pointing on first byte of event struct
 
   template <class T>
   const T *get() const {
     if (rose::type_id<T>::VALUE == event_id) {
-      return reinterpret_cast<const T *>(data);
+      return std::launder(reinterpret_cast<const T *>(data));
     }
     return nullptr;
   }
@@ -22,7 +23,7 @@ struct Event {
   template <class T>
   T *get_mutable() {
     if (rose::type_id<T>::VALUE == event_id) {
-      return reinterpret_cast<T *>(data);
+      return std::launder(reinterpret_cast<T *>(data));
     }
     return nullptr;
   }

@@ -1,6 +1,31 @@
-#include <ros/container.h>
+#include <rose/container.h>
+#include <rose/event.h>
+#include <rose/eventqueue.h>
+#include <rose/typetraits.h>
 
 #include <cassert>
+
+struct Test1 {
+  float x, y, z;
+};
+
+struct Test2 {
+  int i, j, k;
+  Test1 test1;
+};
+
+//We have to create the type_id type_traits by hand, normaly we would generate them with rose.parser
+namespace rose {
+template <>
+struct type_id<Test1> {
+  static inline rose::hash_value VALUE = rose::hash("Test1");
+};
+
+template <>
+struct type_id<Test2> {
+  static inline rose::hash_value VALUE = rose::hash("Test2");
+};
+}
 
 int main() {
   rose::Hashmap<16, const char *, long long> map;
@@ -16,5 +41,35 @@ int main() {
 
   assert(map.getOrDefault("missing", -77) == -77);
 
+
+  //Event Queue
+  rose::EventQueueContainer<2 * 1024, 64> container;
+
+  rose::EventQueue queue(container);
+
+  assert(queue.begin() == queue.end());
+
+  Test1 t1a{1.0f, 2.0f, 3.0f};
+  Test2 t2a{4, 5, 6, t1a};
+  queue.push_back(t2a);
+  queue.push_back(t1a);
+
+  assert(queue.count() == 2);
+
+  for (auto event : queue) {
+    if (const Test1 *p = event.get<Test1>()) {
+      assert(p->x == 1);
+    } else if (const Test2 *p = event.get<Test2>()) {
+      assert(p->test1.x == 1);
+    }
+
+    if (Test1 *p = event.get_mutable<Test1>()) {
+      assert(p->x == 1);
+    } else if (Test2 *p = event.get_mutable<Test2>()) {
+      assert(p->test1.x == 1);
+    }
+  }
+
+  puts("OK");
   return 0;
 }
