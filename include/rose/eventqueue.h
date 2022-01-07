@@ -48,11 +48,10 @@ struct EventIterator {
 
 template <size_t MAX_SIZE, size_t MAX_ELEMENTS>
 struct alignas(32) EventQueueContainer {
-  // the structure of an Event block is like that
-  // | ID         : 8 Byte (rose::hash_value)
-  // | Size       : 8 Byte (size_t) (PADDED size of T)
+  // The structure of an Event block is like that
   // | Event Data : X Byte (T)
   // | Padding    : 0..7 Byte (Padding so sizeof(T) is multible if 8 == sizeof(void*)
+  // This must be the first member or else the allignment will be off.
   unsigned char data[MAX_SIZE];
   EventQueueContainerMetaInfo meta[MAX_ELEMENTS];
   size_t data_size = 0;
