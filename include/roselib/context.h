@@ -1,6 +1,7 @@
 #pragma once
 
 #include <rosemath.h>
+#include <rose/eventqueue.h>
 #include <components/components.h>
 #include <components/padevents.h>
 
