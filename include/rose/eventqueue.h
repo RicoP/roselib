@@ -63,10 +63,14 @@ struct EventQueue : rose::nocopy {
   EventQueueContainerMetaInfo *meta;
   size_t *data_size;
   size_t *meta_size;
+  size_t max_data_size;
+  size_t max_meta_size;
 
-  template <size_t N, size_t M>
-  EventQueue(EventQueueContainer<N, M> &container)
-      : data(container.data), meta(container.meta), data_size(&container.data_size), meta_size(&container.meta_size) {}
+  EventQueue() = delete;
+
+  template <size_t MAX_DATA, size_t MAX_META>
+  EventQueue(EventQueueContainer<MAX_DATA, MAX_META> &container)
+      : data(container.data), meta(container.meta), data_size(&container.data_size), meta_size(&container.meta_size), max_data_size(MAX_DATA), max_meta_size(MAX_META) {}
 
   static size_t round_next_alligned(size_t size) {
     size_t padding = size % 32;
@@ -86,15 +90,14 @@ struct EventQueue : rose::nocopy {
 
     size_t padded_event_data_size = round_next_alligned(sizeof(T));
 
-    // asset(MAX >= data_size + padded_event_data_size);
+    assert(max_data_size >= *data_size + padded_event_data_size);
 
     assert(*data_size == round_next_alligned(*data_size));
 
-    //::new (data + data_size) rose::hash_value(event_id);
-    //::new (data + data_size) size_t(padded_event_data_size);
-
     ::new (data + *data_size) T(event);
     *data_size += padded_event_data_size;
+
+    assert(*meta_size != max_meta_size);
 
     meta[*meta_size].event_id = event_id;
     meta[*meta_size].alligned_size = padded_event_data_size;

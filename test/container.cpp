@@ -43,33 +43,41 @@ int main() {
 
 
   //Event Queue
-  rose::EventQueueContainer<2 * 1024, 64> container;
-
+  rose::EventQueueContainer<64, 2> container;
   rose::EventQueue queue(container);
 
-  assert(queue.begin() == queue.end());
+  for (int i = 0; i != 2; ++i) {
+    assert(queue.begin() == queue.end());
 
-  Test1 t1a{1.0f, 2.0f, 3.0f};
-  Test2 t2a{4, 5, 6, t1a};
-  queue.push_back(t2a);
-  queue.push_back(t1a);
+    Test1 t1a{1.0f, 2.0f, 3.0f};
+    Test2 t2a{4, 5, 6, t1a};
+    queue.push_back(t2a);
+    queue.push_back(t1a);
 
-  assert(queue.count() == 2);
+    assert(queue.count() == 2);
 
-  for (auto event : queue) {
-    if (const Test1 *p = event.get<Test1>()) {
-      assert(p->x == 1);
-    } else if (const Test2 *p = event.get<Test2>()) {
-      assert(p->test1.x == 1);
+    for (auto event : queue) {
+      if (const Test1 *p = event.get<Test1>()) {
+        assert(p->x == 1);
+        assert(p->y == 2);
+        assert(p->z == 3);
+      } else if (const Test2 *p = event.get<Test2>()) {
+        assert(p->test1.x == 1);
+        assert(p->test1.y == 2);
+        assert(p->test1.z == 3);
+      }
+      if (Test1 *p = event.get_mutable<Test1>()) {
+        assert(p->x == 1);
+        assert(p->y == 2);
+        assert(p->z == 3);
+      } else if (Test2 *p = event.get_mutable<Test2>()) {
+        assert(p->test1.x == 1);
+        assert(p->test1.y == 2);
+        assert(p->test1.z == 3);
+      }
     }
-
-    if (Test1 *p = event.get_mutable<Test1>()) {
-      assert(p->x == 1);
-    } else if (Test2 *p = event.get_mutable<Test2>()) {
-      assert(p->test1.x == 1);
-    }
+    queue.clear();
   }
-
   puts("OK");
   return 0;
 }
