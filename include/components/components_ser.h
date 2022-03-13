@@ -1,6 +1,7 @@
 #pragma once
 
 #include <rose/hash.h>
+#include <rose/typetraits.h>
 #include <serializer/serializer.h>
 
 ///////////////////////////////////////////////////////////////////
@@ -16,6 +17,10 @@ namespace rose {
     void      deserialize(PadEventButton &o, IDeserializer &s);
     void        serialize(PadEventButton &o, ISerializer &s);
   }
+  template<>
+  struct type_id<PadEventButton> {
+    static inline hash_value VALUE = 13001520524004003403ULL;
+  };
   hash_value         hash(const PadEventButton &o);
   void construct_defaults(      PadEventButton &o); //implement me
 }
@@ -34,6 +39,10 @@ namespace rose {
     void      deserialize(PadEvent &o, IDeserializer &s);
   }
   hash_value         hash(const PadEvent &o);
+  template<>
+  struct type_id<PadEvent> {
+    static inline hash_value VALUE = 918484592891382733ULL;
+  };
   void construct_defaults(      PadEvent &o); // implement me
 }
 bool operator==(const PadEvent &lhs, const PadEvent &rhs);

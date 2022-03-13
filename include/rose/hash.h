@@ -75,7 +75,7 @@ inline float nextf(hash_value& h) {
   return u_f - 1.0f;
 }
 
-inline float nexti(hash_value& h) {
+inline int nexti(hash_value& h) {
   next(h);
 
   union {
