@@ -11,13 +11,13 @@ enum class SubsystemConfig : int {
 
 struct SubsystemPath {
   //@String
-  char path[64];
+  char path[64] = "";
   SubsystemConfig config = SubsystemConfig::NONE;
 };
 
 struct WorkspacePath {
   //@String
-  char path[260];
+  char path[260] = "";
 };
 
 struct Workspace {

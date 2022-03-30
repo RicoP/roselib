@@ -51,6 +51,8 @@ inline SubsystemConfig operator|(const SubsystemConfig &a, const SubsystemConfig
 inline SubsystemConfig operator|=(SubsystemConfig &a, const SubsystemConfig &b) { return a = a | b; }
 inline SubsystemConfig operator&(const SubsystemConfig &a, const SubsystemConfig &b) { return static_cast<SubsystemConfig>(static_cast<int >(a) & static_cast<int >(b)); }
 inline SubsystemConfig operator&=(SubsystemConfig &a, const SubsystemConfig &b) { return a = a & b; }
+inline SubsystemConfig operator^(const SubsystemConfig &a, const SubsystemConfig &b) { return static_cast<SubsystemConfig>(static_cast<int >(a) ^ static_cast<int >(b)); }
+inline SubsystemConfig operator^=(SubsystemConfig &a, const SubsystemConfig &b) { return a = a ^ b; }
 inline bool operator!(const SubsystemConfig &e) { return static_cast<int >(e) == 0; }
 
 
@@ -80,7 +82,7 @@ namespace rose {
   hash_value         hash(const SubsystemPath &o);
   template<>
   struct type_id<SubsystemPath> {
-    inline static hash_value VALUE = 15506991714936396707ULL;
+    inline static hash_value VALUE = 10948514965112361504ULL;
   };
   void construct_defaults(      SubsystemPath &o); // implement me
 }
@@ -97,7 +99,7 @@ namespace rose {
   hash_value         hash(const WorkspacePath &o);
   template<>
   struct type_id<WorkspacePath> {
-    inline static hash_value VALUE = 17356310555021850461ULL;
+    inline static hash_value VALUE = 468019005510777901ULL;
   };
   void construct_defaults(      WorkspacePath &o); // implement me
 }
