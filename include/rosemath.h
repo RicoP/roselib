@@ -16,6 +16,12 @@ T abs(T val) {
   return val < 0 ? -val : val;
 }
 
+#ifdef min
+#  undef min
+#endif
+#ifdef max
+#  undef max
+#endif
 template <class T>
 T min(T a, T b) {
   return a < b ? a : b;
