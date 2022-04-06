@@ -75,6 +75,11 @@ inline float nextf(hash_value& h) {
   return u_f - 1.0f;
 }
 
+inline float nextf(hash_value& h, float min, float max) {
+  if (max < min) return nextf(h, max, min);
+  return min + nextf(h) * (max - min);
+}
+
 inline int nexti(hash_value& h) {
   next(h);
 

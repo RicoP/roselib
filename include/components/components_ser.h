@@ -29,6 +29,8 @@ inline PadEventButton operator|(const PadEventButton &a, const PadEventButton &b
 inline PadEventButton operator|=(PadEventButton &a, const PadEventButton &b) { return a = a | b; }
 inline PadEventButton operator&(const PadEventButton &a, const PadEventButton &b) { return static_cast<PadEventButton>(static_cast<int >(a) & static_cast<int >(b)); }
 inline PadEventButton operator&=(PadEventButton &a, const PadEventButton &b) { return a = a & b; }
+inline PadEventButton operator^(const PadEventButton &a, const PadEventButton &b) { return static_cast<PadEventButton>(static_cast<int >(a) ^ static_cast<int >(b)); }
+inline PadEventButton operator^=(PadEventButton &a, const PadEventButton &b) { return a = a ^ b; }
 inline bool operator!(const PadEventButton &e) { return static_cast<int >(e) == 0; }
 
 
