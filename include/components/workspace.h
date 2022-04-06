@@ -15,16 +15,9 @@ struct SubsystemPath {
   SubsystemConfig config = SubsystemConfig::NONE;
 };
 
-struct WorkspacePath {
-  //@String
-  char path[260] = "";
-};
-
 struct Workspace {
-  WorkspacePath path;
   std::vector<SubsystemPath> subsystems;
-};
 
-struct WorkspaceConfig {
-  std::vector<Workspace> workspaces;
+  //@String
+  char console_filter[128] = "";
 };

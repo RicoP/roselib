@@ -92,23 +92,6 @@ bool operator==(const SubsystemPath &lhs, const SubsystemPath &rhs);
 bool operator!=(const SubsystemPath &lhs, const SubsystemPath &rhs);
 
 
-struct                WorkspacePath;
-namespace rose {
-  namespace ecs {
-    void        serialize(WorkspacePath &o, ISerializer &s);
-    void      deserialize(WorkspacePath &o, IDeserializer &s);
-  }
-  hash_value         hash(const WorkspacePath &o);
-  template<>
-  struct type_id<WorkspacePath> {
-    inline static hash_value VALUE = 468019005510777901ULL;
-  };
-  void construct_defaults(      WorkspacePath &o); // implement me
-}
-bool operator==(const WorkspacePath &lhs, const WorkspacePath &rhs);
-bool operator!=(const WorkspacePath &lhs, const WorkspacePath &rhs);
-
-
 struct                Workspace;
 namespace rose {
   namespace ecs {
@@ -118,29 +101,12 @@ namespace rose {
   hash_value         hash(const Workspace &o);
   template<>
   struct type_id<Workspace> {
-    inline static hash_value VALUE = 16052463485792588602ULL;
+    inline static hash_value VALUE = 13179882803128084631ULL;
   };
   void construct_defaults(      Workspace &o); // implement me
 }
 bool operator==(const Workspace &lhs, const Workspace &rhs);
 bool operator!=(const Workspace &lhs, const Workspace &rhs);
-
-
-struct                WorkspaceConfig;
-namespace rose {
-  namespace ecs {
-    void        serialize(WorkspaceConfig &o, ISerializer &s);
-    void      deserialize(WorkspaceConfig &o, IDeserializer &s);
-  }
-  hash_value         hash(const WorkspaceConfig &o);
-  template<>
-  struct type_id<WorkspaceConfig> {
-    inline static hash_value VALUE = 2384895658567893362ULL;
-  };
-  void construct_defaults(      WorkspaceConfig &o); // implement me
-}
-bool operator==(const WorkspaceConfig &lhs, const WorkspaceConfig &rhs);
-bool operator!=(const WorkspaceConfig &lhs, const WorkspaceConfig &rhs);
 
 
 #ifdef IMPL_SERIALIZER
@@ -524,66 +490,26 @@ rose::hash_value rose::hash(const SubsystemPath &o) {
   return h;
 }
 ///////////////////////////////////////////////////////////////////
-//  struct WorkspacePath
-///////////////////////////////////////////////////////////////////
-bool operator==(const WorkspacePath &lhs, const WorkspacePath &rhs) {
-  return
-    rose_parser_equals(lhs.path, rhs.path) ;
-}
-
-bool operator!=(const WorkspacePath &lhs, const WorkspacePath &rhs) {
-  return
-    !rose_parser_equals(lhs.path, rhs.path) ;
-}
-
-void rose::ecs::serialize(WorkspacePath &o, ISerializer &s) {
-  if(s.node_begin("WorkspacePath", rose::hash("WorkspacePath"), &o)) {
-    s.key("path");
-    serialize(o.path, s, std::strlen(o.path));
-    s.node_end();
-  }
-  s.end();
-}
-
-void rose::ecs::deserialize(WorkspacePath &o, IDeserializer &s) {
-  //implement me
-  //construct_defaults(o);
-
-  while (s.next_key()) {
-    switch (s.hash_key()) {
-      case rose::hash("path"):
-        deserialize(o.path, s);
-        break;
-      default: s.skip_key(); break;
-    }
-  }
-}
-
-rose::hash_value rose::hash(const WorkspacePath &o) {
-  rose::hash_value h = rose::hash(o.path);
-  return h;
-}
-///////////////////////////////////////////////////////////////////
 //  struct Workspace
 ///////////////////////////////////////////////////////////////////
 bool operator==(const Workspace &lhs, const Workspace &rhs) {
   return
-    rose_parser_equals(lhs.path, rhs.path) &&
-    rose_parser_equals(lhs.subsystems, rhs.subsystems) ;
+    rose_parser_equals(lhs.subsystems, rhs.subsystems) &&
+    rose_parser_equals(lhs.console_filter, rhs.console_filter) ;
 }
 
 bool operator!=(const Workspace &lhs, const Workspace &rhs) {
   return
-    !rose_parser_equals(lhs.path, rhs.path) ||
-    !rose_parser_equals(lhs.subsystems, rhs.subsystems) ;
+    !rose_parser_equals(lhs.subsystems, rhs.subsystems) ||
+    !rose_parser_equals(lhs.console_filter, rhs.console_filter) ;
 }
 
 void rose::ecs::serialize(Workspace &o, ISerializer &s) {
   if(s.node_begin("Workspace", rose::hash("Workspace"), &o)) {
-    s.key("path");
-    serialize(o.path, s);
     s.key("subsystems");
     serialize(o.subsystems, s);
+    s.key("console_filter");
+    serialize(o.console_filter, s, std::strlen(o.console_filter));
     s.node_end();
   }
   s.end();
@@ -595,11 +521,11 @@ void rose::ecs::deserialize(Workspace &o, IDeserializer &s) {
 
   while (s.next_key()) {
     switch (s.hash_key()) {
-      case rose::hash("path"):
-        deserialize(o.path, s);
-        break;
       case rose::hash("subsystems"):
         deserialize(o.subsystems, s);
+        break;
+      case rose::hash("console_filter"):
+        deserialize(o.console_filter, s);
         break;
       default: s.skip_key(); break;
     }
@@ -607,49 +533,9 @@ void rose::ecs::deserialize(Workspace &o, IDeserializer &s) {
 }
 
 rose::hash_value rose::hash(const Workspace &o) {
-  rose::hash_value h = rose::hash(o.path);
+  rose::hash_value h = rose::hash(o.subsystems);
   h = rose::xor64(h);
-  h ^= rose::hash(o.subsystems);
-  return h;
-}
-///////////////////////////////////////////////////////////////////
-//  struct WorkspaceConfig
-///////////////////////////////////////////////////////////////////
-bool operator==(const WorkspaceConfig &lhs, const WorkspaceConfig &rhs) {
-  return
-    rose_parser_equals(lhs.workspaces, rhs.workspaces) ;
-}
-
-bool operator!=(const WorkspaceConfig &lhs, const WorkspaceConfig &rhs) {
-  return
-    !rose_parser_equals(lhs.workspaces, rhs.workspaces) ;
-}
-
-void rose::ecs::serialize(WorkspaceConfig &o, ISerializer &s) {
-  if(s.node_begin("WorkspaceConfig", rose::hash("WorkspaceConfig"), &o)) {
-    s.key("workspaces");
-    serialize(o.workspaces, s);
-    s.node_end();
-  }
-  s.end();
-}
-
-void rose::ecs::deserialize(WorkspaceConfig &o, IDeserializer &s) {
-  //implement me
-  //construct_defaults(o);
-
-  while (s.next_key()) {
-    switch (s.hash_key()) {
-      case rose::hash("workspaces"):
-        deserialize(o.workspaces, s);
-        break;
-      default: s.skip_key(); break;
-    }
-  }
-}
-
-rose::hash_value rose::hash(const WorkspaceConfig &o) {
-  rose::hash_value h = rose::hash(o.workspaces);
+  h ^= rose::hash(o.console_filter);
   return h;
 }
 
