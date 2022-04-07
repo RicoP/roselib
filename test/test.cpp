@@ -8,4 +8,4 @@ int main(int argc, char ** argv) {
 
 #define ROSE_FORMAT_IMPL
 #define ROSE_FORMAT_TEST
-#include <rose/format.h>
+#include <rose/printf.h>
