@@ -3,6 +3,10 @@ namespace intern {
   namespace format {
 
     struct rose_format_chain {
+      char* data;
+      int begin;
+      int size;
+
       struct format_value_formatter {
         const char* format;
         enum class type {
@@ -53,22 +57,6 @@ namespace intern {
         rose_format_chain print(rose_format_chain chain) const;
       };
 
-      char* data;
-      int begin;
-      int size;
-
-      /*
-    rose_format_chain val(const char* str) {
-      while (*str && begin != size) {
-        data[begin] = *str;
-        ++begin;
-        ++str;
-      }
-      return *this;
-    }
-    rose_format_chain val(char* str) { return val((const char*)str); }
-      */
-
       const char* end() {
         if (begin == size) {
           return nullptr;
@@ -106,7 +94,7 @@ intern::format::rose_format_chain format(char (&buffer)[N]) {
 // Implementation
 ///////////////////////////////////////////////
 
-#include <cstdio>  // for snprintf
+#  include <cstdio>  // for snprintf
 #  define FORMAT_VALUE(i)                                           \
     sz = snprintf(chain.data + chain.begin, chain.size, format, i); \
     if (sz <= 0 || sz > (chain.size - chain.begin)) {               \
@@ -116,7 +104,8 @@ intern::format::rose_format_chain format(char (&buffer)[N]) {
     }                                                               \
     return chain
 
-rose_format_chain rose::intern::format::rose_format_chain::format_value_formatter::print(rose_format_chain chain) const {
+rose::intern::format::rose_format_chain rose::intern::format::rose_format_chain::format_value_formatter::print(
+    rose::intern::format::rose_format_chain chain) const {
   int sz;
   const char* str = s;
   switch (value_type) {
@@ -157,5 +146,28 @@ TEST_CASE("rose::format") {
   REQUIRE("3.14" == (std::string)(rose::format(str).val(3.14f).end()));
   REQUIRE("        42" == (std::string)(rose::format(str).val({"%10d", 42}).end()));
   REQUIRE("0000000042" == (std::string)(rose::format(str).val({"%010d", 42}).end()));
+
+  int i = 42;
+  unsigned u = 42;
+  long l = 42;
+  unsigned long ul = 42;
+  float f = 3.14f;
+  double d = 3.14;
+  const char* s = "Hello World";
+  void* p = (void*)0x2a;
+
+  REQUIRE("42" == (std::string)(rose::format(str).val(i).end()));
+  REQUIRE("42" == (std::string)(rose::format(str).val(u).end()));
+  REQUIRE("42" == (std::string)(rose::format(str).val(l).end()));
+  REQUIRE("42" == (std::string)(rose::format(str).val(ul).end()));
+  REQUIRE("3.14" == (std::string)(rose::format(str).val(f).end()));
+  REQUIRE("3.14" == (std::string)(rose::format(str).val(d).end()));
+  REQUIRE("Hello World" == (std::string)(rose::format(str).val(s).end()));
+  REQUIRE("000000000000002A" == (std::string)(rose::format(str).val(p).end()));
+
+  // Float test
+  REQUIRE("3.14" == (std::string)(rose::format(str).val({"%4.2f", 3.1416}).end()));
+  REQUIRE("+3e+00" == (std::string)(rose::format(str).val({"%+.0e", 3.1416}).end()));
+  REQUIRE("3.141600E+00" == (std::string)(rose::format(str).val({"%E", 3.1416}).end()));
 }
 #endif

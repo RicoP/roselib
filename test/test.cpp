@@ -1,9 +1,9 @@
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
+#define CATCH_CONFIG_RUNNER
 #include "catch.hpp"
 
-TEST_CASE( "Faketest", "[say_hello]" ) {
-    //TODO: is this possible without creating a new test?
-    std::cout << "Test created on the " << __DATE__ << " at " << __TIME__ << std::endl;
+int main(int argc, char ** argv) {
+  std::cout << "Test created on the " << __DATE__ << " at " << __TIME__ << "\n";
+  return Catch::Session().run(argc, argv);
 }
 
 #define ROSE_FORMAT_IMPL
