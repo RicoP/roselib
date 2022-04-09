@@ -228,7 +228,7 @@ TEST_CASE("rose") {
   REQUIRE("Hello World" == (std::string)(rose::format(str, {"Hello World"})));
   REQUIRE("Hello World" == (std::string)(rose::format(str, {"Hello ", "World"})));
   REQUIRE("Hello World 42" == (std::string)(rose::format(str, {"Hello ", "World ", 42})));
-  REQUIRE("Hello World 0000000042" == (std::string)(rose::format(str, {"Hello ", "World ", {"%010d", 42}})));
   REQUIRE("Hello World 3.14 42" == (std::string)(rose::format(str, {"Hello ", "World ", 3.14, " ", 42})));
+  REQUIRE("Hello World 0000000042" == (std::string)(rose::format(str, {"Hello ", "World ", {"%010d", 42}})));
 }
 #endif
