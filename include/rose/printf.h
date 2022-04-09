@@ -1,3 +1,5 @@
+#include <initializer_list>
+
 namespace rose {
 namespace intern {
 
@@ -86,7 +88,29 @@ namespace intern {
   }
 }  // namespace intern
 
+int snprintf(char* buffer, size_t size, std::initializer_list<intern::rose_format_chain::format_value_formatter> list) {
+  intern::rose_format_chain chain = intern::format(buffer, (int)size);
+  for (auto& f : list) {
+    chain = chain.val(f);
+  }
+  const char* value = chain.end();
+  return chain.begin;
+}
 
+template <size_t N>
+int sprintf(char (&buffer)[N], std::initializer_list<intern::rose_format_chain::format_value_formatter> list) {
+  return snprintf(buffer, N, list);
+}
+
+template <size_t N>
+const char* format(char (&buffer)[N], std::initializer_list<intern::rose_format_chain::format_value_formatter> list) {
+  int ret = snprintf(buffer, N, list);
+
+  if (ret < 0 || ret >= N) {
+    return nullptr;
+  }
+  return buffer;
+}
 
 }  // namespace rose
 
@@ -96,13 +120,13 @@ namespace intern {
 ///////////////////////////////////////////////
 
 #  include <cstdio>  // for snprintf
-#  define FORMAT_VALUE(i)                                           \
-    sz = snprintf(chain.data + chain.begin, chain.size, format, i); \
-    if (sz <= 0 || sz > (chain.size - chain.begin)) {               \
-      /*ERROR*/ chain.begin = chain.size;                           \
-    } else {                                                        \
-      chain.begin += sz;                                            \
-    }                                                               \
+#  define FORMAT_VALUE(i)                                                \
+    sz = std::snprintf(chain.data + chain.begin, chain.size, format, i); \
+    if (sz <= 0 || sz > (chain.size - chain.begin)) {                    \
+      /*ERROR*/ chain.begin = chain.size;                                \
+    } else {                                                             \
+      chain.begin += sz;                                                 \
+    }                                                                    \
     return chain
 
 rose::intern::rose_format_chain rose::intern::rose_format_chain::format_value_formatter::print(
@@ -136,8 +160,6 @@ rose::intern::rose_format_chain rose::intern::rose_format_chain::format_value_fo
 ///////////////////////////////////////////////
 // TEST
 ///////////////////////////////////////////////
-#  include <string>
-
 TEST_CASE("rose") {
   char str[256];
 
@@ -170,5 +192,43 @@ TEST_CASE("rose") {
   REQUIRE("3.14" == (std::string)(rose::intern::format(str).val({"%4.2f", 3.1416}).end()));
   REQUIRE("+3e+00" == (std::string)(rose::intern::format(str).val({"%+.0e", 3.1416}).end()));
   REQUIRE("3.141600E+00" == (std::string)(rose::intern::format(str).val({"%E", 3.1416}).end()));
+
+  // printf
+  rose::snprintf(str, 128, {"Hello World"});
+  REQUIRE("Hello World" == (std::string)str);
+
+  rose::snprintf(str, 128, {42});
+  REQUIRE("42" == (std::string)str);
+
+  rose::snprintf(str, 128, {3.14});
+  REQUIRE("3.14" == (std::string)str);
+
+  rose::snprintf(str, 128, {{"%10d", 42}});
+  REQUIRE("        42" == (std::string)str);
+
+  rose::sprintf(str, {{"%010d", 42}});
+  REQUIRE("0000000042" == (std::string)str);
+
+  rose::sprintf(str, {{"%4.2f", 3.1416}});
+  REQUIRE("3.14" == (std::string)str);
+
+  rose::sprintf(str, {{"%+.0e", 3.1416}});
+  REQUIRE("+3e+00" == (std::string)str);
+
+  rose::sprintf(str, {{"%E", 3.1416}});
+  REQUIRE("3.141600E+00" == (std::string)str);
+
+  rose::sprintf(str, {{"%s", "Hello World"}});
+  REQUIRE("Hello World" == (std::string)str);
+
+  rose::sprintf(str, {{"%p", (void*)0x2a}});
+  REQUIRE("000000000000002A" == (std::string)str);
+
+  // format
+  REQUIRE("Hello World" == (std::string)(rose::format(str, {"Hello World"})));
+  REQUIRE("Hello World" == (std::string)(rose::format(str, {"Hello ", "World"})));
+  REQUIRE("Hello World 42" == (std::string)(rose::format(str, {"Hello ", "World ", 42})));
+  REQUIRE("Hello World 0000000042" == (std::string)(rose::format(str, {"Hello ", "World ", {"%010d", 42}})));
+  REQUIRE("Hello World 3.14 42" == (std::string)(rose::format(str, {"Hello ", "World ", 3.14, " ", 42})));
 }
 #endif
