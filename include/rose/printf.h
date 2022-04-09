@@ -35,6 +35,10 @@ namespace intern {
         void* p;
       };
 
+      //TODO: faster converts for int and float 
+      //https://stackoverflow.com/a/55326309
+      //https://www.zverovich.net/2020/06/13/fast-int-to-string-revisited.html
+
       format_value_formatter(const char* format, int i) : format(format), i(i), value_type(type::int_type) {}
       format_value_formatter(const char* format, unsigned u) : format(format), u(u), value_type(type::uint_type) {}
       format_value_formatter(const char* format, long l) : format(format), l(l), value_type(type::long_type) {}
@@ -110,6 +114,19 @@ const char* format(char (&buffer)[N], std::initializer_list<intern::rose_format_
     return nullptr;
   }
   return buffer;
+}
+
+int printf(std::initializer_list<intern::rose_format_chain::format_value_formatter> list) {
+  char buffer[1024];
+  intern::rose_format_chain chain = intern::format(buffer, 1024);
+  for (auto& f : list) {
+    chain = chain.val(f);
+  }
+  const char* value = chain.end();
+  if(value) {
+    std::fputs(value, stdout);
+  }
+  return chain.begin;
 }
 
 }  // namespace rose
@@ -230,5 +247,8 @@ TEST_CASE("rose") {
   REQUIRE("Hello World 42" == (std::string)(rose::format(str, {"Hello ", "World ", 42})));
   REQUIRE("Hello World 3.14 42" == (std::string)(rose::format(str, {"Hello ", "World ", 3.14, " ", 42})));
   REQUIRE("Hello World 0000000042" == (std::string)(rose::format(str, {"Hello ", "World ", {"%010d", 42}})));
+
+  rose::printf({"All Done ", 42, " ", 3.14, " ", {"%010d", 42}, "\n"});
+
 }
 #endif
