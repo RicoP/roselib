@@ -112,8 +112,6 @@ bool operator!=(const Workspace &lhs, const Workspace &rhs);
 struct                path;
 namespace rose {
   namespace ecs {
-    void        serialize(path &o, ISerializer &s);
-    void      deserialize(path &o, IDeserializer &s);
   }
   hash_value         hash(const path &o);
   template<>
@@ -566,29 +564,6 @@ bool operator==(const path &lhs, const path &rhs) {
 bool operator!=(const path &lhs, const path &rhs) {
   return
     !rose_parser_equals(lhs.string, rhs.string) ;
-}
-
-void rose::ecs::serialize(path &o, ISerializer &s) {
-  if(s.node_begin("path", rose::hash("path"), &o)) {
-    s.key("string");
-    serialize(o.string, s, std::strlen(o.string));
-    s.node_end();
-  }
-  s.end();
-}
-
-void rose::ecs::deserialize(path &o, IDeserializer &s) {
-  //implement me
-  //construct_defaults(o);
-
-  while (s.next_key()) {
-    switch (s.hash_key()) {
-      case rose::hash("string"):
-        deserialize(o.string, s);
-        break;
-      default: s.skip_key(); break;
-    }
-  }
 }
 
 rose::hash_value rose::hash(const path &o) {
