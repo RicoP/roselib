@@ -7,7 +7,7 @@
 ///////////////////////////////////////////////////////////////////
 //  AUTOGEN                                                      //
 //  command:
-//    rose.parser -I .\padevents.h .\workspace.h -O .\components_ser.h
+//    rose.parser -I .\padevents.h .\workspace.h .\path.h -O .\components_ser.h
 ///////////////////////////////////////////////////////////////////
 
 enum class                   PadEventButton : int ;
@@ -107,6 +107,23 @@ namespace rose {
 }
 bool operator==(const Workspace &lhs, const Workspace &rhs);
 bool operator!=(const Workspace &lhs, const Workspace &rhs);
+
+
+struct                path;
+namespace rose {
+  namespace ecs {
+    void        serialize(path &o, ISerializer &s);
+    void      deserialize(path &o, IDeserializer &s);
+  }
+  hash_value         hash(const path &o);
+  template<>
+  struct type_id<path> {
+    inline static hash_value VALUE = 8944715875326514183ULL;
+  };
+  void construct_defaults(      path &o); // implement me
+}
+bool operator==(const path &lhs, const path &rhs);
+bool operator!=(const path &lhs, const path &rhs);
 
 
 #ifdef IMPL_SERIALIZER
@@ -536,6 +553,46 @@ rose::hash_value rose::hash(const Workspace &o) {
   rose::hash_value h = rose::hash(o.subsystems);
   h = rose::xor64(h);
   h ^= rose::hash(o.console_filter);
+  return h;
+}
+///////////////////////////////////////////////////////////////////
+//  struct path
+///////////////////////////////////////////////////////////////////
+bool operator==(const path &lhs, const path &rhs) {
+  return
+    rose_parser_equals(lhs.string, rhs.string) ;
+}
+
+bool operator!=(const path &lhs, const path &rhs) {
+  return
+    !rose_parser_equals(lhs.string, rhs.string) ;
+}
+
+void rose::ecs::serialize(path &o, ISerializer &s) {
+  if(s.node_begin("path", rose::hash("path"), &o)) {
+    s.key("string");
+    serialize(o.string, s, std::strlen(o.string));
+    s.node_end();
+  }
+  s.end();
+}
+
+void rose::ecs::deserialize(path &o, IDeserializer &s) {
+  //implement me
+  //construct_defaults(o);
+
+  while (s.next_key()) {
+    switch (s.hash_key()) {
+      case rose::hash("string"):
+        deserialize(o.string, s);
+        break;
+      default: s.skip_key(); break;
+    }
+  }
+}
+
+rose::hash_value rose::hash(const path &o) {
+  rose::hash_value h = rose::hash(o.string);
   return h;
 }
 
