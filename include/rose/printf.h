@@ -129,6 +129,19 @@ int printf(std::initializer_list<intern::rose_format_chain::format_value_formatt
   return chain.begin;
 }
 
+int println(std::initializer_list<intern::rose_format_chain::format_value_formatter> list) {
+  char buffer[1024];
+  intern::rose_format_chain chain = intern::format(buffer, 1024);
+  for (auto& f : list) {
+    chain = chain.val(f);
+  }
+  const char* value = chain.end();
+  if(value) {
+    std::puts(value);
+  }
+  return chain.begin;
+}
+
 }  // namespace rose
 
 #ifdef ROSE_FORMAT_IMPL
