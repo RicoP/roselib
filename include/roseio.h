@@ -32,6 +32,8 @@ void read_from_string(COMPONENT& component, char * json) {
   rose::ecs::deserialize(component, jsond);
 }
 
+
+
 template <class COMPONENT>
 bool read(COMPONENT& component, ::rose::io::Folder folder, const char* name) {
   assert(folder == ::rose::io::Folder::Working);
@@ -39,9 +41,9 @@ bool read(COMPONENT& component, ::rose::io::Folder folder, const char* name) {
 
   if (!f) {
     // TODO: have an option to just return default value if file doesn't exist.
-    //construct_defaults(component);
-    COMPONENT default_component;
-    component = default_component;
+    construct_defaults(component);
+    //COMPONENT default_component{};
+    //component = default_component;
     return false;
   }
 
