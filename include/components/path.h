@@ -12,7 +12,7 @@ struct path {
 inline void        serialize(path &o, ISerializer &s) {
 	rose::ecs::serialize(o.string, s);
 }
-void      deserialize(path &o, IDeserializer &s) {
+inline void      deserialize(path &o, IDeserializer &s) {
 	rose::ecs::deserialize(o.string, s);
 }
 

@@ -2,7 +2,10 @@
 
 #include <vector>
 
+#include <components/path.h>
 
+namespace rose {
+namespace ecs {  
 //@Flag
 enum class SubsystemConfig : int {
   NONE = 0,
@@ -11,7 +14,7 @@ enum class SubsystemConfig : int {
 
 struct SubsystemPath {
   //@String
-  char path[64] = "";
+  path path;
   SubsystemConfig config = SubsystemConfig::NONE;
 };
 
@@ -21,3 +24,5 @@ struct Workspace {
   //@String
   char console_filter[128] = "";
 };
+}
+}
