@@ -9,7 +9,7 @@ workspace "ROS"
   language "C++"
   warnings "Off"
   architecture "x64"
-  cppdialect "C++17"
+  cppdialect "C++20"
 
   filter "configurations:Debug"
     defines { "DEBUG", "EA_DEBUG" }
@@ -28,8 +28,9 @@ project "_root"
   removefiles { ".build/**" }
   removefiles { "**.cpp", "**.h", "**.c" }
 
-project "ros"
-  kind "None"
+project "roselib"
+  kind "ConsoleApp"
+  language "C++"
   files { "include/**.h" }
   
 project "test.cast"
