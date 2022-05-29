@@ -19,7 +19,7 @@ namespace rose {
   }
   template<>
   struct type_id<PadEventButton> {
-    inline static hash_value VALUE = 13001520524004003403ULL;
+    inline static hash_value VALUE = 15454388631323420064ULL;
   };
   hash_value         hash(const PadEventButton &o);
   void construct_defaults(      PadEventButton &o); //implement me
@@ -34,7 +34,11 @@ inline PadEventButton operator^=(PadEventButton &a, const PadEventButton &b) { r
 inline bool operator!(const PadEventButton &e) { return static_cast<int >(e) == 0; }
 
 
-enum class                   rose::ecs::SubsystemConfig : int ;
+namespace rose {
+namespace ecs {
+enum class                   SubsystemConfig : int ;
+}
+}
 const char * to_string(const rose::ecs::SubsystemConfig &);
 namespace rose {
   namespace ecs {
@@ -43,7 +47,7 @@ namespace rose {
   }
   template<>
   struct type_id<rose::ecs::SubsystemConfig> {
-    inline static hash_value VALUE = 11689830927128042884ULL;
+    inline static hash_value VALUE = 13932719040233964906ULL;
   };
   hash_value         hash(const rose::ecs::SubsystemConfig &o);
   void construct_defaults(      rose::ecs::SubsystemConfig &o); //implement me
@@ -67,7 +71,7 @@ namespace rose {
   hash_value         hash(const PadEvent &o);
   template<>
   struct type_id<PadEvent> {
-    inline static hash_value VALUE = 918484592891382733ULL;
+    inline static hash_value VALUE = 6632300324658256845ULL;
   };
   void construct_defaults(      PadEvent &o); // implement me
 }
@@ -75,7 +79,11 @@ bool operator==(const PadEvent &lhs, const PadEvent &rhs);
 bool operator!=(const PadEvent &lhs, const PadEvent &rhs);
 
 
-struct                rose::ecs::SubsystemPath;
+namespace rose {
+namespace ecs {
+struct                SubsystemPath;
+}
+}
 namespace rose {
   namespace ecs {
     void        serialize(rose::ecs::SubsystemPath &o, ISerializer &s);
@@ -84,7 +92,7 @@ namespace rose {
   hash_value         hash(const rose::ecs::SubsystemPath &o);
   template<>
   struct type_id<rose::ecs::SubsystemPath> {
-    inline static hash_value VALUE = 13148833942642572779ULL;
+    inline static hash_value VALUE = 15951837611172143261ULL;
   };
   void construct_defaults(      rose::ecs::SubsystemPath &o); // implement me
 }
@@ -92,7 +100,11 @@ bool operator==(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemP
 bool operator!=(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs);
 
 
-struct                rose::ecs::Workspace;
+namespace rose {
+namespace ecs {
+struct                Workspace;
+}
+}
 namespace rose {
   namespace ecs {
     void        serialize(rose::ecs::Workspace &o, ISerializer &s);
@@ -101,7 +113,7 @@ namespace rose {
   hash_value         hash(const rose::ecs::Workspace &o);
   template<>
   struct type_id<rose::ecs::Workspace> {
-    inline static hash_value VALUE = 3466511763420867999ULL;
+    inline static hash_value VALUE = 16099609672572318632ULL;
   };
   void construct_defaults(      rose::ecs::Workspace &o); // implement me
 }
@@ -116,7 +128,7 @@ namespace rose {
   hash_value         hash(const path &o);
   template<>
   struct type_id<path> {
-    inline static hash_value VALUE = 8944715875326514183ULL;
+    inline static hash_value VALUE = 1307292036334781402ULL;
   };
   void construct_defaults(      path &o); // implement me
 }
