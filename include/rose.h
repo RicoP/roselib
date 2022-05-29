@@ -25,3 +25,5 @@ namespace rose {
 
 #undef FUNC_SIG
 #undef PROC_SIG
+
+#include <rose/internal/bindings.h>

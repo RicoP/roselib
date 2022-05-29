@@ -87,7 +87,6 @@ struct EventQueue : rose::nocopy {
   template <class T>
   void push_back(T &event) {
     auto event_id = rose::type_id<T>::VALUE;
-
     size_t padded_event_data_size = round_next_alligned(sizeof(T));
 
     assert(max_data_size >= *data_size + padded_event_data_size);
