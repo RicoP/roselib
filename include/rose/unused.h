@@ -7,13 +7,13 @@
 //will guarantee the execution of the expression COND and MSG.
 namespace rose {
 template <class Thead>
-void unused(const Thead & head) {
-  (void)(head);
+void unused(const Thead &) {
 }
-
-template <class Thead, class... Ttail>
-void unused(const Thead & head, Ttail... args) {
+/*
+template <class Thead>
+void unused(const Thead & head, ...) {
   rose::unused(head);
-  rose::unused(args...);
+  rose::unused(...);
 }
+*/
 }  // namespace rose
