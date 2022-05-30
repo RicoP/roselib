@@ -1,3 +1,2 @@
-#define ROSE_BINDINGS_IMPL
+#pragma once
 #include <rose/internal/bindings_impl.h>
-#undef ROSE_BINDINGS_IMPL
