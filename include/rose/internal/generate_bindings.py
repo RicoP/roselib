@@ -152,8 +152,8 @@ with open("bindings_engine.h.tmp", "w") as f:
 		f.write(");\n")
 	f.write("}\n\n")
 
-	f.write("template<class Lambda>\n")
-	f.write("void inject_bindings(void* handle, Lambda get_symbol_address) {\n")
+	f.write("template<class Lambda1, class Lambda2>\n")
+	f.write("void inject_bindings(Lambda1 get_symbol_address, Lambda2 not_found_cb) {\n")
 	#iteartor over bindings and create the string
 	#{
 	#	auto fun = (input_pad_ft*)(GetProcAddress(lib, "c_input_pad"));
@@ -170,7 +170,7 @@ with open("bindings_engine.h.tmp", "w") as f:
 		f.write(binding[0])
 		f.write("_")
 		f.write(binding[2])
-		f.write("_ft*)(get_symbol_address(handle, \"c_")
+		f.write("_ft*)(get_symbol_address(\"c_")
 		f.write("rose_")
 		f.write(binding[0])
 		f.write("_")
@@ -182,7 +182,7 @@ with open("bindings_engine.h.tmp", "w") as f:
 		f.write("_")
 		f.write(binding[2])
 		f.write(";\n    } else {\n")
-		f.write("      std::fprintf(stderr, \"Warning: Couldn't find function %s \\n\", \"c_")
+		f.write("      not_found_cb(\"c_")
 		f.write("rose_")
 		f.write(binding[0])
 		f.write("_")

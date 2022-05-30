@@ -17,30 +17,30 @@ int g_rose_filewatcher_watch_path(const char * path);
 bool g_rose_filewatcher_unwatch_path(int id);
 }
 
-template<class Lambda>
-void inject_bindings(void* handle, Lambda get_symbol_address) {
+template<class Lambda1, class Lambda2>
+void inject_bindings(Lambda1 get_symbol_address, Lambda2 not_found_cb) {
   {
-    auto fun = (rose_internal_get_event_queue_ft*)(get_symbol_address(handle, "c_rose_internal_get_event_queue"));
+    auto fun = (rose_internal_get_event_queue_ft*)(get_symbol_address("c_rose_internal_get_event_queue"));
     if(fun) {
       *fun = subsystem_bindings::g_rose_internal_get_event_queue;
     } else {
-      std::fprintf(stderr, "Warning: Couldn't find function %s \n", "c_rose_internal_get_event_queue");
+      not_found_cb("c_rose_internal_get_event_queue");
     }
   }
   {
-    auto fun = (rose_filewatcher_watch_path_ft*)(get_symbol_address(handle, "c_rose_filewatcher_watch_path"));
+    auto fun = (rose_filewatcher_watch_path_ft*)(get_symbol_address("c_rose_filewatcher_watch_path"));
     if(fun) {
       *fun = subsystem_bindings::g_rose_filewatcher_watch_path;
     } else {
-      std::fprintf(stderr, "Warning: Couldn't find function %s \n", "c_rose_filewatcher_watch_path");
+      not_found_cb("c_rose_filewatcher_watch_path");
     }
   }
   {
-    auto fun = (rose_filewatcher_unwatch_path_ft*)(get_symbol_address(handle, "c_rose_filewatcher_unwatch_path"));
+    auto fun = (rose_filewatcher_unwatch_path_ft*)(get_symbol_address("c_rose_filewatcher_unwatch_path"));
     if(fun) {
       *fun = subsystem_bindings::g_rose_filewatcher_unwatch_path;
     } else {
-      std::fprintf(stderr, "Warning: Couldn't find function %s \n", "c_rose_filewatcher_unwatch_path");
+      not_found_cb("c_rose_filewatcher_unwatch_path");
     }
   }
 }
