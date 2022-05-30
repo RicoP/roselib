@@ -117,7 +117,7 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 	f.write("namespace event {\n")
 	f.write("  template<class T> \n")
 	f.write("  void broadcast(const T & event) {\n")
-	f.write("    c_rose_internal_get_event_queue().push_back(event);\n")
+	f.write("    c_rose_internal_get_event_queue()->push_back(event);\n")
 	f.write("  }\n")
 	f.write("}\n")
 	f.write("}\n")

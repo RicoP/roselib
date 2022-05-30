@@ -30,7 +30,7 @@ namespace filewatcher {
 namespace event {
   template<class T> 
   void broadcast(const T & event) {
-    c_rose_internal_get_event_queue().push_back(event);
+    c_rose_internal_get_event_queue()->push_back(event);
   }
 }
 }
