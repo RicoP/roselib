@@ -108,7 +108,6 @@ inline int snprintf(char* buffer, size_t size, std::initializer_list<intern::ros
   for (auto& f : list) {
     chain = chain.val(f);
   }
-  const char* value = chain.end();
   return chain.begin;
 }
 
