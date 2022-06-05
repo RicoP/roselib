@@ -29,7 +29,7 @@ FUNC_SIG(ecs,    rose::ecs::Scene&,       scene      , ()                       
 FUNC_SIG(meta,   rose::ecs::MicroSystem&, system_data, ()                                  , ()                     )
 PROC_SIG(meta,                            request_camera_ownership, ()                     , ()                     )
 
-//Workaround functions until we have a propper system
+//TODO: get rid of input functions. We have a event system for that.
 FUNC_SIG(input,    PadEvent,      pad,     (int player)                        , (player)                        )
 FUNC_SIG(input,    PadEvent,      pad_raw, (int player)                        , (player)                        )
 FUNC_SIG(input,    vector2,       stick,   ()                                  , ()                        )
