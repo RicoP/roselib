@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 namespace rose {
 
 template <class T>
@@ -8,14 +10,12 @@ struct owned {
   T* obj;
 
  public:
-  owned(T* obj_) : obj(obj_) {}
+  owned(T* obj_) noexcept /* implicit */ : obj(obj_) {}
+  owned() noexcept : obj(nullptr) {}
   owned(owned<T>&& rhs) noexcept : obj(rhs.obj) { rhs.obj = nullptr; }
-  ~owned() {
-    if (!obj) return;
-    delete obj;
-    obj = nullptr;
-  }
+  owned(const owned<T>&) = delete;
 
+  owned<T>& operator=(const owned<T>& rhs) = delete;
   owned<T>& operator=(owned<T>&& rhs) noexcept {
     if (obj) {
       delete obj;
@@ -25,10 +25,12 @@ struct owned {
     return *this;
   }
 
-  owned<T>& operator=(const owned<T>& rhs) = delete;
-  owned(const owned<T>&) = delete;
+  ~owned() {
+    if (!obj) return;
+    delete obj;
+    obj = nullptr;
+  }
 
-  bool valid() const { return obj != nullptr; }
   T& get() {
     assert(obj);
     return *obj;
@@ -39,16 +41,22 @@ struct owned {
   }
 
   bool operator==(const owned<T>& rhs) const { return obj == rhs.obj; }
+  bool operator==(const T* rhs) const { return obj == rhs; }
+  bool operator!=(const owned<T>& rhs) const { return obj != rhs.obj; }
+  bool operator!=(const T* rhs) const { return obj != rhs; }
 
   T& operator*() { return get(); }
   const T& operator*() const { return get(); }
 
-  T* operator->() { return &get(); }
-  const T* operator->() const { return &get(); }
+  T* operator->() { return obj; }
+  const T* operator->() const { return obj; }
 
-  static owned<T> null() {
-    owned<T> rtn(nullptr);
-    return rtn;
+  bool valid() const { return obj != nullptr; }
+
+  void destroy() {
+    if (!obj) return;
+    delete obj;
+    obj = nullptr;
   }
 };
 
