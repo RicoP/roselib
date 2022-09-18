@@ -61,13 +61,13 @@ project "test.range"
   includedirs { "include" }
   files { "test/range.cpp" }
 
-project "test.optional"
+project "test.owned"
   kind "ConsoleApp"
   language "C++"
   warnings "Extra"
   includedirs { "include" }
   includedirs { "../Catch2/single_include" }
-  files { "test/optional.cpp" }
+  files { "test/owned.cpp" }
 
 --project "test.refptr"
 --  kind "ConsoleApp"
