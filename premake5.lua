@@ -1,6 +1,6 @@
 local is_visual_studio = _ACTION:find("^vs") ~= nil 
 
-workspace "ROS"
+workspace "roselib"
   characterset ("MBCS")
   configurations { "Debug", "Release" }
   location ".build/projects"
@@ -61,10 +61,18 @@ project "test.range"
   includedirs { "include" }
   files { "test/range.cpp" }
 
-project "test.refptr"
+project "test.optional"
   kind "ConsoleApp"
   language "C++"
   warnings "Extra"
   includedirs { "include" }
-  files { "test/refptr.cpp" }
+  includedirs { "../Catch2/single_include" }
+  files { "test/optional.cpp" }
+
+--project "test.refptr"
+--  kind "ConsoleApp"
+--  language "C++"
+--  warnings "Extra"
+--  includedirs { "include" }
+--  files { "test/refptr.cpp" }
 

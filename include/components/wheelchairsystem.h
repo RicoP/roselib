@@ -33,7 +33,7 @@ inline bool operator!=(const WheelchairSystem &lhs, const WheelchairSystem &rhs)
 // serializer                                                    //
 ///////////////////////////////////////////////////////////////////
 inline void serialize(WheelchairSystem &o, ISerializer &s) {
-  if(s.node_begin("WheelchairSystem", ros::hash("WheelchairSystem"), &o)) {
+  if(s.node_begin("WheelchairSystem", rose::hash("WheelchairSystem"), &o)) {
     s.key("object");
     serialize(o.object, s);
     s.node_end();
@@ -49,7 +49,7 @@ inline void deserialize(WheelchairSystem &o, IDeserializer &s) {
 
   while (s.next_key()) {
     switch (s.hash_key()) {
-      case ros::hash("object"):
+      case rose::hash("object"):
         deserialize(o.object, s);
         break;
       default: s.skip_key(); break;
@@ -61,8 +61,8 @@ inline void deserialize(WheelchairSystem &o, IDeserializer &s) {
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
 namespace ros {
-  inline ros::hash_value hash(WheelchairSystem &o) {
-    ros::hash_value h = ros::hash(o.object);
+  inline rose::hash_value hash(WheelchairSystem &o) {
+    rose::hash_value h = rose::hash(o.object);
     return h;
   }
 }
@@ -70,6 +70,6 @@ namespace ros {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(WheelchairSystem &o, ros::hash_value & h) {
+inline void randomize(WheelchairSystem &o, rose::hash_value & h) {
   randomize(o.object, h);
 }

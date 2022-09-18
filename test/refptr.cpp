@@ -1,4 +1,4 @@
-#include <ros/refptr.h>
+#include <rose/refptr.h>
 
 #include <iostream>
 
@@ -37,10 +37,10 @@ const vector3& vector3::operator+=(const vector3& rhs) {
 
 void printvec(const vector3& v) { std::cout << v.x << " " << v.y << " " << v.z << "\n"; }
 
-void printptr(ros::refptr<vector3> ptr) { printvec(*ptr); }
+void printptr(rose::refptr<vector3> ptr) { printvec(*ptr); }
 
-ros::refptr<vector3> create_vector3(float x, float y, float z) {
-  ros::refptr<vector3> p(x, y, z);
+rose::refptr<vector3> create_vector3(float x, float y, float z) {
+  rose::refptr<vector3> p(x, y, z);
   return p;
 }
 
@@ -72,49 +72,49 @@ struct DebugSystem : ISystem {
 };
 
 struct GameMessangerSystem : ISystem {
-  ros::refptr<DebugSystem> debugSystem;
+  rose::refptr<DebugSystem> debugSystem;
 
   virtual const char* name() const override { return "GameMessangerSystem"; }
   virtual ~GameMessangerSystem() override { std::cout << name() << " destruct \n"; }
-  GameMessangerSystem(ros::refptr<DebugSystem> debugSystem_) : debugSystem(debugSystem_) { std::cout << name() << " construct \n"; }
+  GameMessangerSystem(rose::refptr<DebugSystem> debugSystem_) : debugSystem(debugSystem_) { std::cout << name() << " construct \n"; }
 };
 
 struct PhysicsSystem : ISystem {
-  ros::refptr<GameMessangerSystem> gameMessangerSystem;
-  ros::refptr<DebugSystem> debugSystem;
-  ros::refptr<UISystem>::refview uiSystem;
+  rose::refptr<GameMessangerSystem> gameMessangerSystem;
+  rose::refptr<DebugSystem> debugSystem;
+  rose::refptr<UISystem>::refview uiSystem;
 
   virtual const char* name() const override { return "PhysicsSystem"; }
 
   virtual ~PhysicsSystem() override { std::cout << name() << " destruct \n"; }
 
-  PhysicsSystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_, ros::refptr<DebugSystem> debugSystem_)
+  PhysicsSystem(rose::refptr<GameMessangerSystem> gameMessangerSystem_, rose::refptr<DebugSystem> debugSystem_)
       : gameMessangerSystem(gameMessangerSystem_), debugSystem(debugSystem_), uiSystem() {
     std::cout << name() << " construct \n";
   }
 };
 
 struct UISystem : ISystem {
-  ros::refptr<GameMessangerSystem> gameMessangerSystem;
-  ros::refptr<DebugSystem> debugSystem;
-  ros::refptr<PhysicsSystem> physicsSystem;
+  rose::refptr<GameMessangerSystem> gameMessangerSystem;
+  rose::refptr<DebugSystem> debugSystem;
+  rose::refptr<PhysicsSystem> physicsSystem;
 
   virtual const char* name() const override { return "UISystem"; }
 
   virtual ~UISystem() override { std::cout << name() << " destruct \n"; }
 
-  UISystem(ros::refptr<GameMessangerSystem> gameMessangerSystem_,
-           ros::refptr<DebugSystem> debugSystem_,
-           ros::refptr<PhysicsSystem> physicsSystem_)
+  UISystem(rose::refptr<GameMessangerSystem> gameMessangerSystem_,
+           rose::refptr<DebugSystem> debugSystem_,
+           rose::refptr<PhysicsSystem> physicsSystem_)
       : gameMessangerSystem(gameMessangerSystem_), debugSystem(debugSystem_), physicsSystem(physicsSystem_) {
     std::cout << name() << " construct \n";
   }
 };
 
-ros::refptr<UISystem> CreateUISystem(ros::refptr<DebugSystem> debugSystem = ros::refptr<DebugSystem>::make()) {
-  ros::refptr<GameMessangerSystem> gameMessangerSystem = ros::refptr<GameMessangerSystem>::make(debugSystem);
-  ros::refptr<PhysicsSystem> physicsSystem = ros::refptr<PhysicsSystem>::make(gameMessangerSystem, debugSystem);
-  ros::refptr<UISystem> uiSystem = ros::refptr<UISystem>::make(gameMessangerSystem, debugSystem, physicsSystem);
+rose::refptr<UISystem> CreateUISystem(rose::refptr<DebugSystem> debugSystem = rose::refptr<DebugSystem>::make()) {
+  rose::refptr<GameMessangerSystem> gameMessangerSystem = rose::refptr<GameMessangerSystem>::make(debugSystem);
+  rose::refptr<PhysicsSystem> physicsSystem = rose::refptr<PhysicsSystem>::make(gameMessangerSystem, debugSystem);
+  rose::refptr<UISystem> uiSystem = rose::refptr<UISystem>::make(gameMessangerSystem, debugSystem, physicsSystem);
   physicsSystem->uiSystem = uiSystem;
 
   return uiSystem;
@@ -122,14 +122,14 @@ ros::refptr<UISystem> CreateUISystem(ros::refptr<DebugSystem> debugSystem = ros:
 
 int main() {
   {
-    ros::refptr<vector3> ptr = create_vector3(1, 2, 3);
+    rose::refptr<vector3> ptr = create_vector3(1, 2, 3);
 
     printptr(ptr);
 
-    ros::refptr<vector3> ptr2 = ptr;
-    ros::refptr<vector3> ptr3 = ptr2;
+    rose::refptr<vector3> ptr2 = ptr;
+    rose::refptr<vector3> ptr3 = ptr2;
     {
-      ros::refptr<vector3> ptr4 = ptr3;
+      rose::refptr<vector3> ptr4 = ptr3;
       printptr(*ptr2 + *ptr3);
     }
     printptr(ptr3);
@@ -141,11 +141,11 @@ int main() {
 
   // game context
 
-  ros::refptr<DebugSystem> shared_debug_system;
+  rose::refptr<DebugSystem> shared_debug_system;
   assert(!shared_debug_system);
 
   {
-    ros::refptr<UISystem> uiSystem = CreateUISystem();
+    rose::refptr<UISystem> uiSystem = CreateUISystem();
     assert(uiSystem);
 
     std::cout << "\nActive Systems " << g_systems_active << "\n";
@@ -163,10 +163,10 @@ int main() {
   std::cout << "\nActive Systems " << g_systems_active << "\n";
 
   {
-    ros::refptr<UISystem> uiSystem;
+    rose::refptr<UISystem> uiSystem;
     uiSystem = CreateUISystem();
     {
-      ros::refptr<UISystem> uiSystem2 = std::move(uiSystem);
+      rose::refptr<UISystem> uiSystem2 = std::move(uiSystem);
       uiSystem = CreateUISystem();
       uiSystem = std::move(uiSystem2);
     }
@@ -189,7 +189,7 @@ int main() {
   std::cout << "\nActive Systems " << g_systems_active << "\n";
 
   {
-    ros::refptr<UISystem> uiSystem = CreateUISystem(shared_debug_system);
+    rose::refptr<UISystem> uiSystem = CreateUISystem(shared_debug_system);
 
     std::cout << "\nActive Systems " << g_systems_active << "\n";
 
@@ -209,7 +209,7 @@ int main() {
   assert(g_systems_active == 0);
 
   // this will correctly destroy DebugSystem but will leave a dangeling weak ptr
-  // ros::refptr<DebugSystem>::refview debugSystem_null_view = ros::refptr<DebugSystem>::make();
+  // rose::refptr<DebugSystem>::refview debugSystem_null_view = rose::refptr<DebugSystem>::make();
   // assert(debugSystem_null_view.use_count() == 0);
 
   return 0;

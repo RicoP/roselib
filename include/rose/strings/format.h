@@ -94,12 +94,12 @@ namespace strings {
 
   template <typename... Args>
   int format(char *dest, size_t bufferSize, const char *format, Args... args) {
-    return ros::intern::format_impl(dest, bufferSize, format, args...);
+    return rose::intern::format_impl(dest, bufferSize, format, args...);
   }
 
   template <size_t SIZE, typename... Args>
   int format(char (&dest)[SIZE], const char *format, Args... args) {
-    return ros::intern::format_impl(dest, SIZE, format, args...);
+    return rose::intern::format_impl(dest, SIZE, format, args...);
   }
 
 }  // namespace strings
