@@ -1,5 +1,5 @@
 #pragma once
 
 namespace rose {
-void unused(...) {}
+inline void unused(...) {}
 }  // namespace rose
