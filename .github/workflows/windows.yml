@@ -20,6 +20,13 @@ jobs:
         repository: RicoP/roselib
         path: ./roselib
 
+    - name: checkout Catch2
+      uses: actions/checkout@v3
+      with:
+        repository: catchorg/Catch2
+        path: ./Catch2
+        branch: v2.x
+
     - name: Setup premake
       uses: abel0b/setup-premake@v2.1
       with:
