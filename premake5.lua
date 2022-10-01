@@ -10,6 +10,7 @@ workspace "roselib"
   warnings "Off"
   architecture "x64"
   cppdialect "C++20"
+  startproject "tests"
 
   filter "configurations:Debug"
     defines { "DEBUG", "EA_DEBUG" }
@@ -32,42 +33,51 @@ project "roselib"
   kind "ConsoleApp"
   language "C++"
   files { "include/**.h" }
-  
-project "test.cast"
-  kind "ConsoleApp"
-  language "C++"
-  warnings "Extra"
-  includedirs { "include" }
-  files { "test/cast.cpp" }
 
-project "test.container"
-  kind "ConsoleApp"
-  language "C++"
-  warnings "Extra"
-  includedirs { "include" }
-  files { "test/container.cpp" }
-
-project "test.hash"
-  kind "ConsoleApp"
-  language "C++"
-  warnings "Extra"
-  includedirs { "include" }
-  files { "test/hash.cpp" }
-
-project "test.range"
-  kind "ConsoleApp"
-  language "C++"
-  warnings "Extra"
-  includedirs { "include" }
-  files { "test/range.cpp" }
-
-project "test.owned"
+project "tests"
   kind "ConsoleApp"
   language "C++"
   warnings "Extra"
   includedirs { "include" }
   includedirs { "../Catch2/single_include" }
-  files { "test/owned.cpp" }
+  files { "test/**.cpp" }
+  removefiles { "test/refptr.cpp" }
+  
+--project "test.cast"
+--  kind "ConsoleApp"
+--  language "C++"
+--  warnings "Extra"
+--  includedirs { "include" }
+--  files { "test/cast.cpp" }
+
+--project "test.container"
+--  kind "ConsoleApp"
+--  language "C++"
+--  warnings "Extra"
+--  includedirs { "include" }
+--  files { "test/container.cpp" }
+
+--project "test.hash"
+--  kind "ConsoleApp"
+--  language "C++"
+--  warnings "Extra"
+--  includedirs { "include" }
+--  files { "test/hash.cpp" }
+
+--project "test.range"
+--  kind "ConsoleApp"
+--  language "C++"
+--  warnings "Extra"
+--  includedirs { "include" }
+--  files { "test/range.cpp" }
+
+--project "test.owned"
+--  kind "ConsoleApp"
+--  language "C++"
+--  warnings "Extra"
+--  includedirs { "include" }
+--  includedirs { "../Catch2/single_include" }
+--  files { "test/owned.cpp" }
 
 --project "test.refptr"
 --  kind "ConsoleApp"
@@ -75,4 +85,5 @@ project "test.owned"
 --  warnings "Extra"
 --  includedirs { "include" }
 --  files { "test/refptr.cpp" }
+
 

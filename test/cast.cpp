@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 
+/*
 int main() {
   float f = 3.14f;
   int i = 42;
@@ -16,3 +17,5 @@ int main() {
 
   return 0;
 }
+
+*/

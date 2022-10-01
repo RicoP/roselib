@@ -1,6 +1,5 @@
 #include <utility>
 #include <rose/owned.h>
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
 
 static size_t total_ = 0;
@@ -115,14 +114,17 @@ TEST_CASE("use 2", "[owned]") {
     REQUIRE(3 == BigObject::count());
 
     opt = std::move(opt1);
+    REQUIRE(opt1 == nullptr);
     REQUIRE(3 == BigObject::count());
     REQUIRE(opt->value == 1001);
 
     opt = std::move(opt2);
+    REQUIRE(opt2 == nullptr);
     REQUIRE(2 == BigObject::count());
     REQUIRE(opt->value == 1002);
 
     opt = std::move(opt3);
+    REQUIRE(opt3 == nullptr);
     REQUIRE(1 == BigObject::count());
     REQUIRE(opt->value == 1003);
 

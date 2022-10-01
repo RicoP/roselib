@@ -1,16 +1,16 @@
+#include <catch2/catch.hpp>
 #include <rose/hash.h>
 
-#include <cassert>
-
-int main() {
+TEST_CASE("hash Sanity Check", "[hash]") {
   rose::hash_value h = 42;
 
   rose::next(h);
-  assert(h != 42);
+  REQUIRE(h != 42);
 
   for (int i = 0; i != 1000000; ++i) {
     float f = rose::nextf(h);
-    assert(f >= 0.0f && f < 1.0f);
+    bool in_range = f >= 0.0f && f < 1.0f;
+    REQUIRE(in_range);
   }
 
   char const* strings[] = {"Hello", "World", "Foo", "foo", "bar", 0};
@@ -29,7 +29,7 @@ int main() {
     ++string_iter;
   }
 
-  assert(c == 5);
+  REQUIRE(c == 5);
   {
     char const* strings[] = {"Hello", "World", "Foo", "foo", "bar", 0};
 
@@ -40,11 +40,11 @@ int main() {
     bool d = rose::hash(strings[i++]) == rose::hash("foo");
     bool e = rose::hash(strings[i++]) == rose::hash("bar");
 
-    assert(a);
-    assert(b);
-    assert(c);
-    assert(d);
-    assert(e);
+    REQUIRE(a);
+    REQUIRE(b);
+    REQUIRE(c);
+    REQUIRE(d);
+    REQUIRE(e);
   }
 
   {
@@ -53,7 +53,8 @@ int main() {
     rose::hash_value c = rose::hash_fnv("Hero");
     rose::hash_value d = rose::hash_fnv("hero");
 
-    assert(a ^ b != c ^ d);
+    bool ok = (a ^ b != c ^ d);
+    REQUIRE(ok);
   }
 
   rose::hash_value h1 = rose::hash((char)'a');
@@ -62,6 +63,5 @@ int main() {
   rose::hash_value h4 = rose::hash(0xCAFEBABE);
   rose::hash_value h5 = rose::hash(0xCAFEBABEULL);
   rose::hash_value h6 = rose::hash(0xCAFEBABELL);
-
-  return 0;
 }
+

@@ -27,6 +27,7 @@ struct type_id<Test2> {
 };
 }
 
+/*
 int main() {
   rose::Hashmap<16, const char *, long long> map;
   map.emplace_back("hello", 12);
@@ -81,3 +82,5 @@ int main() {
   puts("OK");
   return 0;
 }
+
+*/
