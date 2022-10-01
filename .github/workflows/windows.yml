@@ -44,5 +44,5 @@ jobs:
       run: msbuild ./.build/projects/roselib.sln
 
     - name: execute test
-      working-directory: roselib/test
+      working-directory: roselib
       run: .\.build\bin\Debug\tests.exe
