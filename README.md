@@ -1,4 +1,4 @@
-![Build Status](https://github.com/RicoP/ros/workflows/build/badge.svg)
+[![Windows Build](https://github.com/RicoP/roselib/actions/workflows/windows.yml/badge.svg)](https://github.com/RicoP/roselib/actions/workflows/windows.yml)
 # roselib
 A collection of single header files
   
@@ -7,5 +7,3 @@ A collection of single header files
 
 
 Checkout the `test` folder for corresponding code samples. 
-
-
