@@ -25,7 +25,7 @@ jobs:
       with:
         repository: catchorg/Catch2
         path: ./Catch2
-        branch: v2.x
+        ref: v2.x
 
     - name: Setup premake
       uses: abel0b/setup-premake@v2.1
