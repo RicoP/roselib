@@ -1,5 +1,6 @@
 #pragma once
 
 namespace rose {
-inline void unused(...) {}
+template <typename... Ts>
+void unused(Ts const&...) { /* do nothing */ }
 }  // namespace rose
