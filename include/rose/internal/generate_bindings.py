@@ -5,11 +5,12 @@ bindings = [
 	# namespace type    name  args: [ [type, name], ... ]
 	#[ "events", "void", "push", [ ["void*", "data"], ["int", "size"] ] ]
 	[ "internal", "rose::EventQueue*", "get_event_queue", [ ] ],
+	[ "internal", "class rose::SingletonRegister &", "get_singleton_register", [ ] ],
 	[ "filewatcher", "int", "watch_path", [ ["const char *", "path"] ] ],
 	[ "filewatcher", "bool", "unwatch_path", [ ["int", "id"] ] ],
 ]
 
-blacklist = [ ("internal", "get_event_queue") ]
+blacklist = [ ("internal", "get_event_queue"), ("internal", "get_singleton_register") ]
 
 # a custom made hash function for python strings that stays consistent between runs
 def chash(obj):
@@ -30,6 +31,7 @@ def write_header(f):
 	f.write("///////////////////////////////////////////////////\n")
 	f.write("#include <rose/hash.h>\n")
 	f.write("#include <rose/eventqueue.h>\n")
+	f.write("#include <rose/internal/singletonregister.h>\n")
 	f.write("\n")
 
 # create file file bindings_engine.h.tmp
@@ -59,6 +61,7 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 	write_header(f)
 	f.write("#include <roselib/context.h>\n")
 	f.write("#include <rose/internal/bindings_typedef.h>\n")
+	f.write("#include <rose/internal/singletonregister.h>\n")
 
 	for binding in bindings:
 		#ROSE_EXPORT input_pad_ft c_input_pad;
@@ -120,7 +123,14 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 	f.write("    c_rose_internal_get_event_queue()->push_back(event);\n")
 	f.write("  }\n")
 	f.write("}\n")
+
+	f.write("namespace world {\n")
+	f.write("  template<class T> \n")
+	f.write("  T & get() {\n")
+	f.write("    return c_rose_internal_get_singleton_register().Get<T>();\n")
+	f.write("  }\n")
 	f.write("}\n")
+
 	f.write("#endif\n")
 
 	f.close()
