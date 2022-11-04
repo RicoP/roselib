@@ -5,7 +5,7 @@ bindings = [
 	# namespace type    name  args: [ [type, name], ... ]
 	#[ "events", "void", "push", [ ["void*", "data"], ["int", "size"] ] ]
 	[ "internal", "rose::EventQueue*", "get_event_queue", [ ] ],
-	[ "internal", "class rose::SingletonRegister &", "get_singleton_register", [ ] ],
+	[ "internal", "struct rose::SingletonRegister &", "get_singleton_register", [ ] ],
 	[ "filewatcher", "int", "watch_path", [ ["const char *", "path"] ] ],
 	[ "filewatcher", "bool", "unwatch_path", [ ["int", "id"] ] ],
 ]
@@ -131,6 +131,7 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 	f.write("  }\n")
 	f.write("}\n")
 
+	f.write("}\n")
 	f.write("#endif\n")
 
 	f.close()
