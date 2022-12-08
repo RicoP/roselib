@@ -16,15 +16,16 @@ namespace rose {
                 rose::type_id<T>::VALUE,
                 //Function pointer to constructor
                 +[](void * data) {
-                    new T::T(data)();
+                    new(data) T();
                 }, 
                 //Function pointer to destructor
                 +[](void * data) {
-                    T::~T(data)();
+                    //TODO: destruct 
+                    //~T(data)();
                 }
             );
 
-            T * tptr = std::reinterpret_cast<T*>(ptr);
+            T * tptr = reinterpret_cast<T*>(ptr);
             return *tptr;
         }
     };
