@@ -10,11 +10,13 @@ namespace rose
 struct StringPool {
   struct StringRange {
     int begin = -1;
-    int end = -1;
+    int byte_count = -1;
   };
 
   /// AAAAABBBBCCCC...
-  std::vector<char> utf8pool;
+  char* utf8pool = nullptr;
+  int poolSize = 0;
+  int poolCapacity = 0;
 
   /// AAAAABBBBCCCC...
   /// ^    ^   ^   ...
@@ -48,15 +50,19 @@ struct StringPool {
     return &indexRefTuples[found->indexToTuple];
   }
 
-  int handleCounter = 1;
-  int newHandle() { return handleCounter++; }
+  int handleCounter = 0;
+  int handleMostRecent = 0; //not always guaranteed to be == with handleCounter
+  int newHandle() { return handleMostRecent = ++handleCounter; }
 
   struct RefCountedStringPointer {
     struct StringPool* pool = nullptr;
-    int handle = -1;
+    int handle = 0;
 
     // Ref counting stuff
     // https://www.chriswirz.com/software/refernce-counting-classes-in-c-plus-plus
+
+    IndexRefTuple* getTuple() const { return pool->handleToTuple(handle); }
+    StringRange& getRange() const { return pool->ranges[getTuple()->indexInRange]; }
 
     void RefPlusOne() { /*if(pool)*/ pool->handleToTuple(handle)->ref_count++; }
     void RefMinusOne() { if(pool) pool->handleToTuple(handle)->ref_count--; }
@@ -66,7 +72,7 @@ struct StringPool {
     ~RefCountedStringPointer() { RefMinusOne();  }
 
     RefCountedStringPointer(const RefCountedStringPointer& rhs) : handle(rhs.handle), pool(rhs.pool) { RefPlusOne(); }
-    RefCountedStringPointer(RefCountedStringPointer&& rhs) noexcept : handle(rhs.handle), pool(rhs.pool) { rhs.pool = nullptr; }
+    RefCountedStringPointer(RefCountedStringPointer&& rhs) noexcept : handle(rhs.handle), pool(rhs.pool) { rhs.pool = nullptr; rhs.handle = 0; }
 
     RefCountedStringPointer& operator=(const RefCountedStringPointer& rhs) {
       RefMinusOne();
@@ -84,8 +90,26 @@ struct StringPool {
 
   struct StringView {
     RefCountedStringPointer pointer;
-    int begin_byte_offset;  //>=0
-    int end_byte_offset;  //<=0
+    int begin_byte_offset = 0;  //>=0
+    int byte_count = 0;  // <= pointer->...->byte_count
+
+    const char* raw_cstr() const { return pointer.pool->utf8pool + pointer.getRange().begin + begin_byte_offset; }
+
+    StringView append(const StringView&);
+
+    bool equal(const char* rhs) {
+      const char* lhs = raw_cstr();
+      const char* end = lhs + byte_count;
+      for (;;) {
+        if (lhs == end) return *rhs == 0;
+        if (*lhs != *rhs) return false;
+        lhs++;
+        rhs++;
+      }
+    }
+
+    bool operator==(const char* rhs) { return equal(rhs); }
+    bool operator!=(const char* rhs) { return !equal(rhs); }
   };
 
   explicit StringPool() { }
@@ -98,14 +122,36 @@ struct StringPool {
   }
 
   int reserve_bytes(int length) {
-    auto current = utf8pool.size();
-    utf8pool.resize(current + length);
+    auto current = poolSize;
+    if (poolSize + length <= poolCapacity) {
+    } else {
+      poolCapacity += length;
+      //utf8pool.resize(current + length);
+      utf8pool = reinterpret_cast<char*>(std::realloc(utf8pool, poolCapacity));
+    }
+    poolSize += length;
     return (int)current;
+  }
+
+  StringView create_undefined(char * & new_str, int length) {
+    int begin = reserve_bytes(length);
+    new_str = &utf8pool[0] + begin;
+
+    int rangeIndex = (int)ranges.size();
+    ranges.emplace_back(StringRange{begin, begin + length});
+
+    int tupleIndex = (int)indexRefTuples.size();
+    indexRefTuples.emplace_back(IndexRefTuple{1, rangeIndex});
+
+    int handle = newHandle();
+    handleLookup.emplace_back(StringPoolHandle{handle, tupleIndex});
+
+    RefCountedStringPointer p(this, handle);
+    return StringView{p, 0, length};
   }
 
   // String creator
   StringView create_new(const char* str, int length) {
-    //int length = std::strlen(str);
     int begin = reserve_bytes(length);
     char* buffer_begin = &utf8pool[0] + begin;
     //TODO: Maybe check we don't have a zero character here?
@@ -121,13 +167,40 @@ struct StringPool {
     handleLookup.emplace_back(StringPoolHandle{handle, tupleIndex});
 
     RefCountedStringPointer p(this, handle);
-    return StringView{p, 0, 0};
+    return StringView{p, 0, length};
   }
 
   template<size_t N>
   StringView create_new(const char (&str)[N]) {
     return create_new(str, N - 1);
   }
+
+  StringView create_new(const char * str) {
+    int length = (int)std::strlen(str);
+    return create_new(str, length);
+  }
 };
+
+StringPool::StringView StringPool::StringView::append(const StringPool::StringView& rhs) {
+  bool last = pointer.handle == pointer.pool->handleMostRecent;
+
+  if (last) {
+    //we can just extent the existing memory.
+    bool actuallyEndWithLastByte = pointer.getRange().byte_count - this->begin_byte_offset == byte_count;
+    if (actuallyEndWithLastByte) {
+      //TODO: Extend existing memory.
+      //return *this;
+    }
+  }
+
+  // Create new string
+  char* buffer;
+  auto new_view = pointer.pool->create_undefined(buffer, this->byte_count + rhs.byte_count);
+
+  std::memcpy(buffer, &this->pointer.pool->utf8pool[this->pointer.getRange().begin], this->byte_count);
+  buffer += this->byte_count;
+  std::memcpy(buffer, &rhs.pointer.pool->utf8pool[rhs.pointer.getRange().begin], rhs.byte_count);
+  return new_view;
+}
 }
 
