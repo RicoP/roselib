@@ -205,7 +205,7 @@ struct Utf8Iterator {
 
 struct StringView {
   StringPool::RefCountedStringPointer pointer;
-  int begin_byte_offset = 0;  //>=0
+  int begin_byte_offset = 0;  // >= 0
   int byte_count = 0;         // <= pointer->...->byte_count
 
   StringView(StringPool& pool, const char* str, int length)
@@ -215,6 +215,7 @@ struct StringView {
   }
   
   StringView(StringPool& pool, const char8_t* str, int length)
+    //cast from char8_t* to char* is ok: https://stackoverflow.com/a/57453713
     : pointer(pool.create_new(reinterpret_cast<const char*>(str), length))
     , begin_byte_offset(0)
     , byte_count(length) {
