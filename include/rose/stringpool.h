@@ -88,30 +88,6 @@ struct StringPool {
     }
   };
 
-  struct StringView {
-    RefCountedStringPointer pointer;
-    int begin_byte_offset = 0;  //>=0
-    int byte_count = 0;  // <= pointer->...->byte_count
-
-    const char* raw_cstr() const { return pointer.pool->utf8pool + pointer.getRange().begin + begin_byte_offset; }
-
-    StringView append(const StringView&);
-
-    bool equal(const char* rhs) {
-      const char* lhs = raw_cstr();
-      const char* end = lhs + byte_count;
-      for (;;) {
-        if (lhs == end) return *rhs == 0;
-        if (*lhs != *rhs) return false;
-        lhs++;
-        rhs++;
-      }
-    }
-
-    bool operator==(const char* rhs) { return equal(rhs); }
-    bool operator!=(const char* rhs) { return !equal(rhs); }
-  };
-
   explicit StringPool() { }
 
   StringPool(const StringPool&) = delete;
@@ -121,19 +97,33 @@ struct StringPool {
     return std::count_if(indexRefTuples.begin(), indexRefTuples.end(), [](const auto& tuple) { return tuple.ref_count != 0; });
   }
 
+  int next_power_of_2(int x) {
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    x++;
+    return x;
+  }
+
   int reserve_bytes(int length) {
-    auto current = poolSize;
-    if (poolSize + length <= poolCapacity) {
-    } else {
-      poolCapacity += length;
-      //utf8pool.resize(current + length);
+    int current = poolSize;
+    int oldCapcacity = poolCapacity;
+    poolSize += length;
+
+    while (poolSize > poolCapacity) {
+      poolCapacity = next_power_of_2(poolCapacity);
+    }
+
+    if (oldCapcacity != poolCapacity) {
       utf8pool = reinterpret_cast<char*>(std::realloc(utf8pool, poolCapacity));
     }
-    poolSize += length;
+
     return (int)current;
   }
 
-  StringView create_undefined(char * & new_str, int length) {
+  RefCountedStringPointer create_undefined(char*& new_str, int length) {
     int begin = reserve_bytes(length);
     new_str = &utf8pool[0] + begin;
 
@@ -147,11 +137,11 @@ struct StringPool {
     handleLookup.emplace_back(StringPoolHandle{handle, tupleIndex});
 
     RefCountedStringPointer p(this, handle);
-    return StringView{p, 0, length};
+    return p;
   }
 
   // String creator
-  StringView create_new(const char* str, int length) {
+  RefCountedStringPointer create_new(const char* str, int length) {
     int begin = reserve_bytes(length);
     char* buffer_begin = &utf8pool[0] + begin;
     //TODO: Maybe check we don't have a zero character here?
@@ -167,40 +157,126 @@ struct StringPool {
     handleLookup.emplace_back(StringPoolHandle{handle, tupleIndex});
 
     RefCountedStringPointer p(this, handle);
-    return StringView{p, 0, length};
+    return p;
   }
 
   template<size_t N>
-  StringView create_new(const char (&str)[N]) {
+  RefCountedStringPointer create_new(const char (&str)[N]) {
     return create_new(str, N - 1);
   }
 
-  StringView create_new(const char * str) {
+  RefCountedStringPointer create_new(const char* str) {
     int length = (int)std::strlen(str);
     return create_new(str, length);
   }
 };
 
-StringPool::StringView StringPool::StringView::append(const StringPool::StringView& rhs) {
-  bool last = pointer.handle == pointer.pool->handleMostRecent;
+struct Utf8Iterator {
+  const char* current;
+  const char* end;
 
-  if (last) {
-    //we can just extent the existing memory.
-    bool actuallyEndWithLastByte = pointer.getRange().byte_count - this->begin_byte_offset == byte_count;
-    if (actuallyEndWithLastByte) {
-      //TODO: Extend existing memory.
-      //return *this;
+  std::uint32_t nextCodepoint() {
+    if (current == end) return 0;
+
+    //https://github.com/RandyGaul/cute_framework/blob/9cd21c981d82a0839cc856bae7eb8bc306c33c14/src/cute_string.cpp#L524
+    std::uint32_t codepoint = 0;
+    const char* s = current;
+	  unsigned char c = *s++;
+	  int extra = 0;
+	  int min = 0;
+
+	       if (c >= 0xF0) { codepoint = c & 0x07; extra = 3; min = 0x10000; }
+	  else if (c >= 0xE0) { codepoint = c & 0x0F; extra = 2; min = 0x800; }
+	  else if (c >= 0xC0) { codepoint = c & 0x1F; extra = 1; min = 0x80; }
+	  else if (c >= 0x80) { codepoint = 0xFFFD; }
+	  else codepoint = c;
+	  while (extra--) {
+      if (s == end) { codepoint = 0xFFFD; break; }
+		  c = *s++;
+		  if ((c & 0xC0) != 0x80) { codepoint = 0xFFFD; break; }
+		  (codepoint) = ((codepoint) << 6) | (c & 0x3F);
+	  }
+	  if (codepoint < min) codepoint = 0xFFFD;
+	  current = s;
+    return codepoint;
+  }
+};
+
+struct StringView {
+  StringPool::RefCountedStringPointer pointer;
+  int begin_byte_offset = 0;  //>=0
+  int byte_count = 0;         // <= pointer->...->byte_count
+
+  StringView(StringPool& pool, const char* str, int length)
+    : pointer(pool.create_new(str, length))
+    , begin_byte_offset(0)
+    , byte_count(length) {
+  }
+  
+  StringView(StringPool& pool, const char8_t* str, int length)
+    : pointer(pool.create_new(reinterpret_cast<const char*>(str), length))
+    , begin_byte_offset(0)
+    , byte_count(length) {
+  }
+  
+  template <size_t N>
+  StringView(StringPool& pool, const char (&str)[N])
+    : StringView(pool, str, N - 1) {
+  }
+
+  template <size_t N>
+  StringView(StringPool& pool, const char8_t (&str)[N])
+    : StringView(pool, str, N - 1) {
+  }
+
+  StringView(const StringPool::RefCountedStringPointer & pointer, int begin, int length)
+    : pointer(pointer)
+    , begin_byte_offset(begin)
+    , byte_count(length) {
+  }
+
+  const char* begin() const { return pointer.pool->utf8pool + pointer.getRange().begin + begin_byte_offset; }
+  const char* end() const { return begin() + byte_count; }
+
+  bool equal(const char* rhs) {
+    const char* lhs = begin();
+    const char* end = lhs + byte_count;
+    for (;;) {
+      if (lhs == end) return *rhs == 0;
+      if (*lhs != *rhs) return false;
+      lhs++;
+      rhs++;
     }
   }
 
-  // Create new string
-  char* buffer;
-  auto new_view = pointer.pool->create_undefined(buffer, this->byte_count + rhs.byte_count);
+  bool operator==(const char* rhs) { return equal(rhs); }
+  bool operator!=(const char* rhs) { return !equal(rhs); }
+  
+  StringView append(const StringView& rhs) {
+    bool last = pointer.handle == pointer.pool->handleMostRecent;
 
-  std::memcpy(buffer, &this->pointer.pool->utf8pool[this->pointer.getRange().begin], this->byte_count);
-  buffer += this->byte_count;
-  std::memcpy(buffer, &rhs.pointer.pool->utf8pool[rhs.pointer.getRange().begin], rhs.byte_count);
-  return new_view;
-}
+    if (last) {
+      // we can just extent the existing memory.
+      bool actuallyEndWithLastByte = pointer.getRange().byte_count - this->begin_byte_offset == byte_count;
+      if (actuallyEndWithLastByte) {
+        // TODO: Extend existing memory.
+        // return *this;
+      }
+    }
+
+    // Create new string
+    char* buffer;
+    StringPool::RefCountedStringPointer new_view = pointer.pool->create_undefined(buffer, this->byte_count + rhs.byte_count);
+
+    std::memcpy(buffer, &this->pointer.pool->utf8pool[this->pointer.getRange().begin], this->byte_count);
+    buffer += this->byte_count;
+    std::memcpy(buffer, &rhs.pointer.pool->utf8pool[rhs.pointer.getRange().begin], rhs.byte_count);
+    return {new_view, 0, this->byte_count + rhs.byte_count};
+  }
+
+  Utf8Iterator iterator() const {
+    return { begin(), end() };
+  }
+};
 }
 

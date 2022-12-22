@@ -9,9 +9,20 @@ TEST_CASE("String Pool Sanity Check", "[string pool]") {
     REQUIRE(0 == pool.string_count_active());
     REQUIRE(0 == pool.string_count_total());
     {
-      auto str = pool.create_new("Hello World");
+      rose::StringView str(pool, u8"Hellö");
       REQUIRE(1 == pool.string_count_total());
       REQUIRE(1 == pool.string_count_active());
+
+      auto iter = str.iterator();
+      REQUIRE('H' == iter.nextCodepoint());
+      REQUIRE('e' == iter.nextCodepoint());
+      REQUIRE('l' == iter.nextCodepoint());
+      REQUIRE('l' == iter.nextCodepoint());
+      REQUIRE(0x00F6 == iter.nextCodepoint());
+      REQUIRE(0 == iter.nextCodepoint());
+
+      //REQUIRE(pool.poolSize == str.CodepointCount())
+      //REQUIRE(pool.poolCapacity == str.CodepointCount())
     }
     REQUIRE(1 == pool.string_count_total());
     REQUIRE(0 == pool.string_count_active());
@@ -23,12 +34,12 @@ TEST_CASE("String Pool Sanity Check", "[string pool]") {
     REQUIRE(0 == pool.string_count_active());
     REQUIRE(0 == pool.string_count_total());
     {
-      auto str1 = pool.create_new("Hello World 1");
+      rose::StringView str1(pool, "Hello World 1");
       REQUIRE(1 == pool.string_count_total());
       REQUIRE(1 == pool.string_count_active());
       REQUIRE((str1 == "Hello World 1"));
 
-      auto str2 = pool.create_new("Hello World 2");
+      rose::StringView str2(pool, "Hello World 2");
       REQUIRE(2 == pool.string_count_total());
       REQUIRE(2 == pool.string_count_active());
       REQUIRE((str2 == "Hello World 2"));
