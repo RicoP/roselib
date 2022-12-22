@@ -14,15 +14,12 @@ TEST_CASE("String Pool Sanity Check", "[string pool]") {
       REQUIRE(1 == pool.string_count_active());
 
       auto iter = str.iterator();
-      REQUIRE('H' == iter.nextCodepoint());
-      REQUIRE('e' == iter.nextCodepoint());
-      REQUIRE('l' == iter.nextCodepoint());
-      REQUIRE('l' == iter.nextCodepoint());
-      REQUIRE(0x00F6 == iter.nextCodepoint());
-      REQUIRE(0 == iter.nextCodepoint());
-
-      //REQUIRE(pool.poolSize == str.CodepointCount())
-      //REQUIRE(pool.poolCapacity == str.CodepointCount())
+      REQUIRE('H' == iter.next_codepoint());
+      REQUIRE('e' == iter.next_codepoint());
+      REQUIRE('l' == iter.next_codepoint());
+      REQUIRE('l' == iter.next_codepoint());
+      REQUIRE(0x00F6 == iter.next_codepoint());
+      REQUIRE(0 == iter.next_codepoint());
     }
     REQUIRE(1 == pool.string_count_total());
     REQUIRE(0 == pool.string_count_active());

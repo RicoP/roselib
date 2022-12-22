@@ -113,7 +113,8 @@ struct StringPool {
     poolSize += length;
 
     while (poolSize > poolCapacity) {
-      poolCapacity = next_power_of_2(poolCapacity);
+      //https://discord.com/channels/400588936151433218/836190238703222796/1055271600561324174
+      poolCapacity = 1 + (poolCapacity * 3) / 2;
     }
 
     if (oldCapcacity != poolCapacity) {
@@ -175,11 +176,11 @@ struct Utf8Iterator {
   const char* current;
   const char* end;
 
-  std::uint32_t nextCodepoint() {
+  int next_codepoint() {
     if (current == end) return 0;
 
     //https://github.com/RandyGaul/cute_framework/blob/9cd21c981d82a0839cc856bae7eb8bc306c33c14/src/cute_string.cpp#L524
-    std::uint32_t codepoint = 0;
+    int codepoint = 0;
     const char* s = current;
 	  unsigned char c = *s++;
 	  int extra = 0;
@@ -276,6 +277,13 @@ struct StringView {
 
   Utf8Iterator iterator() const {
     return { begin(), end() };
+  }
+
+  int codepoint_count() const {
+    int size = 0;
+    auto iter = iterator();
+    while (iter.next_codepoint()) size++;
+    return size;
   }
 };
 }
