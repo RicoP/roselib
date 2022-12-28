@@ -41,7 +41,7 @@ bool read(COMPONENT& component, ::rose::io::Folder folder, const char* name) {
 
   if (!f) {
     // TODO: have an option to just return default value if file doesn't exist.
-    construct_defaults(component);
+    // construct_defaults(component);
     //COMPONENT default_component{};
     //component = default_component;
     return false;
