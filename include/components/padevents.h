@@ -46,3 +46,34 @@ struct PadEvent {
   PadEventButton buttons;
   int player;
 };
+
+//TODO: change to that:
+/*
+struct PadAnalogChangeEvent {
+  float stick_lx;
+  float stick_ly;
+  float stick_rx;
+  float stick_ry;
+
+  float trigger_l;
+  float trigger_r;
+  int player;
+};
+
+struct PadButtonChangeEvent {
+  PadEventButton changed;
+  PadEventButton buttons;
+  int player;
+
+  bool wasPressed(PadEventButton button) {
+    if(!(changed & buttons)) return false;
+    return !!(buttons & button);
+  }
+
+  bool wasReleased(PadEventButton button) {
+    if(!(changed & buttons)) return false;
+    return !(buttons & button);
+  }
+};
+
+*/
