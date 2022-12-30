@@ -36,15 +36,17 @@ enum class PadEventButton : int {
 };
 
 struct PadEvent {
-  float stick_lx;
-  float stick_ly;
-  float stick_rx;
-  float stick_ry;
+  int player = 0;
 
-  float trigger_l;
-  float trigger_r;
-  PadEventButton buttons;
-  int player;
+  float stick_lx = 0;
+  float stick_ly = 0;
+  float stick_rx = 0;
+  float stick_ry = 0;
+
+  float trigger_l = 0;
+  float trigger_r = 0;
+
+  PadEventButton buttons = PadEventButton::NONE;
 };
 
 //TODO: change to that:
