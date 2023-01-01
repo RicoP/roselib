@@ -28,7 +28,7 @@ inline void construct_defaults(RoseOptions & o) {
   std::memset(&o, 0, sizeof(RoseOptions));
   o.raytracer = true;
   o.window_position = ::vector(0,0);
-  o.window_size = ::vector(1280, 720);
+  o.window_size = ::vector(640,480);
 }
 
 inline bool operator==(const RoseOptions &lhs, const RoseOptions &rhs) {
