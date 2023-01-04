@@ -2,7 +2,7 @@
 
 #include <rose/hash.h>
 #include <rose/typetraits.h>
-#include <serializer/serializer.h>
+#include <rose/serializer.h>
 
 ///////////////////////////////////////////////////////////////////
 //  AUTOGEN                                                      //
@@ -25,13 +25,12 @@ namespace rose {
   void construct_defaults(      PadEventButton &o); //implement me
 }
 
-inline PadEventButton operator|(const PadEventButton &a, const PadEventButton &b) { return static_cast<PadEventButton>(static_cast<int >(a) | static_cast<int >(b)); }
-inline PadEventButton operator|=(PadEventButton &a, const PadEventButton &b) { return a = a | b; }
-inline PadEventButton operator&(const PadEventButton &a, const PadEventButton &b) { return static_cast<PadEventButton>(static_cast<int >(a) & static_cast<int >(b)); }
-inline PadEventButton operator&=(PadEventButton &a, const PadEventButton &b) { return a = a & b; }
-inline PadEventButton operator^(const PadEventButton &a, const PadEventButton &b) { return static_cast<PadEventButton>(static_cast<int >(a) ^ static_cast<int >(b)); }
-inline PadEventButton operator^=(PadEventButton &a, const PadEventButton &b) { return a = a ^ b; }
-inline bool operator!(const PadEventButton &e) { return static_cast<int >(e) == 0; }
+inline BoolConvertible<PadEventButton, int > operator|(const PadEventButton &a, const PadEventButton &b) { return { static_cast<PadEventButton>(static_cast<int >(a) | static_cast<int >(b)) }; }
+inline BoolConvertible<PadEventButton, int > operator&(const PadEventButton &a, const PadEventButton &b) { return { static_cast<PadEventButton>(static_cast<int >(a) & static_cast<int >(b)) }; }
+inline BoolConvertible<PadEventButton, int > operator^(const PadEventButton &a, const PadEventButton &b) { return { static_cast<PadEventButton>(static_cast<int >(a) ^ static_cast<int >(b)) }; }
+inline PadEventButton operator|=(PadEventButton &a, PadEventButton b) { return a = a | b; }
+inline PadEventButton operator&=(PadEventButton &a, PadEventButton b) { return a = a & b; }
+inline PadEventButton operator^=(PadEventButton &a, PadEventButton b) { return a = a ^ b; }
 
 
 namespace rose {
@@ -53,13 +52,12 @@ namespace rose {
   void construct_defaults(      rose::ecs::SubsystemConfig &o); //implement me
 }
 
-inline rose::ecs::SubsystemConfig operator|(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) | static_cast<int >(b)); }
-inline rose::ecs::SubsystemConfig operator|=(rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return a = a | b; }
-inline rose::ecs::SubsystemConfig operator&(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) & static_cast<int >(b)); }
-inline rose::ecs::SubsystemConfig operator&=(rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return a = a & b; }
-inline rose::ecs::SubsystemConfig operator^(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) ^ static_cast<int >(b)); }
-inline rose::ecs::SubsystemConfig operator^=(rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return a = a ^ b; }
-inline bool operator!(const rose::ecs::SubsystemConfig &e) { return static_cast<int >(e) == 0; }
+inline BoolConvertible<rose::ecs::SubsystemConfig, int > operator|(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return { static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) | static_cast<int >(b)) }; }
+inline BoolConvertible<rose::ecs::SubsystemConfig, int > operator&(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return { static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) & static_cast<int >(b)) }; }
+inline BoolConvertible<rose::ecs::SubsystemConfig, int > operator^(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return { static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) ^ static_cast<int >(b)) }; }
+inline rose::ecs::SubsystemConfig operator|=(rose::ecs::SubsystemConfig &a, rose::ecs::SubsystemConfig b) { return a = a | b; }
+inline rose::ecs::SubsystemConfig operator&=(rose::ecs::SubsystemConfig &a, rose::ecs::SubsystemConfig b) { return a = a & b; }
+inline rose::ecs::SubsystemConfig operator^=(rose::ecs::SubsystemConfig &a, rose::ecs::SubsystemConfig b) { return a = a ^ b; }
 
 
 struct                PadEvent;
@@ -71,7 +69,7 @@ namespace rose {
   hash_value         hash(const PadEvent &o);
   template<>
   struct type_id<PadEvent> {
-    inline static hash_value VALUE = 6632300324658256845ULL;
+    inline static hash_value VALUE = 2480295155421047372ULL;
   };
   void construct_defaults(      PadEvent &o); // implement me
 }
