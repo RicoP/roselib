@@ -13,12 +13,14 @@ namespace rose {
 namespace ecs {
 struct RoseOptions {
   bool raytracer;
+  bool rendering;
   vector2 window_position;
   vector2 window_size;
 
   bool equals(const RoseOptions & rhs) const {
     return
       raytracer == rhs.raytracer &&
+      rendering == rhs.rendering &&
       window_position == rhs.window_position &&
       window_size == rhs.window_size;
   }
@@ -27,6 +29,7 @@ struct RoseOptions {
 inline void construct_defaults(RoseOptions & o) {
   std::memset(&o, 0, sizeof(RoseOptions));
   o.raytracer = true;
+  o.rendering = true;
   o.window_position = ::vector(0,0);
   o.window_size = ::vector(640,480);
 }
@@ -46,6 +49,8 @@ inline void serialize(RoseOptions &o, ISerializer &s) {
   if(s.node_begin("RoseOptions", rose::hash("RoseOptions"), &o)) {
     s.key("raytracer");
     serialize(o.raytracer, s);
+    s.key("rendering");
+    serialize(o.rendering, s);
     s.key("window_position");
     serialize(o.window_position, s);
     s.key("window_size");
@@ -66,6 +71,9 @@ inline void deserialize(RoseOptions &o, IDeserializer &s) {
       case rose::hash("raytracer"):
         deserialize(o.raytracer, s);
         break;
+      case rose::hash("rendering"):
+        deserialize(o.rendering, s);
+        break;
       case rose::hash("window_position"):
         deserialize(o.window_position, s);
         break;
@@ -82,6 +90,7 @@ inline void deserialize(RoseOptions &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 inline void randomize(RoseOptions &o, rose::hash_value & h) {
   randomize(o.raytracer, h);
+  randomize(o.rendering, h);
   randomize(o.window_position, h);
   randomize(o.window_size, h);
 }
@@ -92,6 +101,8 @@ inline void randomize(RoseOptions &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
   inline hash_value hash(const ecs::RoseOptions &o) {
     hash_value h = hash(o.raytracer);
+    h = xor64(h);
+    h ^= hash(o.rendering);
     h = xor64(h);
     h ^= hash(o.window_position);
     h = xor64(h);
