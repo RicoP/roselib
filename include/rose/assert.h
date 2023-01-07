@@ -1,5 +1,13 @@
 #pragma once
 
-#include <cassert>
+#include <rose/unused.h>
 
-#define ROSE_ASSERT assert
+#ifdef NDEBUG
+#  ifdef assert
+#    undef assert
+#  endif
+#  define assert rose::unused
+#else
+#include <cassert>
+//TODO: replace assert with call that throws
+#endif

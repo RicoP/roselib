@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-#include "assert.h"
+#include <rose/assert.h>
 #include "hash.h"
 
 #ifdef ROSE_USE_EA
@@ -29,7 +29,7 @@ struct vectorPOD {
   T elements[MAX];
 
   T& emplace_back() {
-    ROSE_ASSERT(size != capacity());
+    assert(size != capacity());
     T& ret = elements[size++];
     std::memset(&ret, 0, sizeof(T));
     new (&ret) T();
@@ -41,29 +41,29 @@ struct vectorPOD {
   }
 
   void erase_at(ptrdiff_t i) {
-    ROSE_ASSERT(i >= 0 && i < size);
-    ROSE_ASSERT(size != 0);
+    assert(i >= 0 && i < size);
+    assert(size != 0);
     --size;
     elements[i] = elements[size];
   }
 
   void erase(T* it) {
-    ROSE_ASSERT(it);
+    assert(it);
     erase_at(it - begin());
   }
 
   void pop() {
-    ROSE_ASSERT(size != 0);
+    assert(size != 0);
     --size;
   }
 
   T& operator[](size_t i) {
-    ROSE_ASSERT(i >= 0 && i < size);
+    assert(i >= 0 && i < size);
     return elements[i];
   }
 
   const T& operator[](size_t i) const {
-    ROSE_ASSERT(i >= 0 && i < size);
+    assert(i >= 0 && i < size);
     return elements[i];
   }
 };
@@ -132,8 +132,8 @@ struct HashmapPOD {
     // when kvp points to first element that is bigger, so we must shift
     // all other elements back one element so we can fit in new KVP.
     // When kvp points at last element behind the array we want to insert new element at end anyway.
-    ROSE_ASSERT(map.size != map.capacity());
-    ROSE_ASSERT(kvpi == map.end() || kvpi->key != hash);  // we assume key is new.
+    assert(map.size != map.capacity());
+    assert(kvpi == map.end() || kvpi->key != hash);  // we assume key is new.
 
     map.size++;  // increase size with initialize value;
     for (auto it = map.back(); it != kvpi; --it) {
@@ -168,7 +168,7 @@ struct HashmapPOD {
 
   TValue& operator[](rose::hash_value hash) {
     auto kvpi = binary_search(hash);
-    ROSE_ASSERT(kvpi != map.end() && kvpi->key == hash);
+    assert(kvpi != map.end() && kvpi->key == hash);
     // C++ behaviour
     // if (kvpi == map.end() || kvpi->key != hashing(key)) {
     //  return emplace_back(key, TValue()).value;
@@ -180,7 +180,7 @@ struct HashmapPOD {
 
   const TValue& operator[](rose::hash_value hash) const {
     auto kvpi = binary_search(hash);
-    ROSE_ASSERT(kvpi != map.end() && kvpi->key == hash);
+    assert(kvpi != map.end() && kvpi->key == hash);
     return kvpi->value;
   }
 };
