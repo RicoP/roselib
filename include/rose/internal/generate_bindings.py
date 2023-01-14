@@ -6,11 +6,12 @@ bindings = [
 	#[ "events", "void", "push", [ ["void*", "data"], ["int", "size"] ] ]
 	[ "internal", "rose::EventQueue*", "get_event_queue", [ ] ],
 	[ "internal", "struct rose::SingletonRegister &", "get_singleton_register", [ ] ],
+	[ "internal", "void *", "create_or_fetch_worldstate", [ ["rose::reflection::TypeInfo", "type"] ] ],
 	[ "filewatcher", "int", "watch_path", [ ["const char *", "path"] ] ],
 	[ "filewatcher", "bool", "unwatch_path", [ ["int", "id"] ] ],
 ]
 
-blacklist = [ ("internal", "get_event_queue"), ("internal", "get_singleton_register") ]
+blacklist = [ ("internal", "get_event_queue"), ("internal", "get_singleton_register"), ("internal", "lazy_regsiter_or_fetch_worldstate") ]
 
 # a custom made hash function for python strings that stays consistent between runs
 def chash(obj):
@@ -30,6 +31,7 @@ def write_header(f):
 	f.write("// Bindings hash: " + str(chash(bindings)) + "\n")
 	f.write("///////////////////////////////////////////////////\n")
 	f.write("#include <rose/hash.h>\n")
+	f.write("#include <rose/world.h>\n")
 	f.write("#include <rose/eventqueue.h>\n")
 	f.write("#include <rose/internal/singletonregister.h>\n")
 	f.write("\n")
@@ -121,13 +123,6 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 	f.write("  template<class T> \n")
 	f.write("  void broadcast(const T & event) {\n")
 	f.write("    c_rose_internal_get_event_queue()->push_back(event);\n")
-	f.write("  }\n")
-	f.write("}\n")
-
-	f.write("namespace world {\n")
-	f.write("  template<class T> \n")
-	f.write("  T & get() {\n")
-	f.write("    return c_rose_internal_get_singleton_register().Get<T>();\n")
 	f.write("  }\n")
 	f.write("}\n")
 
