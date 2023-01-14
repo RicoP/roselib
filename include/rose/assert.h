@@ -11,3 +11,5 @@
 #include <cassert>
 //TODO: replace assert with call that throws
 #endif
+
+#define fixme(MSG) assert(false)
