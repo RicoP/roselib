@@ -48,12 +48,12 @@ with open("bindings_typedef.h.tmp", "w") as f:
 		f.write(binding[0])
 		f.write("_")
 		f.write(binding[2])
-		f.write("_ft)(")
+		f.write("_ft)(int")
 		for arg in binding[3]:
+			f.write(", ")
 			f.write(arg[0])
 			f.write(" ")
 			f.write(arg[1])
-			f.write(", ") if arg != binding[3][-1] else f.write("")
 		f.write(");\n")
 
 	f.close()
@@ -77,6 +77,10 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 		f.write("_")
 		f.write(binding[2])
 		f.write(";\n")
+	
+	f.write("ROSE_EXPORT int c_rose_subsystem_instance_id; \n")
+
+
 
 	f.write("\n#ifdef __cplusplus\n")
 	f.write("namespace rose {\n")
@@ -110,10 +114,10 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 		f.write(binding[0])
 		f.write("_")
 		f.write(binding[2])
-		f.write("(")
+		f.write("(c_rose_subsystem_instance_id")
 		for arg in binding[3]:
+			f.write(", ")
 			f.write(arg[1])
-			f.write(", ") if arg != binding[3][-1] else f.write("")
 		f.write(");\n")
 		f.write("  }\n")
 		f.write("}\n")
@@ -149,12 +153,12 @@ with open("bindings_engine.h.tmp", "w") as f:
 		f.write(binding[0])
 		f.write("_")
 		f.write(binding[2])
-		f.write("(")
+		f.write("(int")
 		for arg in binding[3]:
+			f.write(", ")
 			f.write(arg[0])
 			f.write(" ")
 			f.write(arg[1])
-			f.write(", ") if arg != binding[3][-1] else f.write("")
 		f.write(");\n")
 	f.write("}\n\n")
 

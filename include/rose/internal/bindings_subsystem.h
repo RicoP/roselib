@@ -19,22 +19,23 @@ ROSE_EXPORT rose_internal_get_singleton_register_ft c_rose_internal_get_singleto
 ROSE_EXPORT rose_internal_create_or_fetch_worldstate_ft c_rose_internal_create_or_fetch_worldstate;
 ROSE_EXPORT rose_filewatcher_watch_path_ft c_rose_filewatcher_watch_path;
 ROSE_EXPORT rose_filewatcher_unwatch_path_ft c_rose_filewatcher_unwatch_path;
+ROSE_EXPORT int c_rose_subsystem_instance_id; 
 
 #ifdef __cplusplus
 namespace rose {
 namespace internal {
   inline void * create_or_fetch_worldstate(rose::reflection::TypeInfo type) {
-    return c_rose_internal_create_or_fetch_worldstate(type);
+    return c_rose_internal_create_or_fetch_worldstate(c_rose_subsystem_instance_id, type);
   }
 }
 namespace filewatcher {
   inline int watch_path(const char * path) {
-    return c_rose_filewatcher_watch_path(path);
+    return c_rose_filewatcher_watch_path(c_rose_subsystem_instance_id, path);
   }
 }
 namespace filewatcher {
   inline bool unwatch_path(int id) {
-    return c_rose_filewatcher_unwatch_path(id);
+    return c_rose_filewatcher_unwatch_path(c_rose_subsystem_instance_id, id);
   }
 }
 namespace event {

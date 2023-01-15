@@ -14,7 +14,7 @@ namespace rose::world {
     template<class T>
     T & get() {
         rose::reflection::TypeInfo info = get_type_info<T>();
-        void * ptr = c_rose_internal_create_or_fetch_worldstate(info);
+        void * ptr = c_rose_internal_create_or_fetch_worldstate(c_rose_subsystem_instance_id, info);
         assert(ptr);
         return *reinterpret_cast<T*>(ptr);
     }

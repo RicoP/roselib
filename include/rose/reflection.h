@@ -5,7 +5,8 @@
 
 namespace rose::reflection {
     struct TypeInfo {
-        // a unique id that should be unique for this type (for now simply 'hash(name)')
+        // A unique id that should be unique for this type (for now simply 'hash(name)').
+        // Could also be the hash of the absolute address of the header file.
         rose::hash_value unique_id = 0;
         // a hash based on the members of that type. Changes when the members change.
         rose::hash_value member_hash = 0;
@@ -18,7 +19,7 @@ namespace rose::reflection {
         // The Typeinfo object should be desolved before the DLL is unloaded.
 
         // Name of the type. Should be unique. (In DLL memory!)
-        char * name;
+        char * name = nullptr;
 
         // static function pointers to constructor and destructor. (In DLL memory!)
         void (*fp_default_construct)(void *) = nullptr;

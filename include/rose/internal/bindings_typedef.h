@@ -11,8 +11,8 @@
 #include <rose/eventqueue.h>
 #include <rose/internal/singletonregister.h>
 
-typedef rose::EventQueue* (*rose_internal_get_event_queue_ft)();
-typedef struct rose::SingletonRegister & (*rose_internal_get_singleton_register_ft)();
-typedef void * (*rose_internal_create_or_fetch_worldstate_ft)(rose::reflection::TypeInfo type);
-typedef int (*rose_filewatcher_watch_path_ft)(const char * path);
-typedef bool (*rose_filewatcher_unwatch_path_ft)(int id);
+typedef rose::EventQueue* (*rose_internal_get_event_queue_ft)(int);
+typedef struct rose::SingletonRegister & (*rose_internal_get_singleton_register_ft)(int);
+typedef void * (*rose_internal_create_or_fetch_worldstate_ft)(int, rose::reflection::TypeInfo type);
+typedef int (*rose_filewatcher_watch_path_ft)(int, const char * path);
+typedef bool (*rose_filewatcher_unwatch_path_ft)(int, int id);

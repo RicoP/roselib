@@ -14,11 +14,11 @@
 #include <rose/internal/bindings_typedef.h>
 
 namespace subsystem_bindings {
-rose::EventQueue* g_rose_internal_get_event_queue();
-struct rose::SingletonRegister & g_rose_internal_get_singleton_register();
-void * g_rose_internal_create_or_fetch_worldstate(rose::reflection::TypeInfo type);
-int g_rose_filewatcher_watch_path(const char * path);
-bool g_rose_filewatcher_unwatch_path(int id);
+rose::EventQueue* g_rose_internal_get_event_queue(int);
+struct rose::SingletonRegister & g_rose_internal_get_singleton_register(int);
+void * g_rose_internal_create_or_fetch_worldstate(int, rose::reflection::TypeInfo type);
+int g_rose_filewatcher_watch_path(int, const char * path);
+bool g_rose_filewatcher_unwatch_path(int, int id);
 }
 
 template<class Lambda1, class Lambda2>
