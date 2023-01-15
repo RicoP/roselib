@@ -6,7 +6,7 @@ bindings = [
 	#[ "events", "void", "push", [ ["void*", "data"], ["int", "size"] ] ]
 	[ "internal", "rose::EventQueue*", "get_event_queue", [ ] ],
 	[ "internal", "struct rose::SingletonRegister &", "get_singleton_register", [ ] ],
-	[ "internal", "void *", "create_or_fetch_worldstate", [ ["rose::reflection::TypeInfo", "type"] ] ],
+	[ "internal", "void *", "create_or_fetch_worldstate", [ ["const rose::reflection::TypeInfo &", "type"] ] ],
 	[ "filewatcher", "int", "watch_path", [ ["const char *", "path"] ] ],
 	[ "filewatcher", "bool", "unwatch_path", [ ["int", "id"] ] ],
 ]

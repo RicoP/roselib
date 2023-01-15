@@ -34,5 +34,5 @@ namespace rose::reflection {
     // Must be specialized in corresponding
     // object header when code is generated.
     template <typename T>
-    TypeInfo get_type_info();
+    const TypeInfo & get_type_info();
 }

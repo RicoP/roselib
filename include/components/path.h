@@ -9,11 +9,13 @@ struct path {
 	bool append(const char * element);
 };
 
+namespace rose::ecs {
 inline void        serialize(path &o, ISerializer &s) {
 	rose::ecs::serialize(o.string, s);
 }
 inline void      deserialize(path &o, IDeserializer &s) {
 	rose::ecs::deserialize(o.string, s);
+}
 }
 
 
