@@ -29,4 +29,10 @@ namespace rose::reflection {
         void (*fp_serialize)(void *, ISerializer &) = nullptr;
         void (*fp_deserialize)(void *, IDeserializer &) = nullptr;
     };
+
+    // Not implemented by default.
+    // Must be specialized in corresponding
+    // object header when code is generated.
+    template <typename T>
+    TypeInfo get_type_info();
 }

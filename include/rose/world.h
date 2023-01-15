@@ -5,15 +5,9 @@
 #include <rose/internal/bindings_subsystem.h>
 
 namespace rose::world {
-    // Not implemented by default.
-    // Must be specialized in corresponding
-    // object header when code is generated.
-    template <typename T>
-    rose::reflection::TypeInfo get_type_info();
-
     template<class T>
     T & get() {
-        rose::reflection::TypeInfo info = get_type_info<T>();
+        rose::reflection::TypeInfo info = rose::reflection::get_type_info<T>();
         void * ptr = c_rose_internal_create_or_fetch_worldstate(c_rose_subsystem_instance_id, info);
         assert(ptr);
         return *reinterpret_cast<T*>(ptr);
