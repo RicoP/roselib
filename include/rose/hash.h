@@ -58,6 +58,11 @@ T next_range(hash_value& h, T min, T max) {
   return min;
 }
 
+template <typename T1, typename T2>
+T1 next_range(hash_value& h, T1 min, T2 max) {
+  return next_range<T1>(h, min, (T1)max);
+}
+
 inline float nextf(hash_value& h) {
   next(h);
 
