@@ -9,6 +9,7 @@ namespace rose::reflection {
         // Could also be the hash of the absolute address of the header file.
         rose::hash_value unique_id = 0;
         // a hash based on the members of that type. Changes when the members change.
+        // TODO: rename to type_id
         rose::hash_value member_hash = 0;
         // sizeof(T)
         std::size_t memory_footprint = 0;
