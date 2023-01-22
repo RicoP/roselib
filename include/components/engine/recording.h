@@ -8,23 +8,21 @@
 enum class RoseRecordingState : int {
     NONE = 0,
 
-    RecordingStart = 0x1,
+    Inactive,
+    Paused,
+    Delete,
+
+    RecordingStart = 0x100,
     Recording,
     RecordingStop,
 
-    RecordingMask = 0xF,
+    RecordingMask = 0xF00,
 
-    ReplayingStart = 0x10,
+    ReplayingStart = 0x1000,
     Replaying,
     ReplayingSeek,
     ReplayingStop,
 
-    ReplayingMask = 0xF0,
+    ReplayingMask = 0xF000,
 
-    Inactive = 0x100,
-};
-
-struct RoseRecordingRequest {
-  RoseRecordingState state = RoseRecordingState::NONE;
-  int seek = -1;
 };

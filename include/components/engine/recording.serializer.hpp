@@ -21,7 +21,7 @@ namespace rose {
   }
   template<>
   struct type_id<RoseRecordingState> {
-    inline static hash_value VALUE = 17245467189916409023ULL;
+    inline static hash_value VALUE = 6863955439502559106ULL;
   };
   hash_value         hash(const RoseRecordingState &o);
   void construct_defaults(      RoseRecordingState &o); //implement me
@@ -34,27 +34,6 @@ inline RoseRecordingState operator|=(RoseRecordingState &a, RoseRecordingState b
 inline RoseRecordingState operator&=(RoseRecordingState &a, RoseRecordingState b) { return a = a & b; }
 inline RoseRecordingState operator^=(RoseRecordingState &a, RoseRecordingState b) { return a = a ^ b; }
 
-
-struct                RoseRecordingRequest;
-namespace rose {
-  namespace ecs {
-    void        serialize(RoseRecordingRequest &o, ISerializer &s);
-    void      deserialize(RoseRecordingRequest &o, IDeserializer &s);
-  }
-  hash_value         hash(const RoseRecordingRequest &o);
-  template<>
-  struct type_id<RoseRecordingRequest> {
-    inline static hash_value VALUE = 971013233248560044ULL;
-  };
-  void construct_defaults(      RoseRecordingRequest &o); // implement me
-}
-bool operator==(const RoseRecordingRequest &lhs, const RoseRecordingRequest &rhs);
-bool operator!=(const RoseRecordingRequest &lhs, const RoseRecordingRequest &rhs);
-
-namespace rose::reflection {
-  template <>
-  const rose::reflection::TypeInfo & get_type_info<RoseRecordingRequest>();
-}
 
 #ifdef IMPL_SERIALIZER
 
@@ -110,6 +89,9 @@ namespace rose::reflection {
 const char * to_string(const RoseRecordingState & e) {
     switch(e) {
         case RoseRecordingState::NONE: return "NONE";
+        case RoseRecordingState::Inactive: return "Inactive";
+        case RoseRecordingState::Paused: return "Paused";
+        case RoseRecordingState::Delete: return "Delete";
         case RoseRecordingState::RecordingStart: return "RecordingStart";
         case RoseRecordingState::Recording: return "Recording";
         case RoseRecordingState::RecordingStop: return "RecordingStop";
@@ -119,7 +101,6 @@ const char * to_string(const RoseRecordingState & e) {
         case RoseRecordingState::ReplayingSeek: return "ReplayingSeek";
         case RoseRecordingState::ReplayingStop: return "ReplayingStop";
         case RoseRecordingState::ReplayingMask: return "ReplayingMask";
-        case RoseRecordingState::Inactive: return "Inactive";
         default: return "<UNKNOWN>";
     }
 }
@@ -127,6 +108,21 @@ void rose::ecs::serialize(RoseRecordingState& o, ISerializer& s) {
   switch (o) {
     case RoseRecordingState::NONE: {
       char str[] = "NONE";
+      serialize(str, s);
+      break;
+    }
+    case RoseRecordingState::Inactive: {
+      char str[] = "Inactive";
+      serialize(str, s);
+      break;
+    }
+    case RoseRecordingState::Paused: {
+      char str[] = "Paused";
+      serialize(str, s);
+      break;
+    }
+    case RoseRecordingState::Delete: {
+      char str[] = "Delete";
       serialize(str, s);
       break;
     }
@@ -175,11 +171,6 @@ void rose::ecs::serialize(RoseRecordingState& o, ISerializer& s) {
       serialize(str, s);
       break;
     }
-    case RoseRecordingState::Inactive: {
-      char str[] = "Inactive";
-      serialize(str, s);
-      break;
-    }
     default: /* unknown */ break;
   }
 }
@@ -189,6 +180,9 @@ void rose::ecs::deserialize(RoseRecordingState& o, IDeserializer& s) {
   rose::hash_value h = rose::hash(str);
   switch (h) {
   case rose::hash("NONE"): o = RoseRecordingState::NONE; break;
+  case rose::hash("Inactive"): o = RoseRecordingState::Inactive; break;
+  case rose::hash("Paused"): o = RoseRecordingState::Paused; break;
+  case rose::hash("Delete"): o = RoseRecordingState::Delete; break;
   case rose::hash("RecordingStart"): o = RoseRecordingState::RecordingStart; break;
   case rose::hash("Recording"): o = RoseRecordingState::Recording; break;
   case rose::hash("RecordingStop"): o = RoseRecordingState::RecordingStop; break;
@@ -198,80 +192,11 @@ void rose::ecs::deserialize(RoseRecordingState& o, IDeserializer& s) {
   case rose::hash("ReplayingSeek"): o = RoseRecordingState::ReplayingSeek; break;
   case rose::hash("ReplayingStop"): o = RoseRecordingState::ReplayingStop; break;
   case rose::hash("ReplayingMask"): o = RoseRecordingState::ReplayingMask; break;
-  case rose::hash("Inactive"): o = RoseRecordingState::Inactive; break;
   default: /*unknown value*/ break;
   }
 }
 rose::hash_value       rose::hash(const RoseRecordingState& o) {
   return static_cast<rose::hash_value>(o);
-}
-
-///////////////////////////////////////////////////////////////////
-//  struct RoseRecordingRequest
-///////////////////////////////////////////////////////////////////
-bool operator==(const RoseRecordingRequest &lhs, const RoseRecordingRequest &rhs) {
-  return
-    rose_parser_equals(lhs.state, rhs.state) &&
-    rose_parser_equals(lhs.seek, rhs.seek) ;
-}
-
-bool operator!=(const RoseRecordingRequest &lhs, const RoseRecordingRequest &rhs) {
-  return
-    !rose_parser_equals(lhs.state, rhs.state) ||
-    !rose_parser_equals(lhs.seek, rhs.seek) ;
-}
-
-void rose::ecs::serialize(RoseRecordingRequest &o, ISerializer &s) {
-  if(s.node_begin("RoseRecordingRequest", rose::hash("RoseRecordingRequest"), &o)) {
-    s.key("state");
-    serialize(o.state, s);
-    s.key("seek");
-    serialize(o.seek, s);
-    s.node_end();
-  }
-  s.end();
-}
-
-void rose::ecs::deserialize(RoseRecordingRequest &o, IDeserializer &s) {
-  //implement me
-  //construct_defaults(o);
-
-  while (s.next_key()) {
-    switch (s.hash_key()) {
-      case rose::hash("state"):
-        deserialize(o.state, s);
-        break;
-      case rose::hash("seek"):
-        deserialize(o.seek, s);
-        break;
-      default: s.skip_key(); break;
-    }
-  }
-}
-
-rose::hash_value rose::hash(const RoseRecordingRequest &o) {
-  rose::hash_value h = rose::hash(o.state);
-  h = rose::xor64(h);
-  h ^= rose::hash(o.seek);
-  return h;
-}
-
-namespace rose::reflection {
-  template <>
-  const rose::reflection::TypeInfo & get_type_info<RoseRecordingRequest>() {
-    static rose::reflection::TypeInfo info = {
-      /*             unique_id */ rose::hash("RoseRecordingRequest"),
-      /*           member_hash */ 971013233248560044ULL,
-      /*      memory_footprint */ sizeof(RoseRecordingRequest),
-      /*      memory_alignment */ 16,
-      /*                  name */ "RoseRecordingRequest",
-      /*  fp_default_construct */ +[](void * ptr) { new (ptr) RoseRecordingRequest(); },
-      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<RoseRecordingRequest*>(ptr))->~RoseRecordingRequest(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<RoseRecordingRequest*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<RoseRecordingRequest*>(ptr)), d); }
-    };
-    return info;
-  }
 }
 
 
