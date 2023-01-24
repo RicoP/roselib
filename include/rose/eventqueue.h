@@ -25,7 +25,7 @@ struct EventIterator {
     assert(current.data != end);
     meta_index++;
     Event new_current;
-    new_current.data = current.data + current.padded_event_size;
+    new_current.data = ((char*)current.data) + current.padded_event_size;
     if (new_current.data == end) {
       new_current.event_id = 0;
       new_current.padded_event_size = 0;

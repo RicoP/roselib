@@ -10,7 +10,7 @@ namespace rose {
 struct Event {
   rose::hash_value event_id = 0;
   size_t padded_event_size = 0;
-  unsigned char *data = nullptr;  // pointing on first byte of event struct
+  void *data = nullptr;  // pointing on first byte of event struct
 
   template <class T>
   const T *get() const {
