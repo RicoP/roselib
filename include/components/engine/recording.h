@@ -12,17 +12,17 @@ enum class RoseRecordingState : int {
     Paused,
     Delete,
 
-    RecordingStart = 0x100,
+    RecordingMask = 0x100,
+    RecordingStart,
     Recording,
     RecordingStop,
 
-    RecordingMask = 0xF00,
 
-    ReplayingStart = 0x1000,
+    ReplayingMask = 0x200,
+    ReplayingStart,
     Replaying,
     ReplayingSeek,
     ReplayingStop,
 
-    ReplayingMask = 0xF000,
 
 };

@@ -21,7 +21,7 @@ namespace rose {
   }
   template<>
   struct type_id<RoseRecordingState> {
-    inline static hash_value VALUE = 6863955439502559106ULL;
+    inline static hash_value VALUE = 7035316879344613215ULL;
   };
   hash_value         hash(const RoseRecordingState &o);
   void construct_defaults(      RoseRecordingState &o); //implement me
@@ -92,15 +92,15 @@ const char * to_string(const RoseRecordingState & e) {
         case RoseRecordingState::Inactive: return "Inactive";
         case RoseRecordingState::Paused: return "Paused";
         case RoseRecordingState::Delete: return "Delete";
+        case RoseRecordingState::RecordingMask: return "RecordingMask";
         case RoseRecordingState::RecordingStart: return "RecordingStart";
         case RoseRecordingState::Recording: return "Recording";
         case RoseRecordingState::RecordingStop: return "RecordingStop";
-        case RoseRecordingState::RecordingMask: return "RecordingMask";
+        case RoseRecordingState::ReplayingMask: return "ReplayingMask";
         case RoseRecordingState::ReplayingStart: return "ReplayingStart";
         case RoseRecordingState::Replaying: return "Replaying";
         case RoseRecordingState::ReplayingSeek: return "ReplayingSeek";
         case RoseRecordingState::ReplayingStop: return "ReplayingStop";
-        case RoseRecordingState::ReplayingMask: return "ReplayingMask";
         default: return "<UNKNOWN>";
     }
 }
@@ -126,6 +126,11 @@ void rose::ecs::serialize(RoseRecordingState& o, ISerializer& s) {
       serialize(str, s);
       break;
     }
+    case RoseRecordingState::RecordingMask: {
+      char str[] = "RecordingMask";
+      serialize(str, s);
+      break;
+    }
     case RoseRecordingState::RecordingStart: {
       char str[] = "RecordingStart";
       serialize(str, s);
@@ -141,8 +146,8 @@ void rose::ecs::serialize(RoseRecordingState& o, ISerializer& s) {
       serialize(str, s);
       break;
     }
-    case RoseRecordingState::RecordingMask: {
-      char str[] = "RecordingMask";
+    case RoseRecordingState::ReplayingMask: {
+      char str[] = "ReplayingMask";
       serialize(str, s);
       break;
     }
@@ -166,11 +171,6 @@ void rose::ecs::serialize(RoseRecordingState& o, ISerializer& s) {
       serialize(str, s);
       break;
     }
-    case RoseRecordingState::ReplayingMask: {
-      char str[] = "ReplayingMask";
-      serialize(str, s);
-      break;
-    }
     default: /* unknown */ break;
   }
 }
@@ -183,15 +183,15 @@ void rose::ecs::deserialize(RoseRecordingState& o, IDeserializer& s) {
   case rose::hash("Inactive"): o = RoseRecordingState::Inactive; break;
   case rose::hash("Paused"): o = RoseRecordingState::Paused; break;
   case rose::hash("Delete"): o = RoseRecordingState::Delete; break;
+  case rose::hash("RecordingMask"): o = RoseRecordingState::RecordingMask; break;
   case rose::hash("RecordingStart"): o = RoseRecordingState::RecordingStart; break;
   case rose::hash("Recording"): o = RoseRecordingState::Recording; break;
   case rose::hash("RecordingStop"): o = RoseRecordingState::RecordingStop; break;
-  case rose::hash("RecordingMask"): o = RoseRecordingState::RecordingMask; break;
+  case rose::hash("ReplayingMask"): o = RoseRecordingState::ReplayingMask; break;
   case rose::hash("ReplayingStart"): o = RoseRecordingState::ReplayingStart; break;
   case rose::hash("Replaying"): o = RoseRecordingState::Replaying; break;
   case rose::hash("ReplayingSeek"): o = RoseRecordingState::ReplayingSeek; break;
   case rose::hash("ReplayingStop"): o = RoseRecordingState::ReplayingStop; break;
-  case rose::hash("ReplayingMask"): o = RoseRecordingState::ReplayingMask; break;
   default: /*unknown value*/ break;
   }
 }
