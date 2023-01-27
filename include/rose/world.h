@@ -6,18 +6,49 @@
 #include <rose/reflection.h>
 
 namespace rose::internal {
-constexpr rose::hash_value RoseUniqueClassImplHash(const char* file, rose::hash_value line) {
+constexpr rose::hash_value RoseUniqueClassImplHash(const char* file, rose::hash_value line = 0) {
   rose::hash_value MagicPrime = 0x00000100000001b3ULL;
   rose::hash_value Hash = 0xcbf29ce484222325ULL;
 
+  int state = 0;
   for (; *file; file++) {
     char c = *file;
     if(c == '\\') c = '/';
+
+
+    switch (state) {
+      break; case  '/': state = c == 'i' ? 'ii' : '/';
+      break; case 'ii': state = c == 'n' ? 'in' : 0;
+      break; case 'in': state = c == 'c' ? 'ic' : 0;
+      break; case 'ic': state = c == 'l' ? 'il' : 0;
+      break; case 'il': state = c == 'u' ? 'iu' : 0;
+      break; case 'iu': state = c == 'd' ? 'id' : 0;
+      break; case 'id': state = c == 'e' ? 'ie' : 0;
+      break; case 'ie': state = 0; if(c == '/') Hash = 0xcbf29ce484222325ULL; 
+    }
+
+    switch (state) {
+      break; case  '/': state = c == 's' ? 'ss' : 0;
+      break; case 'ss': state = c == 'o' ? 'so' : 0;
+      break; case 'so': state = c == 'u' ? 'su' : 0;
+      break; case 'su': state = c == 'r' ? 'sr' : 0;
+      break; case 'sr': state = c == 'c' ? 'sc' : 0;
+      break; case 'sc': state = c == 'e' ? 'se' : 0;
+      break; case 'se': state = 0; if(c == '/') Hash = 0xcbf29ce484222325ULL; 
+    }
+
+    if (state == 0 && c == '/') state = '/';
     Hash = (Hash ^ c) * MagicPrime;
   }
 
   return Hash ^ line;
 }
+
+//Some tests
+static_assert(RoseUniqueClassImplHash("C:\\Hello.h") == RoseUniqueClassImplHash("C:/Hello.h"), "test 1 failed");
+static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("/Hello.h"), "test 2 failed");
+static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("A/source/Hello.h"), "test 3 failed");
+static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("A/source/include/source/Hello.h"), "test 4 failed");
 
 struct RoseUniqueClassImplBase {};
 
@@ -28,9 +59,6 @@ struct RoseUniqueClassImpl : RoseUniqueClassImplBase {
 };
 }
 
-// TODO: Wrap 'rose::hash(__FILE__)' in a constexpr function that only takes
-//       the part after '/include/' or '/source/' so the same source file
-//       generates the same ID on different machines.
 #define RoseUniqueClass rose::internal::RoseUniqueClassImpl<rose::internal::RoseUniqueClassImplHash(__FILE__, __LINE__)>
 
 namespace rose::world {
