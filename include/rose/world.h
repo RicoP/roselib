@@ -45,10 +45,12 @@ constexpr rose::hash_value RoseUniqueClassImplHash(const char* file, rose::hash_
 }
 
 //Some tests
-static_assert(RoseUniqueClassImplHash("C:\\Hello.h") == RoseUniqueClassImplHash("C:/Hello.h"), "test 1 failed");
-static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("/Hello.h"), "test 2 failed");
-static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("A/source/Hello.h"), "test 3 failed");
-static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("A/source/include/source/Hello.h"), "test 4 failed");
+static_assert(RoseUniqueClassImplHash("C:\\Hello.h") == RoseUniqueClassImplHash("C:/Hello.h"), "test failed");
+static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("/Hello.h"), "test failed");
+static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("A/source/Hello.h"), "test failed");
+static_assert(RoseUniqueClassImplHash("A/include/Hello.h") == RoseUniqueClassImplHash("A/source/include/source/Hello.h"), "test failed");
+static_assert(RoseUniqueClassImplHash("A/source/Hello.h") == RoseUniqueClassImplHash("/Hello.h"), "test failed");
+static_assert(RoseUniqueClassImplHash("A/include/A") != RoseUniqueClassImplHash("A/source/B"), "test failed");
 
 struct RoseUniqueClassImplBase {};
 
