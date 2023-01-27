@@ -4,6 +4,7 @@
 #include <rose/hash.h>
 #include <rose/nocopy.h>
 #include <rose/typetraits.h>
+#include <rose/world.h>
 
 #include <cassert>
 #include <cstring>
@@ -58,7 +59,7 @@ struct alignas(32) EventQueueContainer {
   size_t meta_size = 0;
 };
 
-struct EventQueue : rose::nocopy {
+struct EventQueue : RoseUniqueClass, rose::nocopy {
   unsigned char *data;
   EventQueueContainerMetaInfo *meta;
   size_t *data_size;

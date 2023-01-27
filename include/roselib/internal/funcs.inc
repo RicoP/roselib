@@ -34,6 +34,3 @@ FUNC_SIG(input,    PadEvent,      pad,     (int player)                        ,
 FUNC_SIG(input,    PadEvent,      pad_raw, (int player)                        , (player)                        )
 FUNC_SIG(input,    vector2,       stick,   ()                                  , ()                        )
 FUNC_SIG(input,    bool,          action,  ()                                  , ()                        )
-
-//Internal
-FUNC_SIG(internal, rose::EventQueue&, get_event_queue,  ()                      , ()                        )

@@ -3,8 +3,6 @@ import os
 bindings = [
 	#BINDING(events, void, push, (void * data, int size), (data, size) )
 	# namespace type    name  args: [ [type, name], ... ]
-	#[ "events", "void", "push", [ ["void*", "data"], ["int", "size"] ] ]
-	[ "internal", "rose::EventQueue*", "get_event_queue", [ ] ],
 	[ "internal", "void *", "create_or_fetch_worldstate", [ ["const rose::reflection::TypeInfo &", "type"] ] ],
 	[ "internal", "void", "register_utility_class_instance", [ ["std::size_t", "type_id"], ["void *", "instance"] ] ],
 	[ "internal", "void *", "get_utility_class_instance", [ ["std::size_t", "type_id"] ] ],
@@ -30,8 +28,6 @@ def write_header(f):
 	f.write("// Bindings hash: " + str(chash(bindings)) + "\n")
 	f.write("///////////////////////////////////////////////////\n")
 	f.write("#include <rose/hash.h>\n")
-	f.write("#include <rose/world.h>\n")
-	f.write("#include <rose/eventqueue.h>\n")
 	f.write("\n")
 
 # create file file bindings_engine.h.tmp
@@ -117,14 +113,6 @@ with open("bindings_subsystem.h.tmp", "w") as f:
 		f.write(");\n")
 		f.write("  }\n")
 		f.write("}\n")
-
-	#some custom functions
-	f.write("namespace event {\n")
-	f.write("  template<class T> \n")
-	f.write("  void broadcast(const T & event) {\n")
-	f.write("    c_rose_internal_get_event_queue()->push_back(event);\n")
-	f.write("  }\n")
-	f.write("}\n")
 
 	f.write("}\n")
 	f.write("#endif\n")
