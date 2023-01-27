@@ -4,8 +4,8 @@ bindings = [
 	#BINDING(events, void, push, (void * data, int size), (data, size) )
 	# namespace type    name  args: [ [type, name], ... ]
 	[ "internal", "void *", "create_or_fetch_worldstate", [ ["const rose::reflection::TypeInfo &", "type"] ] ],
-	[ "internal", "void", "register_utility_class_instance", [ ["std::size_t", "type_id"], ["void *", "instance"] ] ],
-	[ "internal", "void *", "get_utility_class_instance", [ ["std::size_t", "type_id"] ] ],
+	[ "internal", "void", "register_utility_class_instance", [ ["rose::hash_value", "type_id"], ["void *", "instance"] ] ],
+	[ "internal", "void *", "get_utility_class_instance", [ ["rose::hash_value", "type_id"] ] ],
 	[ "filewatcher", "int", "watch_path", [ ["const char *", "path"] ] ],
 	[ "filewatcher", "bool", "unwatch_path", [ ["int", "id"] ] ],
 ]
