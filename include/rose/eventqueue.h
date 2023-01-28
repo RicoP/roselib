@@ -4,7 +4,7 @@
 #include <rose/hash.h>
 #include <rose/nocopy.h>
 #include <rose/typetraits.h>
-#include <rose/world.h>
+#include <rose/singleton.h>
 
 #include <cassert>
 #include <cstring>
