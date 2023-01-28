@@ -59,7 +59,7 @@ struct alignas(32) EventQueueContainer {
   size_t meta_size = 0;
 };
 
-struct EventQueue : RoseUniqueClass, rose::nocopy {
+struct EventQueue : RoseSingleton<EventQueue> {
   unsigned char *data;
   EventQueueContainerMetaInfo *meta;
   size_t *data_size;
