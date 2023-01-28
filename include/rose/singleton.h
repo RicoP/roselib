@@ -77,7 +77,7 @@ struct RoseSingletonImpl : RoseSingletonImplBase {
 };
 
 template <typename T>
-struct RoseSingletonSingleton {
+struct RoseSingletonGetter {
   static T& instance() { return rose::world::get_singleton<T>(); }
 };
 
@@ -107,4 +107,4 @@ namespace rose::world {
 }
 
 #define RoseSingleton \
-  rose::internal::RoseSingletonImpl<rose::internal::hash_path(__FILE__, __LINE__)>, rose::internal::RoseSingletonSingleton
+  rose::internal::RoseSingletonImpl<rose::internal::hash_path(__FILE__, __LINE__)>, rose::internal::RoseSingletonGetter
