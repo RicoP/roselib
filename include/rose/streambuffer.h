@@ -186,6 +186,7 @@ struct StreamBuffer {
   void read_till(char* dst, size_t len, const char* terminator) {
     using namespace rose::internal;
     char* p = dst;
+    *p = 0; // fill destination with at least a empty string
     for (;;) {
       char c = peek();
       if (contains(c, terminator)) {
@@ -206,12 +207,12 @@ struct StreamBuffer {
     skip_till_word(str, N - 1);
   }
 
-  void skip_till_any(const char* terminator) {
+  char skip_till_any(const char* terminator) {
     using namespace rose::internal;
     for (;;) {
       char c = peek();
       if (contains(c, terminator)) {
-        break;
+        return c;
       }
       skip(1);
     }
