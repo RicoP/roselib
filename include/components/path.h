@@ -4,9 +4,12 @@
 
 struct path {
 	//@String
-	char string[260];
+	char string[260] = "";
 
 	bool append(const char * element);
+
+	bool operator==(const path & rhs) { return strcmp(string, rhs.string) == 0; }
+	bool operator!=(const path & rhs) { return strcmp(string, rhs.string) != 0; }
 };
 
 namespace rose::ecs {
