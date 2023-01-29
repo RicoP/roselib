@@ -71,7 +71,7 @@ namespace rose {
   hash_value         hash(const PadEvent &o);
   template<>
   struct type_id<PadEvent> {
-    inline static hash_value VALUE = 2480295155421047372ULL;
+    inline static hash_value VALUE = 8622684111860223662ULL;
   };
   void construct_defaults(      PadEvent &o); // implement me
 }
@@ -96,7 +96,7 @@ namespace rose {
   hash_value         hash(const rose::ecs::SubsystemPath &o);
   template<>
   struct type_id<rose::ecs::SubsystemPath> {
-    inline static hash_value VALUE = 15951837611172143261ULL;
+    inline static hash_value VALUE = 7818908942263758317ULL;
   };
   void construct_defaults(      rose::ecs::SubsystemPath &o); // implement me
 }
@@ -121,7 +121,7 @@ namespace rose {
   hash_value         hash(const rose::ecs::Workspace &o);
   template<>
   struct type_id<rose::ecs::Workspace> {
-    inline static hash_value VALUE = 16099609672572318632ULL;
+    inline static hash_value VALUE = 5908010755741012363ULL;
   };
   void construct_defaults(      rose::ecs::Workspace &o); // implement me
 }
@@ -140,7 +140,7 @@ namespace rose {
   hash_value         hash(const path &o);
   template<>
   struct type_id<path> {
-    inline static hash_value VALUE = 1307292036334781402ULL;
+    inline static hash_value VALUE = 17893456324184279306ULL;
   };
   void construct_defaults(      path &o); // implement me
 }
@@ -392,19 +392,11 @@ bool operator==(const PadEvent &lhs, const PadEvent &rhs) {
     rose_parser_equals(lhs.trigger_l, rhs.trigger_l) &&
     rose_parser_equals(lhs.trigger_r, rhs.trigger_r) &&
     rose_parser_equals(lhs.buttons, rhs.buttons) &&
-    rose_parser_equals(lhs.player, rhs.player) ;
+    rose_parser_equals(lhs.player, rhs.player);
 }
 
 bool operator!=(const PadEvent &lhs, const PadEvent &rhs) {
-  return
-    !rose_parser_equals(lhs.stick_lx, rhs.stick_lx) ||
-    !rose_parser_equals(lhs.stick_ly, rhs.stick_ly) ||
-    !rose_parser_equals(lhs.stick_rx, rhs.stick_rx) ||
-    !rose_parser_equals(lhs.stick_ry, rhs.stick_ry) ||
-    !rose_parser_equals(lhs.trigger_l, rhs.trigger_l) ||
-    !rose_parser_equals(lhs.trigger_r, rhs.trigger_r) ||
-    !rose_parser_equals(lhs.buttons, rhs.buttons) ||
-    !rose_parser_equals(lhs.player, rhs.player) ;
+  return !(lhs == rhs);
 }
 
 void rose::ecs::serialize(PadEvent &o, ISerializer &s) {
@@ -489,7 +481,7 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<PadEvent>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("PadEvent"),
-      /*           member_hash */ 2480295155421047372ULL,
+      /*           member_hash */ 8622684111860223662ULL,
       /*      memory_footprint */ sizeof(PadEvent),
       /*      memory_alignment */ 16,
       /*                  name */ "PadEvent",
@@ -508,13 +500,11 @@ namespace rose::reflection {
 bool operator==(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs) {
   return
     rose_parser_equals(lhs.path, rhs.path) &&
-    rose_parser_equals(lhs.config, rhs.config) ;
+    rose_parser_equals(lhs.config, rhs.config);
 }
 
 bool operator!=(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs) {
-  return
-    !rose_parser_equals(lhs.path, rhs.path) ||
-    !rose_parser_equals(lhs.config, rhs.config) ;
+  return !(lhs == rhs);
 }
 
 void rose::ecs::serialize(rose::ecs::SubsystemPath &o, ISerializer &s) {
@@ -557,7 +547,7 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<rose::ecs::SubsystemPath>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("rose::ecs::SubsystemPath"),
-      /*           member_hash */ 15951837611172143261ULL,
+      /*           member_hash */ 7818908942263758317ULL,
       /*      memory_footprint */ sizeof(rose::ecs::SubsystemPath),
       /*      memory_alignment */ 16,
       /*                  name */ "rose::ecs::SubsystemPath",
@@ -576,13 +566,11 @@ namespace rose::reflection {
 bool operator==(const rose::ecs::Workspace &lhs, const rose::ecs::Workspace &rhs) {
   return
     rose_parser_equals(lhs.subsystems, rhs.subsystems) &&
-    rose_parser_equals(lhs.console_filter, rhs.console_filter) ;
+    rose_parser_equals(lhs.console_filter, rhs.console_filter);
 }
 
 bool operator!=(const rose::ecs::Workspace &lhs, const rose::ecs::Workspace &rhs) {
-  return
-    !rose_parser_equals(lhs.subsystems, rhs.subsystems) ||
-    !rose_parser_equals(lhs.console_filter, rhs.console_filter) ;
+  return !(lhs == rhs);
 }
 
 void rose::ecs::serialize(rose::ecs::Workspace &o, ISerializer &s) {
@@ -625,7 +613,7 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<rose::ecs::Workspace>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("rose::ecs::Workspace"),
-      /*           member_hash */ 16099609672572318632ULL,
+      /*           member_hash */ 5908010755741012363ULL,
       /*      memory_footprint */ sizeof(rose::ecs::Workspace),
       /*      memory_alignment */ 16,
       /*                  name */ "rose::ecs::Workspace",
@@ -643,12 +631,11 @@ namespace rose::reflection {
 ///////////////////////////////////////////////////////////////////
 bool operator==(const path &lhs, const path &rhs) {
   return
-    rose_parser_equals(lhs.string, rhs.string) ;
+    rose_parser_equals(lhs.string, rhs.string);
 }
 
 bool operator!=(const path &lhs, const path &rhs) {
-  return
-    !rose_parser_equals(lhs.string, rhs.string) ;
+  return !(lhs == rhs);
 }
 
 rose::hash_value rose::hash(const path &o) {
@@ -661,7 +648,7 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<path>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("path"),
-      /*           member_hash */ 1307292036334781402ULL,
+      /*           member_hash */ 17893456324184279306ULL,
       /*      memory_footprint */ sizeof(path),
       /*      memory_alignment */ 16,
       /*                  name */ "path",
