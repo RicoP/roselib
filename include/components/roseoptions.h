@@ -4,13 +4,11 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/vector2.h>
 #include <components/vector2.h>
 namespace rose {
-namespace ecs {
 struct RoseOptions {
   bool raytracer;
   bool rendering;
@@ -94,12 +92,11 @@ inline void randomize(RoseOptions &o, rose::hash_value & h) {
   randomize(o.window_position, h);
   randomize(o.window_size, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::RoseOptions &o) {
+  inline hash_value hash(const RoseOptions &o) {
     hash_value h = hash(o.raytracer);
     h = xor64(h);
     h ^= hash(o.rendering);

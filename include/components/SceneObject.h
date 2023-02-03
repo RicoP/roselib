@@ -4,7 +4,6 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/objectid.h>
@@ -13,7 +12,6 @@
 #include <components/textureassetref.h>
 #include <components/transform.h>
 namespace rose {
-namespace ecs {
 struct SceneObject {
   ObjectID ID;
   Collider collider;
@@ -106,12 +104,11 @@ inline void randomize(SceneObject &o, rose::hash_value & h) {
   randomize(o.texture, h);
   randomize(o.transform, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::SceneObject &o) {
+  inline hash_value hash(const SceneObject &o) {
     hash_value h = hash(o.ID);
     h = xor64(h);
     h ^= hash(o.collider);

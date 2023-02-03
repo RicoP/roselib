@@ -24,9 +24,9 @@ FUNC_SIG(random,   float,            nextf,      (rose::hash_value & rand, float
 
 FUNC_SIG(ui,       bool,    button     , (const char * name)                               , (name)                    )
 
-FUNC_SIG(ecs,    rose::ecs::Scene&,       scene      , ()                                  , ()                        )
+FUNC_SIG(ecs,    rose::Scene&,       scene      , ()                                  , ()                        )
 
-FUNC_SIG(meta,   rose::ecs::MicroSystem&, system_data, ()                                  , ()                     )
+FUNC_SIG(meta,   rose::MicroSystem&, system_data, ()                                  , ()                     )
 PROC_SIG(meta,                            request_camera_ownership, ()                     , ()                     )
 
 //TODO: get rid of input functions. We have a event system for that.

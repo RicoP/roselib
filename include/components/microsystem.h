@@ -4,12 +4,10 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/camera.h>
 namespace rose {
-namespace ecs {
 struct MicroSystem {
   Camera camera;
   rose::hash_value hash;
@@ -82,12 +80,11 @@ inline void randomize(MicroSystem &o, rose::hash_value & h) {
   randomize(o.hash, h);
   randomize(o.name, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::MicroSystem &o) {
+  inline hash_value hash(const MicroSystem &o) {
     hash_value h = hash(o.camera);
     h = xor64(h);
     h ^= hash(o.hash);

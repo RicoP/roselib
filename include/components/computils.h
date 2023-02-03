@@ -53,11 +53,11 @@ struct CString {
 };
 
 
-inline rose::ecs::GUID create_guid() {
-  static_assert(sizeof(hash_value) * 2 == sizeof(rose::ecs::GUID));
+inline rose::GUID create_guid() {
+  static_assert(sizeof(hash_value) * 2 == sizeof(rose::GUID));
   union {
     hash_value h[2];
-    rose::ecs::GUID guid = {{0}};
+    rose::GUID guid = {{0}};
   } u;
 
   std::time_t rawtime = time(nullptr);
@@ -71,7 +71,7 @@ inline rose::ecs::GUID create_guid() {
   return u.guid;
 }
 
-inline rose::ecs::LocalDate create_local_date() {
+inline rose::LocalDate create_local_date() {
 
   std::time_t now = std::time(NULL);
   std::tm * t = std::localtime(&now);
@@ -92,7 +92,7 @@ inline rose::ecs::LocalDate create_local_date() {
     );
   // clang-format on
 
-  rose::ecs::LocalDate ld;
+  rose::LocalDate ld;
   ld.date = date;
   ld.time = time;
   return ld;

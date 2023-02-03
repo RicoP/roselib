@@ -2,29 +2,21 @@
 
 #include <serializer/serializer.h>
 
-struct path {
+struct Path {
 	//@String
 	char string[260] = "";
 
-	bool append(const char * element);
-
-	bool operator==(const path & rhs) { return strcmp(string, rhs.string) == 0; }
-	bool operator!=(const path & rhs) { return strcmp(string, rhs.string) != 0; }
+	bool operator==(const Path & rhs) { return strcmp(string, rhs.string) == 0; }
+	bool operator!=(const Path & rhs) { return strcmp(string, rhs.string) != 0; }
 };
 
-namespace rose::ecs {
-inline void        serialize(path &o, ISerializer &s) {
-	rose::ecs::serialize(o.string, s);
+namespace rose {
+
+inline void        serialize(Path &o, ISerializer &s) {
+	rose::serialize(o.string, s);
 }
-inline void      deserialize(path &o, IDeserializer &s) {
-	rose::ecs::deserialize(o.string, s);
-}
+inline void      deserialize(Path &o, IDeserializer &s) {
+	rose::deserialize(o.string, s);
 }
 
-
-#ifdef ROSE_PATH_IMPL
-bool path::append(const char * element) {
-	//implement me later
-	return true;
 }
-#endif

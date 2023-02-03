@@ -4,7 +4,6 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/vector3.h>
@@ -16,7 +15,6 @@
 #include <components/transform.h>
 #include <components/vector3.h>
 namespace rose {
-namespace ecs {
 struct Kraxler {
   vector3 barycentric;
   vector3 cam_offset;
@@ -170,12 +168,11 @@ inline void randomize(Kraxler &o, rose::hash_value & h) {
   randomize(o.triangle, h);
   randomize(o.velocity, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::Kraxler &o) {
+  inline hash_value hash(const Kraxler &o) {
     hash_value h = hash(o.barycentric);
     h = xor64(h);
     h ^= hash(o.cam_offset);

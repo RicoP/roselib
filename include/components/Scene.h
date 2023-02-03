@@ -4,7 +4,6 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/camera.h>
@@ -16,7 +15,6 @@
 #include <components/raytracer.h>
 #include <components/wheelchairsystemstate.h>
 namespace rose {
-namespace ecs {
 struct Scene {
   int activeCamera;
   rose::vectorPOD<16, Camera> cameras;
@@ -153,12 +151,11 @@ inline void randomize(Scene &o, rose::hash_value & h) {
   randomize(o.raytracer, h);
   randomize(o.wheelchairSystem, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::Scene &o) {
+  inline hash_value hash(const Scene &o) {
     hash_value h = hash(o.activeCamera);
     h = xor64(h);
     h ^= hash(o.cameras);

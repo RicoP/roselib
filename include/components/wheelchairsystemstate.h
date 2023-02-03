@@ -4,12 +4,10 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/objectid.h>
 namespace rose {
-namespace ecs {
 struct WheelchairSystemState {
   ObjectID object;
 
@@ -66,12 +64,11 @@ inline void deserialize(WheelchairSystemState &o, IDeserializer &s) {
 inline void randomize(WheelchairSystemState &o, rose::hash_value & h) {
   randomize(o.object, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::WheelchairSystemState &o) {
+  inline hash_value hash(const WheelchairSystemState &o) {
     hash_value h = hash(o.object);
     return h;
   }

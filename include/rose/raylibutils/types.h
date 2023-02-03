@@ -59,7 +59,6 @@ struct Camera3D {
 */
 
 namespace rose {
-  namespace ecs {
     inline void serialize(Color &o, ISerializer &s) {
         unsigned long long l = 0;
         l ^= o.a;
@@ -70,11 +69,11 @@ namespace rose {
         l <<= 8;
         l ^= o.r;
         
-        ::rose::ecs::serialize(l, s);
+        serialize(l, s);
     }
     inline void deserialize(Color &o, IDeserializer &s) {
         unsigned long long l = 0;
-        ::rose::ecs::deserialize(l, s);
+        deserialize(l, s);
 
         o.r = (unsigned char)(l & 0xFF);
         l >>= 8;
@@ -84,59 +83,51 @@ namespace rose {
         l >>= 8;
         o.a = (unsigned char)(l & 0xFF);
     }
-  }
 }
 
 namespace rose {
-  namespace ecs {
     inline void serialize(Vector2 &o, ISerializer &s) {
         float v[2] = {o.x, o.y};
-        ::rose::ecs::serialize(v, s);
+        serialize(v, s);
     }
     inline void deserialize(Vector2 &o, IDeserializer &s) {
         float v[2] = {0,0};
-        ::rose::ecs::deserialize(v, s);
+        deserialize(v, s);
         o.x = v[0];
         o.y = v[1];
     }
-  }
 }
 
 namespace rose {
-  namespace ecs {
     inline void serialize(Vector3 &o, ISerializer &s) {
         float v[3] = {o.x, o.y, o.z};
-        ::rose::ecs::serialize(v, s);
+        serialize(v, s);
     }
     inline void deserialize(Vector3 &o, IDeserializer &s) {
         float v[3] = {0,0,0};
-        ::rose::ecs::deserialize(v, s);
+        deserialize(v, s);
         o.x = v[0];
         o.y = v[1];
         o.z = v[2];
     }
-  }
 }
 
 namespace rose {
-  namespace ecs {
     inline void serialize(Vector4 &o, ISerializer &s) {
         float v[4] = {o.x, o.y, o.z, o.w};
-        ::rose::ecs::serialize(v, s);
+        serialize(v, s);
     }
     inline void deserialize(Vector4 &o, IDeserializer &s) {
         float v[4] = {0,0,0,0};
-        ::rose::ecs::deserialize(v, s);
+        deserialize(v, s);
         o.x = v[0];
         o.y = v[1];
         o.z = v[2];
         o.w = v[3];
     }
-  }
 }
 
 namespace rose {
-  namespace ecs {
     inline void serialize(Matrix &o, ISerializer &s) {
         auto equals = [](Vector4 lhs, Vector4 rhs) {
             return lhs.x == rhs.x &&
@@ -168,7 +159,7 @@ namespace rose {
             }
         }
 
-        ::rose::ecs::serialize(rows, s, max);
+        serialize(rows, s, max);
     }
     inline void deserialize(Matrix &o, IDeserializer &s) {
         float rows[4][4] = {
@@ -177,14 +168,13 @@ namespace rose {
             {0,0,1,0},
             {0,0,0,1}
         };
-        ::rose::ecs::deserialize(rows, s);
+        deserialize(rows, s);
 
         o.m0 = rows[0][0]; o.m4 = rows[0][1]; o.m8  = rows[0][2]; o.m12 = rows[0][3];
         o.m1 = rows[1][0]; o.m5 = rows[1][1]; o.m9  = rows[1][2]; o.m13 = rows[1][3];
         o.m2 = rows[2][0]; o.m6 = rows[2][1]; o.m10 = rows[2][2]; o.m14 = rows[2][3];
         o.m3 = rows[3][0]; o.m7 = rows[3][1]; o.m11 = rows[3][2]; o.m15 = rows[3][3];
     }
-  }
 }
 
 

@@ -4,7 +4,6 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/matrix4.h>
@@ -12,7 +11,6 @@
 #include <components/quaternion.h>
 #include <components/vector3.h>
 namespace rose {
-namespace ecs {
 struct Transform {
   matrix4 mvt;
   vector3 position;
@@ -96,12 +94,11 @@ inline void randomize(Transform &o, rose::hash_value & h) {
   randomize(o.rotation, h);
   randomize(o.scale, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::Transform &o) {
+  inline hash_value hash(const Transform &o) {
     hash_value h = hash(o.mvt);
     h = xor64(h);
     h ^= hash(o.position);

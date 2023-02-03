@@ -4,11 +4,9 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 namespace rose {
-namespace ecs {
 struct LocalDate {
   int date;
   int time;
@@ -72,12 +70,11 @@ inline void randomize(LocalDate &o, rose::hash_value & h) {
   randomize(o.date, h);
   randomize(o.time, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::LocalDate &o) {
+  inline hash_value hash(const LocalDate &o) {
     hash_value h = hash(o.date);
     h = xor64(h);
     h ^= hash(o.time);

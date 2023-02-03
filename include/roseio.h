@@ -20,7 +20,7 @@ int write(COMPONENT & component, ::rose::io::Folder folder, const char* name) {
   FILE* f = fopen(name, "wb");
   if(!f) return 1;
   JsonSerializer jsons(f);
-  rose::ecs::serialize(component, jsons);
+  rose::serialize(component, jsons);
   fclose(f);
   return 0;
 }
@@ -29,7 +29,7 @@ int write(COMPONENT & component, ::rose::io::Folder folder, const char* name) {
 template <class COMPONENT>
 void read_from_string(COMPONENT& component, char * json) {
   JsonDeserializer jsond(json);
-  rose::ecs::deserialize(component, jsond);
+  rose::deserialize(component, jsond);
 }
 
 

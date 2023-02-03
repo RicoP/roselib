@@ -4,14 +4,12 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/objectid.h>
 #include <components/vector3.h>
 #include <components/vector3.h>
 namespace rose {
-namespace ecs {
 struct Collider {
   bool active;
   rose::vectorPOD<16, ObjectID> intersections;
@@ -94,12 +92,11 @@ inline void randomize(Collider &o, rose::hash_value & h) {
   randomize(o.pivot, h);
   randomize(o.scale, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::Collider &o) {
+  inline hash_value hash(const Collider &o) {
     hash_value h = hash(o.active);
     h = xor64(h);
     h ^= hash(o.intersections);

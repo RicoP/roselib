@@ -4,6 +4,7 @@
 #include <components/padevents.h>
 #include <vector>
 
+namespace rose {
 //@Flag
 enum class RoseRecordingState : int {
     NONE = 0,
@@ -26,3 +27,4 @@ enum class RoseRecordingState : int {
 
 
 };
+}

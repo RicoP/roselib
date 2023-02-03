@@ -15,10 +15,8 @@
 enum class                   PadEventButton : int ;
 const char * to_string(const PadEventButton &);
 namespace rose {
-  namespace ecs {
-    void      deserialize(PadEventButton &o, IDeserializer &s);
-    void        serialize(PadEventButton &o, ISerializer &s);
-  }
+  void      deserialize(PadEventButton &o, IDeserializer &s);
+  void        serialize(PadEventButton &o, ISerializer &s);
   template<>
   struct type_id<PadEventButton> {
     inline static hash_value VALUE = 15454388631323420064ULL;
@@ -36,42 +34,36 @@ inline PadEventButton operator^=(PadEventButton &a, PadEventButton b) { return a
 
 
 namespace rose {
-namespace ecs {
 enum class                   SubsystemConfig : int ;
 }
-}
-const char * to_string(const rose::ecs::SubsystemConfig &);
+const char * to_string(const rose::SubsystemConfig &);
 namespace rose {
-  namespace ecs {
-    void      deserialize(rose::ecs::SubsystemConfig &o, IDeserializer &s);
-    void        serialize(rose::ecs::SubsystemConfig &o, ISerializer &s);
-  }
+  void      deserialize(rose::SubsystemConfig &o, IDeserializer &s);
+  void        serialize(rose::SubsystemConfig &o, ISerializer &s);
   template<>
-  struct type_id<rose::ecs::SubsystemConfig> {
-    inline static hash_value VALUE = 13932719040233964906ULL;
+  struct type_id<rose::SubsystemConfig> {
+    inline static hash_value VALUE = 15130333752924015374ULL;
   };
-  hash_value         hash(const rose::ecs::SubsystemConfig &o);
-  void construct_defaults(      rose::ecs::SubsystemConfig &o); //implement me
+  hash_value         hash(const rose::SubsystemConfig &o);
+  void construct_defaults(      rose::SubsystemConfig &o); //implement me
 }
 
-inline BoolConvertible<rose::ecs::SubsystemConfig, int > operator|(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return { static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) | static_cast<int >(b)) }; }
-inline BoolConvertible<rose::ecs::SubsystemConfig, int > operator&(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return { static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) & static_cast<int >(b)) }; }
-inline BoolConvertible<rose::ecs::SubsystemConfig, int > operator^(const rose::ecs::SubsystemConfig &a, const rose::ecs::SubsystemConfig &b) { return { static_cast<rose::ecs::SubsystemConfig>(static_cast<int >(a) ^ static_cast<int >(b)) }; }
-inline rose::ecs::SubsystemConfig operator|=(rose::ecs::SubsystemConfig &a, rose::ecs::SubsystemConfig b) { return a = a | b; }
-inline rose::ecs::SubsystemConfig operator&=(rose::ecs::SubsystemConfig &a, rose::ecs::SubsystemConfig b) { return a = a & b; }
-inline rose::ecs::SubsystemConfig operator^=(rose::ecs::SubsystemConfig &a, rose::ecs::SubsystemConfig b) { return a = a ^ b; }
+inline BoolConvertible<rose::SubsystemConfig, int > operator|(const rose::SubsystemConfig &a, const rose::SubsystemConfig &b) { return { static_cast<rose::SubsystemConfig>(static_cast<int >(a) | static_cast<int >(b)) }; }
+inline BoolConvertible<rose::SubsystemConfig, int > operator&(const rose::SubsystemConfig &a, const rose::SubsystemConfig &b) { return { static_cast<rose::SubsystemConfig>(static_cast<int >(a) & static_cast<int >(b)) }; }
+inline BoolConvertible<rose::SubsystemConfig, int > operator^(const rose::SubsystemConfig &a, const rose::SubsystemConfig &b) { return { static_cast<rose::SubsystemConfig>(static_cast<int >(a) ^ static_cast<int >(b)) }; }
+inline rose::SubsystemConfig operator|=(rose::SubsystemConfig &a, rose::SubsystemConfig b) { return a = a | b; }
+inline rose::SubsystemConfig operator&=(rose::SubsystemConfig &a, rose::SubsystemConfig b) { return a = a & b; }
+inline rose::SubsystemConfig operator^=(rose::SubsystemConfig &a, rose::SubsystemConfig b) { return a = a ^ b; }
 
 
 struct                PadEvent;
 namespace rose {
-  namespace ecs {
     void        serialize(PadEvent &o, ISerializer &s);
     void      deserialize(PadEvent &o, IDeserializer &s);
-  }
   hash_value         hash(const PadEvent &o);
   template<>
   struct type_id<PadEvent> {
-    inline static hash_value VALUE = 8622684111860223662ULL;
+    inline static hash_value VALUE = 2480295155421047372ULL;
   };
   void construct_defaults(      PadEvent &o); // implement me
 }
@@ -84,72 +76,62 @@ namespace rose::reflection {
 }
 
 namespace rose {
-namespace ecs {
 struct                SubsystemPath;
 }
-}
 namespace rose {
-  namespace ecs {
-    void        serialize(rose::ecs::SubsystemPath &o, ISerializer &s);
-    void      deserialize(rose::ecs::SubsystemPath &o, IDeserializer &s);
-  }
-  hash_value         hash(const rose::ecs::SubsystemPath &o);
+    void        serialize(rose::SubsystemPath &o, ISerializer &s);
+    void      deserialize(rose::SubsystemPath &o, IDeserializer &s);
+  hash_value         hash(const rose::SubsystemPath &o);
   template<>
-  struct type_id<rose::ecs::SubsystemPath> {
-    inline static hash_value VALUE = 7818908942263758317ULL;
+  struct type_id<rose::SubsystemPath> {
+    inline static hash_value VALUE = 5383390033191037884ULL;
   };
-  void construct_defaults(      rose::ecs::SubsystemPath &o); // implement me
+  void construct_defaults(      rose::SubsystemPath &o); // implement me
 }
-bool operator==(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs);
-bool operator!=(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs);
+bool operator==(const rose::SubsystemPath &lhs, const rose::SubsystemPath &rhs);
+bool operator!=(const rose::SubsystemPath &lhs, const rose::SubsystemPath &rhs);
 
 namespace rose::reflection {
   template <>
-  const rose::reflection::TypeInfo & get_type_info<rose::ecs::SubsystemPath>();
+  const rose::reflection::TypeInfo & get_type_info<rose::SubsystemPath>();
 }
 
 namespace rose {
-namespace ecs {
 struct                Workspace;
 }
-}
 namespace rose {
-  namespace ecs {
-    void        serialize(rose::ecs::Workspace &o, ISerializer &s);
-    void      deserialize(rose::ecs::Workspace &o, IDeserializer &s);
-  }
-  hash_value         hash(const rose::ecs::Workspace &o);
+    void        serialize(rose::Workspace &o, ISerializer &s);
+    void      deserialize(rose::Workspace &o, IDeserializer &s);
+  hash_value         hash(const rose::Workspace &o);
   template<>
-  struct type_id<rose::ecs::Workspace> {
-    inline static hash_value VALUE = 5908010755741012363ULL;
+  struct type_id<rose::Workspace> {
+    inline static hash_value VALUE = 9747542806317341572ULL;
   };
-  void construct_defaults(      rose::ecs::Workspace &o); // implement me
+  void construct_defaults(      rose::Workspace &o); // implement me
 }
-bool operator==(const rose::ecs::Workspace &lhs, const rose::ecs::Workspace &rhs);
-bool operator!=(const rose::ecs::Workspace &lhs, const rose::ecs::Workspace &rhs);
+bool operator==(const rose::Workspace &lhs, const rose::Workspace &rhs);
+bool operator!=(const rose::Workspace &lhs, const rose::Workspace &rhs);
 
 namespace rose::reflection {
   template <>
-  const rose::reflection::TypeInfo & get_type_info<rose::ecs::Workspace>();
+  const rose::reflection::TypeInfo & get_type_info<rose::Workspace>();
 }
 
-struct                path;
+struct                Path;
 namespace rose {
-  namespace ecs {
-  }
-  hash_value         hash(const path &o);
+  hash_value         hash(const Path &o);
   template<>
-  struct type_id<path> {
-    inline static hash_value VALUE = 17893456324184279306ULL;
+  struct type_id<Path> {
+    inline static hash_value VALUE = 18284124119257047942ULL;
   };
-  void construct_defaults(      path &o); // implement me
+  void construct_defaults(      Path &o); // implement me
 }
-bool operator==(const path &lhs, const path &rhs);
-bool operator!=(const path &lhs, const path &rhs);
+bool operator==(const Path &lhs, const Path &rhs);
+bool operator!=(const Path &lhs, const Path &rhs);
 
 namespace rose::reflection {
   template <>
-  const rose::reflection::TypeInfo & get_type_info<path>();
+  const rose::reflection::TypeInfo & get_type_info<Path>();
 }
 
 #ifdef IMPL_SERIALIZER
@@ -225,7 +207,7 @@ const char * to_string(const PadEventButton & e) {
         default: return "<UNKNOWN>";
     }
 }
-void rose::ecs::serialize(PadEventButton& o, ISerializer& s) {
+void rose::serialize(PadEventButton& o, ISerializer& s) {
   switch (o) {
     case PadEventButton::NONE: {
       char str[] = "NONE";
@@ -315,7 +297,7 @@ void rose::ecs::serialize(PadEventButton& o, ISerializer& s) {
     default: /* unknown */ break;
   }
 }
-void rose::ecs::deserialize(PadEventButton& o, IDeserializer& s) {
+void rose::deserialize(PadEventButton& o, IDeserializer& s) {
   char str[64];
   deserialize(str, s);
   rose::hash_value h = rose::hash(str);
@@ -344,21 +326,21 @@ rose::hash_value       rose::hash(const PadEventButton& o) {
   return static_cast<rose::hash_value>(o);
 }
 
-const char * to_string(const rose::ecs::SubsystemConfig & e) {
+const char * to_string(const rose::SubsystemConfig & e) {
     switch(e) {
-        case rose::ecs::SubsystemConfig::NONE: return "NONE";
-        case rose::ecs::SubsystemConfig::Active: return "Active";
+        case rose::SubsystemConfig::NONE: return "NONE";
+        case rose::SubsystemConfig::Active: return "Active";
         default: return "<UNKNOWN>";
     }
 }
-void rose::ecs::serialize(rose::ecs::SubsystemConfig& o, ISerializer& s) {
+void rose::serialize(rose::SubsystemConfig& o, ISerializer& s) {
   switch (o) {
-    case rose::ecs::SubsystemConfig::NONE: {
+    case rose::SubsystemConfig::NONE: {
       char str[] = "NONE";
       serialize(str, s);
       break;
     }
-    case rose::ecs::SubsystemConfig::Active: {
+    case rose::SubsystemConfig::Active: {
       char str[] = "Active";
       serialize(str, s);
       break;
@@ -366,17 +348,17 @@ void rose::ecs::serialize(rose::ecs::SubsystemConfig& o, ISerializer& s) {
     default: /* unknown */ break;
   }
 }
-void rose::ecs::deserialize(rose::ecs::SubsystemConfig& o, IDeserializer& s) {
+void rose::deserialize(rose::SubsystemConfig& o, IDeserializer& s) {
   char str[64];
   deserialize(str, s);
   rose::hash_value h = rose::hash(str);
   switch (h) {
-  case rose::hash("NONE"): o = rose::ecs::SubsystemConfig::NONE; break;
-  case rose::hash("Active"): o = rose::ecs::SubsystemConfig::Active; break;
+  case rose::hash("NONE"): o = rose::SubsystemConfig::NONE; break;
+  case rose::hash("Active"): o = rose::SubsystemConfig::Active; break;
   default: /*unknown value*/ break;
   }
 }
-rose::hash_value       rose::hash(const rose::ecs::SubsystemConfig& o) {
+rose::hash_value       rose::hash(const rose::SubsystemConfig& o) {
   return static_cast<rose::hash_value>(o);
 }
 
@@ -399,7 +381,7 @@ bool operator!=(const PadEvent &lhs, const PadEvent &rhs) {
   return !(lhs == rhs);
 }
 
-void rose::ecs::serialize(PadEvent &o, ISerializer &s) {
+void rose::serialize(PadEvent &o, ISerializer &s) {
   if(s.node_begin("PadEvent", rose::hash("PadEvent"), &o)) {
     s.key("stick_lx");
     serialize(o.stick_lx, s);
@@ -422,7 +404,7 @@ void rose::ecs::serialize(PadEvent &o, ISerializer &s) {
   s.end();
 }
 
-void rose::ecs::deserialize(PadEvent &o, IDeserializer &s) {
+void rose::deserialize(PadEvent &o, IDeserializer &s) {
   //implement me
   //construct_defaults(o);
 
@@ -481,34 +463,34 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<PadEvent>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("PadEvent"),
-      /*           member_hash */ 8622684111860223662ULL,
+      /*           member_hash */ 2480295155421047372ULL,
       /*      memory_footprint */ sizeof(PadEvent),
       /*      memory_alignment */ 16,
       /*                  name */ "PadEvent",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) PadEvent(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<PadEvent*>(ptr))->~PadEvent(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<PadEvent*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<PadEvent*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<PadEvent*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<PadEvent*>(ptr)), d); }
     };
     return info;
   }
 }
 
 ///////////////////////////////////////////////////////////////////
-//  struct rose::ecs::SubsystemPath
+//  struct rose::SubsystemPath
 ///////////////////////////////////////////////////////////////////
-bool operator==(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs) {
+bool operator==(const rose::SubsystemPath &lhs, const rose::SubsystemPath &rhs) {
   return
     rose_parser_equals(lhs.path, rhs.path) &&
     rose_parser_equals(lhs.config, rhs.config);
 }
 
-bool operator!=(const rose::ecs::SubsystemPath &lhs, const rose::ecs::SubsystemPath &rhs) {
+bool operator!=(const rose::SubsystemPath &lhs, const rose::SubsystemPath &rhs) {
   return !(lhs == rhs);
 }
 
-void rose::ecs::serialize(rose::ecs::SubsystemPath &o, ISerializer &s) {
-  if(s.node_begin("rose::ecs::SubsystemPath", rose::hash("rose::ecs::SubsystemPath"), &o)) {
+void rose::serialize(rose::SubsystemPath &o, ISerializer &s) {
+  if(s.node_begin("rose::SubsystemPath", rose::hash("rose::SubsystemPath"), &o)) {
     s.key("path");
     serialize(o.path, s);
     s.key("config");
@@ -518,7 +500,7 @@ void rose::ecs::serialize(rose::ecs::SubsystemPath &o, ISerializer &s) {
   s.end();
 }
 
-void rose::ecs::deserialize(rose::ecs::SubsystemPath &o, IDeserializer &s) {
+void rose::deserialize(rose::SubsystemPath &o, IDeserializer &s) {
   //implement me
   //construct_defaults(o);
 
@@ -535,7 +517,7 @@ void rose::ecs::deserialize(rose::ecs::SubsystemPath &o, IDeserializer &s) {
   }
 }
 
-rose::hash_value rose::hash(const rose::ecs::SubsystemPath &o) {
+rose::hash_value rose::hash(const rose::SubsystemPath &o) {
   rose::hash_value h = rose::hash(o.path);
   h = rose::xor64(h);
   h ^= rose::hash(o.config);
@@ -544,37 +526,37 @@ rose::hash_value rose::hash(const rose::ecs::SubsystemPath &o) {
 
 namespace rose::reflection {
   template <>
-  const rose::reflection::TypeInfo & get_type_info<rose::ecs::SubsystemPath>() {
+  const rose::reflection::TypeInfo & get_type_info<rose::SubsystemPath>() {
     static rose::reflection::TypeInfo info = {
-      /*             unique_id */ rose::hash("rose::ecs::SubsystemPath"),
-      /*           member_hash */ 7818908942263758317ULL,
-      /*      memory_footprint */ sizeof(rose::ecs::SubsystemPath),
+      /*             unique_id */ rose::hash("rose::SubsystemPath"),
+      /*           member_hash */ 5383390033191037884ULL,
+      /*      memory_footprint */ sizeof(rose::SubsystemPath),
       /*      memory_alignment */ 16,
-      /*                  name */ "rose::ecs::SubsystemPath",
-      /*  fp_default_construct */ +[](void * ptr) { new (ptr) rose::ecs::SubsystemPath(); },
-      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<rose::ecs::SubsystemPath*>(ptr))->~SubsystemPath(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<rose::ecs::SubsystemPath*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<rose::ecs::SubsystemPath*>(ptr)), d); }
+      /*                  name */ "rose::SubsystemPath",
+      /*  fp_default_construct */ +[](void * ptr) { new (ptr) rose::SubsystemPath(); },
+      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<rose::SubsystemPath*>(ptr))->~SubsystemPath(); },
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<rose::SubsystemPath*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<rose::SubsystemPath*>(ptr)), d); }
     };
     return info;
   }
 }
 
 ///////////////////////////////////////////////////////////////////
-//  struct rose::ecs::Workspace
+//  struct rose::Workspace
 ///////////////////////////////////////////////////////////////////
-bool operator==(const rose::ecs::Workspace &lhs, const rose::ecs::Workspace &rhs) {
+bool operator==(const rose::Workspace &lhs, const rose::Workspace &rhs) {
   return
     rose_parser_equals(lhs.subsystems, rhs.subsystems) &&
     rose_parser_equals(lhs.console_filter, rhs.console_filter);
 }
 
-bool operator!=(const rose::ecs::Workspace &lhs, const rose::ecs::Workspace &rhs) {
+bool operator!=(const rose::Workspace &lhs, const rose::Workspace &rhs) {
   return !(lhs == rhs);
 }
 
-void rose::ecs::serialize(rose::ecs::Workspace &o, ISerializer &s) {
-  if(s.node_begin("rose::ecs::Workspace", rose::hash("rose::ecs::Workspace"), &o)) {
+void rose::serialize(rose::Workspace &o, ISerializer &s) {
+  if(s.node_begin("rose::Workspace", rose::hash("rose::Workspace"), &o)) {
     s.key("subsystems");
     serialize(o.subsystems, s);
     s.key("console_filter");
@@ -584,7 +566,7 @@ void rose::ecs::serialize(rose::ecs::Workspace &o, ISerializer &s) {
   s.end();
 }
 
-void rose::ecs::deserialize(rose::ecs::Workspace &o, IDeserializer &s) {
+void rose::deserialize(rose::Workspace &o, IDeserializer &s) {
   //implement me
   //construct_defaults(o);
 
@@ -601,7 +583,7 @@ void rose::ecs::deserialize(rose::ecs::Workspace &o, IDeserializer &s) {
   }
 }
 
-rose::hash_value rose::hash(const rose::ecs::Workspace &o) {
+rose::hash_value rose::hash(const rose::Workspace &o) {
   rose::hash_value h = rose::hash(o.subsystems);
   h = rose::xor64(h);
   h ^= rose::hash(o.console_filter);
@@ -610,52 +592,52 @@ rose::hash_value rose::hash(const rose::ecs::Workspace &o) {
 
 namespace rose::reflection {
   template <>
-  const rose::reflection::TypeInfo & get_type_info<rose::ecs::Workspace>() {
+  const rose::reflection::TypeInfo & get_type_info<rose::Workspace>() {
     static rose::reflection::TypeInfo info = {
-      /*             unique_id */ rose::hash("rose::ecs::Workspace"),
-      /*           member_hash */ 5908010755741012363ULL,
-      /*      memory_footprint */ sizeof(rose::ecs::Workspace),
+      /*             unique_id */ rose::hash("rose::Workspace"),
+      /*           member_hash */ 9747542806317341572ULL,
+      /*      memory_footprint */ sizeof(rose::Workspace),
       /*      memory_alignment */ 16,
-      /*                  name */ "rose::ecs::Workspace",
-      /*  fp_default_construct */ +[](void * ptr) { new (ptr) rose::ecs::Workspace(); },
-      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<rose::ecs::Workspace*>(ptr))->~Workspace(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<rose::ecs::Workspace*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<rose::ecs::Workspace*>(ptr)), d); }
+      /*                  name */ "rose::Workspace",
+      /*  fp_default_construct */ +[](void * ptr) { new (ptr) rose::Workspace(); },
+      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<rose::Workspace*>(ptr))->~Workspace(); },
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<rose::Workspace*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<rose::Workspace*>(ptr)), d); }
     };
     return info;
   }
 }
 
 ///////////////////////////////////////////////////////////////////
-//  struct path
+//  struct Path
 ///////////////////////////////////////////////////////////////////
-bool operator==(const path &lhs, const path &rhs) {
+bool operator==(const Path &lhs, const Path &rhs) {
   return
     rose_parser_equals(lhs.string, rhs.string);
 }
 
-bool operator!=(const path &lhs, const path &rhs) {
+bool operator!=(const Path &lhs, const Path &rhs) {
   return !(lhs == rhs);
 }
 
-rose::hash_value rose::hash(const path &o) {
+rose::hash_value rose::hash(const Path &o) {
   rose::hash_value h = rose::hash(o.string);
   return h;
 }
 
 namespace rose::reflection {
   template <>
-  const rose::reflection::TypeInfo & get_type_info<path>() {
+  const rose::reflection::TypeInfo & get_type_info<Path>() {
     static rose::reflection::TypeInfo info = {
-      /*             unique_id */ rose::hash("path"),
-      /*           member_hash */ 17893456324184279306ULL,
-      /*      memory_footprint */ sizeof(path),
+      /*             unique_id */ rose::hash("Path"),
+      /*           member_hash */ 18284124119257047942ULL,
+      /*      memory_footprint */ sizeof(Path),
       /*      memory_alignment */ 16,
-      /*                  name */ "path",
-      /*  fp_default_construct */ +[](void * ptr) { new (ptr) path(); },
-      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<path*>(ptr))->~path(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<path*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<path*>(ptr)), d); }
+      /*                  name */ "Path",
+      /*  fp_default_construct */ +[](void * ptr) { new (ptr) Path(); },
+      /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Path*>(ptr))->~Path(); },
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Path*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Path*>(ptr)), d); }
     };
     return info;
   }

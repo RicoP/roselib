@@ -20,7 +20,7 @@ namespace rose::reflection {
         // The Typeinfo object should be desolved before the DLL is unloaded.
 
         // Name of the type. Should be unique. (In DLL memory!)
-        char * name = nullptr;
+        const char * name = nullptr;
 
         // static function pointers to constructor and destructor. (In DLL memory!)
         void (*fp_default_construct)(void *) = nullptr;

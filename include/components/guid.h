@@ -9,7 +9,6 @@
 #include <cstring>
 
 namespace rose {
-namespace ecs {
   struct GUID {
     unsigned char data[16];
 
@@ -69,10 +68,10 @@ namespace ecs {
   }
 
   inline void randomize(GUID &o, rose::hash_value &h) {
-    static_assert(sizeof(hash_value) * 2 == sizeof(ecs::GUID));
+    static_assert(sizeof(hash_value) * 2 == sizeof(GUID));
     union {
       hash_value h[2];
-      ecs::GUID guid = {{0}};
+      GUID guid = {{0}};
     } u;
     next(h);
     u.h[0] = h;
@@ -80,13 +79,12 @@ namespace ecs {
     u.h[1] = h;
     o = u.guid;
   }
-}  // namespace ecs
 
-inline hash_value hash(ecs::GUID &o) {
-  static_assert(sizeof(hash_value) * 2 == sizeof(ecs::GUID));
+inline hash_value hash(GUID &o) {
+  static_assert(sizeof(hash_value) * 2 == sizeof(GUID));
   union {
     hash_value h[2];
-    ecs::GUID guid;
+    GUID guid;
   } u;
   u.guid = o;
   return u.h[0] ^ u.h[1];

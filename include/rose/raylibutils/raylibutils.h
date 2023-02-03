@@ -10,8 +10,9 @@
 #include <components/components_ser.h>
 #include <utility>
 
+namespace rose {
 struct RaylibAssetModel {
-    path path;
+    Path path;
     Model model;
     bool valid = false;
 
@@ -69,13 +70,12 @@ struct RaylibAssetModel {
     bool operator!=(const RaylibAssetModel & rhs) const { return !(*this == rhs); }
 };
 
-namespace rose::ecs {
 inline void serialize(RaylibAssetModel &o, ISerializer &s) {
-	rose::ecs::serialize(o.path, s);
+	serialize(o.path, s);
 }
 inline void deserialize(RaylibAssetModel &o, IDeserializer &s) {
-    path p;
-	rose::ecs::deserialize(p, s);
+    Path p;
+	deserialize(p, s);
     o = RaylibAssetModel(p.string);
 }
 }

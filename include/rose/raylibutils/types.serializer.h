@@ -13,12 +13,10 @@
 ///////////////////////////////////////////////////////////////////
 
 namespace rose {
-  namespace ecs {
-  }
   hash_value         hash(const Color &o);
   template<>
   struct type_id<Color> {
-    inline static hash_value VALUE = 4128948502821854812ULL;
+    inline static hash_value VALUE = 11375897551430744876ULL;
   };
   void construct_defaults(      Color &o); // implement me
 }
@@ -31,12 +29,10 @@ namespace rose::reflection {
 }
 
 namespace rose {
-  namespace ecs {
-  }
   hash_value         hash(const Vector2 &o);
   template<>
   struct type_id<Vector2> {
-    inline static hash_value VALUE = 15233094943956135143ULL;
+    inline static hash_value VALUE = 6016383611561840414ULL;
   };
   void construct_defaults(      Vector2 &o); // implement me
 }
@@ -49,12 +45,10 @@ namespace rose::reflection {
 }
 
 namespace rose {
-  namespace ecs {
-  }
   hash_value         hash(const Vector3 &o);
   template<>
   struct type_id<Vector3> {
-    inline static hash_value VALUE = 10680352880738452598ULL;
+    inline static hash_value VALUE = 865855757241434760ULL;
   };
   void construct_defaults(      Vector3 &o); // implement me
 }
@@ -67,12 +61,10 @@ namespace rose::reflection {
 }
 
 namespace rose {
-  namespace ecs {
-  }
   hash_value         hash(const Vector4 &o);
   template<>
   struct type_id<Vector4> {
-    inline static hash_value VALUE = 16980048387060110837ULL;
+    inline static hash_value VALUE = 5281526937919724321ULL;
   };
   void construct_defaults(      Vector4 &o); // implement me
 }
@@ -85,12 +77,10 @@ namespace rose::reflection {
 }
 
 namespace rose {
-  namespace ecs {
-  }
   hash_value         hash(const Matrix &o);
   template<>
   struct type_id<Matrix> {
-    inline static hash_value VALUE = 15686817669975511007ULL;
+    inline static hash_value VALUE = 17183949275312155998ULL;
   };
   void construct_defaults(      Matrix &o); // implement me
 }
@@ -103,14 +93,12 @@ namespace rose::reflection {
 }
 
 namespace rose {
-  namespace ecs {
     void        serialize(Camera3D &o, ISerializer &s);
     void      deserialize(Camera3D &o, IDeserializer &s);
-  }
   hash_value         hash(const Camera3D &o);
   template<>
   struct type_id<Camera3D> {
-    inline static hash_value VALUE = 6060328374390309782ULL;
+    inline static hash_value VALUE = 17592964880055371367ULL;
   };
   void construct_defaults(      Camera3D &o); // implement me
 }
@@ -204,14 +192,14 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<Color>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("Color"),
-      /*           member_hash */ 4128948502821854812ULL,
+      /*           member_hash */ 11375897551430744876ULL,
       /*      memory_footprint */ sizeof(Color),
       /*      memory_alignment */ 16,
       /*                  name */ "Color",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) Color(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Color*>(ptr))->~Color(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<Color*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<Color*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Color*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Color*>(ptr)), d); }
     };
     return info;
   }
@@ -242,14 +230,14 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<Vector2>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("Vector2"),
-      /*           member_hash */ 15233094943956135143ULL,
+      /*           member_hash */ 6016383611561840414ULL,
       /*      memory_footprint */ sizeof(Vector2),
       /*      memory_alignment */ 16,
       /*                  name */ "Vector2",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) Vector2(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Vector2*>(ptr))->~Vector2(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<Vector2*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<Vector2*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Vector2*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Vector2*>(ptr)), d); }
     };
     return info;
   }
@@ -283,14 +271,14 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<Vector3>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("Vector3"),
-      /*           member_hash */ 10680352880738452598ULL,
+      /*           member_hash */ 865855757241434760ULL,
       /*      memory_footprint */ sizeof(Vector3),
       /*      memory_alignment */ 16,
       /*                  name */ "Vector3",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) Vector3(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Vector3*>(ptr))->~Vector3(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<Vector3*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<Vector3*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Vector3*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Vector3*>(ptr)), d); }
     };
     return info;
   }
@@ -327,14 +315,14 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<Vector4>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("Vector4"),
-      /*           member_hash */ 16980048387060110837ULL,
+      /*           member_hash */ 5281526937919724321ULL,
       /*      memory_footprint */ sizeof(Vector4),
       /*      memory_alignment */ 16,
       /*                  name */ "Vector4",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) Vector4(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Vector4*>(ptr))->~Vector4(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<Vector4*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<Vector4*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Vector4*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Vector4*>(ptr)), d); }
     };
     return info;
   }
@@ -407,14 +395,14 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<Matrix>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("Matrix"),
-      /*           member_hash */ 15686817669975511007ULL,
+      /*           member_hash */ 17183949275312155998ULL,
       /*      memory_footprint */ sizeof(Matrix),
       /*      memory_alignment */ 16,
       /*                  name */ "Matrix",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) Matrix(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Matrix*>(ptr))->~Matrix(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<Matrix*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<Matrix*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Matrix*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Matrix*>(ptr)), d); }
     };
     return info;
   }
@@ -436,7 +424,7 @@ bool operator!=(const Camera3D &lhs, const Camera3D &rhs) {
   return !(lhs == rhs);
 }
 
-void rose::ecs::serialize(Camera3D &o, ISerializer &s) {
+void rose::serialize(Camera3D &o, ISerializer &s) {
   if(s.node_begin("Camera3D", rose::hash("Camera3D"), &o)) {
     s.key("position");
     serialize(o.position, s);
@@ -453,7 +441,7 @@ void rose::ecs::serialize(Camera3D &o, ISerializer &s) {
   s.end();
 }
 
-void rose::ecs::deserialize(Camera3D &o, IDeserializer &s) {
+void rose::deserialize(Camera3D &o, IDeserializer &s) {
   //implement me
   //construct_defaults(o);
 
@@ -497,14 +485,14 @@ namespace rose::reflection {
   const rose::reflection::TypeInfo & get_type_info<Camera3D>() {
     static rose::reflection::TypeInfo info = {
       /*             unique_id */ rose::hash("Camera3D"),
-      /*           member_hash */ 6060328374390309782ULL,
+      /*           member_hash */ 17592964880055371367ULL,
       /*      memory_footprint */ sizeof(Camera3D),
       /*      memory_alignment */ 16,
       /*                  name */ "Camera3D",
       /*  fp_default_construct */ +[](void * ptr) { new (ptr) Camera3D(); },
       /*   fp_default_destruct */ +[](void * ptr) { std::launder(reinterpret_cast<Camera3D*>(ptr))->~Camera3D(); },
-      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::ecs::serialize(*std::launder(reinterpret_cast<Camera3D*>(ptr)), s); },
-      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::ecs::deserialize(*std::launder(reinterpret_cast<Camera3D*>(ptr)), d); }
+      /*          fp_serialize */ +[](void * ptr, ISerializer & s) { ::rose::serialize(*std::launder(reinterpret_cast<Camera3D*>(ptr)), s); },
+      /*        fp_deserialize */ +[](void * ptr, IDeserializer & d) { ::rose::deserialize(*std::launder(reinterpret_cast<Camera3D*>(ptr)), d); }
     };
     return info;
   }

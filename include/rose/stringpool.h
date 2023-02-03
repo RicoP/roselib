@@ -5,8 +5,7 @@
 #include <algorithm>
 #include <rose/assert.h>
 
-namespace rose
-{
+namespace rose {
 struct StringPool {
   struct StringRange {
     int begin = -1;

@@ -4,14 +4,12 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 
 #include <rosemath.h>
 
 namespace rose {
-namespace ecs {
 
 ///////////////////////////////////////////////////////////////////
 // serializer                                                    //
@@ -65,7 +63,6 @@ inline void randomize(vector4 &o, rose::hash_value & h) {
   randomize(o.y, h);
   randomize(o.z, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //

@@ -4,14 +4,12 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 
 #include <serializer/serializer.h>
 
 namespace rose {
-namespace ecs {
 
 ///////////////////////////////////////////////////////////////////
 // serializer                                                    //
@@ -47,7 +45,6 @@ inline void deserialize(ShaderAssetRef &o, IDeserializer &s) {
 inline void randomize(ShaderAssetRef &o, rose::hash_value & h) {
   randomize(o.id, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //

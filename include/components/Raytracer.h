@@ -4,13 +4,11 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/shaderassetref.h>
 #include <components/shaderassetref.h>
 namespace rose {
-namespace ecs {
 struct Raytracer {
   ShaderAssetRef fragment;
   ShaderAssetRef vertex;
@@ -76,12 +74,11 @@ inline void randomize(Raytracer &o, rose::hash_value & h) {
   randomize(o.fragment, h);
   randomize(o.vertex, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::Raytracer &o) {
+  inline hash_value hash(const Raytracer &o) {
     hash_value h = hash(o.fragment);
     h = xor64(h);
     h ^= hash(o.vertex);

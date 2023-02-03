@@ -4,13 +4,11 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/matrix4.h>
 #include <components/matrix4.h>
 namespace rose {
-namespace ecs {
 struct Camera {
   float far_plane;
   float fov;
@@ -103,12 +101,11 @@ inline void randomize(Camera &o, rose::hash_value & h) {
   randomize(o.near_plane, h);
   randomize(o.projection, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::Camera &o) {
+  inline hash_value hash(const Camera &o) {
     hash_value h = hash(o.far_plane);
     h = xor64(h);
     h ^= hash(o.fov);

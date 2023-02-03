@@ -4,7 +4,6 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 #include <components/vector3.h>
@@ -12,7 +11,6 @@
 #include <components/camera.h>
 #include <components/cubehero.h>
 namespace rose {
-namespace ecs {
 struct CubeWorld {
   vector3 cam_position;
   vector3 cam_up;
@@ -113,12 +111,11 @@ inline void randomize(CubeWorld &o, rose::hash_value & h) {
   randomize(o.max_cubes, h);
   randomize(o.seed, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::CubeWorld &o) {
+  inline hash_value hash(const CubeWorld &o) {
     hash_value h = hash(o.cam_position);
     h = xor64(h);
     h ^= hash(o.cam_up);

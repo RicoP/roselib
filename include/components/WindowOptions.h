@@ -4,11 +4,9 @@
 #pragma once
 #include <components/computils.h>
 #include <serializer/serializer.h>
-#include <rose/ecs.h>
 #include <cstring>
 
 namespace rose {
-namespace ecs {
 struct WindowOptions {
   bool popped;
 
@@ -64,12 +62,11 @@ inline void deserialize(WindowOptions &o, IDeserializer &s) {
 inline void randomize(WindowOptions &o, rose::hash_value & h) {
   randomize(o.popped, h);
 }
-} //namespace ecs
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ecs::WindowOptions &o) {
+  inline hash_value hash(const WindowOptions &o) {
     hash_value h = hash(o.popped);
     return h;
   }
