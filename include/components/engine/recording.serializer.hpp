@@ -7,86 +7,87 @@
 #include <rose/world.h>
 
 ///////////////////////////////////////////////////////////////////
-//  AUTOGEN                                                      //
+//  AUTOGEN
 //  command:
 //    rose.parser -I .\engine\recording.h -O .\engine\recording.serializer.hpp
 ///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+//  predef enum rose::RoseRecordingState
+///////////////////////////////////////////////////////////////////
+
+inline rose::BoolConvertible<rose::RoseRecordingState> operator|(const rose::RoseRecordingState &lhs, const rose::RoseRecordingState &rhs) { return { static_cast<rose::RoseRecordingState>(static_cast<int >(lhs) | static_cast<int >(rhs)) }; }
+inline rose::BoolConvertible<rose::RoseRecordingState> operator&(const rose::RoseRecordingState &lhs, const rose::RoseRecordingState &rhs) { return { static_cast<rose::RoseRecordingState>(static_cast<int >(lhs) & static_cast<int >(rhs)) }; }
+inline rose::BoolConvertible<rose::RoseRecordingState> operator^(const rose::RoseRecordingState &lhs, const rose::RoseRecordingState &rhs) { return { static_cast<rose::RoseRecordingState>(static_cast<int >(lhs) ^ static_cast<int >(rhs)) }; }
+inline rose::RoseRecordingState operator|=(rose::RoseRecordingState & lhs, rose::RoseRecordingState rhs) { return lhs = lhs | rhs; }
+inline rose::RoseRecordingState operator&=(rose::RoseRecordingState & lhs, rose::RoseRecordingState rhs) { return lhs = lhs & rhs; }
+inline rose::RoseRecordingState operator^=(rose::RoseRecordingState & lhs, rose::RoseRecordingState rhs) { return lhs = lhs ^ rhs; }
+namespace rose {
+inline const char * to_string(const rose::RoseRecordingState & e);
+inline void serialize(rose::RoseRecordingState& o, ISerializer& s);
+inline void deserialize(rose::RoseRecordingState& o, IDeserializer& s);
+inline hash_value       hash(const rose::RoseRecordingState& o);
+} //namespace rose
+
+
+#ifndef IMPL_SERIALIZER_UTIL
+#define IMPL_SERIALIZER_UTIL
+
+///////////////////////////////////////////////////////////////////
+// internal helper methods
+///////////////////////////////////////////////////////////////////
 
 namespace rose {
-enum class                   RoseRecordingState : int ;
-}
-const char * to_string(const rose::RoseRecordingState &);
-namespace rose {
-  void      deserialize(rose::RoseRecordingState &o, IDeserializer &s);
-  void        serialize(rose::RoseRecordingState &o, ISerializer &s);
-  template<>
-  struct type_id<rose::RoseRecordingState> {
-    inline static hash_value VALUE = 9428585348312703707ULL;
-  };
-  hash_value         hash(const rose::RoseRecordingState &o);
-  void construct_defaults(      rose::RoseRecordingState &o); //implement me
+template<class T>
+bool rose_parser_equals(const T& lhs, const T& rhs) {
+  return lhs == rhs;
 }
 
-inline BoolConvertible<rose::RoseRecordingState, int > operator|(const rose::RoseRecordingState &a, const rose::RoseRecordingState &b) { return { static_cast<rose::RoseRecordingState>(static_cast<int >(a) | static_cast<int >(b)) }; }
-inline BoolConvertible<rose::RoseRecordingState, int > operator&(const rose::RoseRecordingState &a, const rose::RoseRecordingState &b) { return { static_cast<rose::RoseRecordingState>(static_cast<int >(a) & static_cast<int >(b)) }; }
-inline BoolConvertible<rose::RoseRecordingState, int > operator^(const rose::RoseRecordingState &a, const rose::RoseRecordingState &b) { return { static_cast<rose::RoseRecordingState>(static_cast<int >(a) ^ static_cast<int >(b)) }; }
-inline rose::RoseRecordingState operator|=(rose::RoseRecordingState &a, rose::RoseRecordingState b) { return a = a | b; }
-inline rose::RoseRecordingState operator&=(rose::RoseRecordingState &a, rose::RoseRecordingState b) { return a = a & b; }
-inline rose::RoseRecordingState operator^=(rose::RoseRecordingState &a, rose::RoseRecordingState b) { return a = a ^ b; }
+template<class T, size_t N>
+bool rose_parser_equals(const T(&lhs)[N], const T(&rhs)[N]) {
+  for (size_t i = 0; i != N; ++i) {
+    if (!rose_parser_equals(lhs, rhs)) return false;
+  }
+  return true;
+}
 
+template<size_t N>
+bool rose_parser_equals(const char(&lhs)[N], const char(&rhs)[N]) {
+  for (size_t i = 0; i != N; ++i) {
+    if (lhs[i] != rhs[i]) return false;
+    if (lhs[i] == 0) return true;
+  }
+  return true;
+}
 
-#ifdef IMPL_SERIALIZER
+template<class T>
+bool rose_parser_equals(const std::vector<T> &lhs, const std::vector<T> &rhs) {
+  if (lhs.size() != rhs.size()) return false;
+  for (size_t i = 0; i != lhs.size(); ++i) {
+    if (!rose_parser_equals(lhs, rhs)) return false;
+  }
+  return true;
+}
 
-    #ifndef IMPL_SERIALIZER_UTIL
-    #define IMPL_SERIALIZER_UTIL
-    #include <cstring>
+template<class T>
+hash_value rose_parser_hash(const T & value) { return hash(value); }
 
-    namespace {
-    //internal helper methods
-    template<class T>
-    bool rose_parser_equals(const T& lhs, const T& rhs) {
-      return lhs == rhs;
-    }
+template<class T>
+hash_value rose_parser_hash(const std::vector<T>& v) {
+  hash_value h = 0;
+  for (const auto& o : v) {
+    h ^= rose_parser_hash(o);
+    h = xor64(h);
+  }
+  return h;
+}
 
-    template<class T, size_t N>
-    bool rose_parser_equals(const T(&lhs)[N], const T(&rhs)[N]) {
-      for (size_t i = 0; i != N; ++i) {
-        if (lhs[i] != rhs[i]) return false;
-      }
-      return true;
-    }
-
-    template<size_t N>
-    bool rose_parser_equals(const char(&lhs)[N], const char(&rhs)[N]) {
-      for (size_t i = 0; i != N; ++i) {
-        if (lhs[i] != rhs[i]) return false;
-        if (lhs[i] == 0) return true;
-      }
-      return true;
-    }
-
-    template<class T>
-    bool rose_parser_equals(const std::vector<T> &lhs, const std::vector<T> &rhs) {
-      if (lhs.size() != rhs.size()) return false;
-      for (size_t i = 0; i != lhs.size(); ++i) {
-        if (lhs[i] != rhs[i]) return false;
-      }
-      return true;
-    }
-
-    template<class TL, class TR>
-    void assign(TL& lhs, TR&& rhs) {
-      lhs = rhs;
-    }
-
-    template<class T>
-    void construct_default(std::vector<T> & v) {
-      c.clear();
-    }
-    }
-    #endif
+}
+#endif
   
-const char * to_string(const rose::RoseRecordingState & e) {
+///////////////////////////////////////////////////////////////////
+//  impl enum rose::RoseRecordingState
+///////////////////////////////////////////////////////////////////
+inline const char * rose::to_string(const rose::RoseRecordingState & e) {
     switch(e) {
         case rose::RoseRecordingState::NONE: return "NONE";
         case rose::RoseRecordingState::Inactive: return "Inactive";
@@ -104,7 +105,7 @@ const char * to_string(const rose::RoseRecordingState & e) {
         default: return "<UNKNOWN>";
     }
 }
-void rose::serialize(rose::RoseRecordingState& o, ISerializer& s) {
+inline void rose::serialize(rose::RoseRecordingState& o, ISerializer& s) {
   switch (o) {
     case rose::RoseRecordingState::NONE: {
       char str[] = "NONE";
@@ -174,7 +175,7 @@ void rose::serialize(rose::RoseRecordingState& o, ISerializer& s) {
     default: /* unknown */ break;
   }
 }
-void rose::deserialize(rose::RoseRecordingState& o, IDeserializer& s) {
+inline void rose::deserialize(rose::RoseRecordingState& o, IDeserializer& s) {
   char str[64];
   deserialize(str, s);
   rose::hash_value h = rose::hash(str);
@@ -195,9 +196,7 @@ void rose::deserialize(rose::RoseRecordingState& o, IDeserializer& s) {
   default: /*unknown value*/ break;
   }
 }
-rose::hash_value       rose::hash(const rose::RoseRecordingState& o) {
+inline rose::hash_value rose::hash(const rose::RoseRecordingState& o) {
   return static_cast<rose::hash_value>(o);
 }
 
-
-#endif
