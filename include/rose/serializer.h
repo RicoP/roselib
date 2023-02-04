@@ -1,8 +1,11 @@
 #pragma once
 
 #include <serializer/serializer.h>
+#include <type_traits>
 
-template <class E, class BaseT>
+namespace rose {
+
+template <class E>
 struct BoolConvertible {
   E value;
 
@@ -11,6 +14,8 @@ struct BoolConvertible {
   }
 
   operator bool() const {
-    return static_cast<BaseT>(value) != 0;
+    return static_cast<std::underlying_type_t<E>>(value) != 0;
   }
 };
+
+}
