@@ -3,11 +3,13 @@
 #include <serializer/serializer.h>
 
 struct Path {
-	//@String
-	char string[260] = "";
+  //@String
+  char string[260] = "";
 
-	bool operator==(const Path & rhs) { return strcmp(string, rhs.string) == 0; }
-	bool operator!=(const Path & rhs) { return strcmp(string, rhs.string) != 0; }
+  Path& operator=(const char *str) { strcpy(string, str); return *this; }
+
+  bool operator==(const char* rhs) const { return strcmp(string, rhs) == 0; }
+  bool operator!=(const char* rhs) const { return !(*this == rhs); }
 };
 
 namespace rose {
