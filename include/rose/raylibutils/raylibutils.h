@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <rose/hash.h>
+#include <rose/assert.h>
+#include <rose/handle.h>
 #include <rose/singleton.h>
 #include <rose/raylibutils/assetmanager.h>
 #include <components/path.h>
@@ -11,67 +13,75 @@
 #include <utility>
 
 namespace rose {
-struct RaylibAssetModel {
-    Path path;
-    Model model;
-    bool valid = false;
+struct RaylibAsset {
+private:
+    local_handle handle = 0;
 
-    ~RaylibAssetModel() {
-        if(valid) RaylibAssetManager::instance().model_decrement(path.string);
-        path.string[0] = 0;
-        valid = false;
+    void inc() { if(handle) RaylibAssetManager::instance().handle_increment(handle); }
+    void dec() { if(handle) RaylibAssetManager::instance().handle_decrement(handle); }
+
+protected:
+    const Model & get_model() const {
+        return RaylibAssetManager::instance().get_handle_model(handle);
     }
 
-    RaylibAssetModel(const char * path) {
-        strcpy(this->path.string, path);
-        model = RaylibAssetManager::instance().model_increment(path);
-        valid = true;
+public:
+    ~RaylibAsset() { dec(); }
+    
+    RaylibAsset(const char * path, RaylibAssetType type) { 
+        handle = RaylibAssetManager::instance().handle_open(path, type);
     }
 
-    RaylibAssetModel(const RaylibAssetModel & rhs) {
-        path = rhs.path;
-        valid = rhs.valid;
-        if(valid)
-            model = RaylibAssetManager::instance().model_increment(path.string);
+    RaylibAsset(const RaylibAsset & rhs) : handle(rhs.handle) { inc(); }
+
+    RaylibAsset(RaylibAsset && rhs) : handle(rhs.handle) {
+        rhs.handle = 0;
     }
 
-    RaylibAssetModel & operator=(const RaylibAssetModel & rhs) {
-        if(valid) RaylibAssetManager::instance().model_decrement(path.string);
-        path = rhs.path;
-        valid = rhs.valid;
-        model = RaylibAssetManager::instance().model_increment(path.string);
+    RaylibAsset & operator=(const RaylibAsset & rhs) {
+        if(handle != rhs.handle) {
+            dec();
+            handle = rhs.handle;        
+            inc();
+        }
+
         return *this;
     }
 
-    RaylibAssetModel(RaylibAssetModel && rhs) {
-        path = rhs.path;
-        valid = rhs.valid;
-        model = rhs.model;
-
-        rhs.valid = false;
-    }
-
-    RaylibAssetModel & operator=(RaylibAssetModel && rhs) {
-        std::swap(valid, rhs.valid);
-        std::swap(path, rhs.path);
-        Model tmp = model;
-        model = rhs.model;
-        rhs.model = tmp;
+    RaylibAsset & operator=(RaylibAsset && rhs) {
+        if(handle != rhs.handle) {
+            dec();
+            handle = rhs.handle;
+            rhs.handle = 0;
+        }
 
         return *this;
+    }
+
+    const char * get_path() const {
+        return RaylibAssetManager::instance().get_handle_path(handle);
+    }
+
+    local_handle get_handle() const { return handle; }
+    operator bool() const { return handle != 0; }
+    bool operator==(const RaylibAsset & rhs) const { return handle == rhs.handle; }
+    bool operator!=(const RaylibAsset & rhs) const { return !(*this == rhs); }
+};
+
+struct RaylibAssetModel : RaylibAsset {
+    RaylibAssetModel(const char * path) 
+    : RaylibAsset(path, RaylibAssetType::Model) {
     }
 
     operator Model() {
-        assert(valid);
-        return model;
+        return get_model();
     }
-
-    bool operator==(const RaylibAssetModel & rhs) const { return path == rhs.path; }
-    bool operator!=(const RaylibAssetModel & rhs) const { return !(*this == rhs); }
 };
 
 inline void serialize(RaylibAssetModel &o, ISerializer &s) {
-	serialize(o.path, s);
+    Path path;
+    path = o.get_path();
+	serialize(path, s);
 }
 inline void deserialize(RaylibAssetModel &o, IDeserializer &s) {
     Path p;
@@ -82,7 +92,9 @@ inline void deserialize(RaylibAssetModel &o, IDeserializer &s) {
 
 namespace rose {
 inline ::rose::hash_value hash(const RaylibAssetModel &o) {
-	return ::rose::hash(o.path);
+    Path path;
+    path = o.get_path();
+	return ::rose::hash(path);
 }
 }
 
