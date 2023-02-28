@@ -21,21 +21,19 @@ private:
     void dec() { if(handle) RaylibAssetManager::instance().handle_decrement(handle); }
 
 protected:
-    const Model & get_model() const {
+    Model & get_model() const {
         return RaylibAssetManager::instance().get_handle_model(handle);
     }
 
 public:
     ~RaylibAsset() { dec(); }
     
+    RaylibAsset(const RaylibAsset & rhs) : handle(rhs.handle) { inc(); }
+    
+    RaylibAsset(RaylibAsset && rhs) : handle(rhs.handle) { rhs.handle = 0; }
+
     RaylibAsset(const char * path, RaylibAssetType type) { 
         handle = RaylibAssetManager::instance().handle_open(path, type);
-    }
-
-    RaylibAsset(const RaylibAsset & rhs) : handle(rhs.handle) { inc(); }
-
-    RaylibAsset(RaylibAsset && rhs) : handle(rhs.handle) {
-        rhs.handle = 0;
     }
 
     RaylibAsset & operator=(const RaylibAsset & rhs) {
@@ -73,7 +71,7 @@ struct RaylibAssetModel : RaylibAsset {
     : RaylibAsset(path, RaylibAssetType::Model) {
     }
 
-    operator Model() {
+    operator Model&() {
         return get_model();
     }
 };
