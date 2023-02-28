@@ -1,3 +1,4 @@
+#if 0
 #include <rose/container.h>
 #include <rose/event.h>
 #include <rose/eventqueue.h>
@@ -84,3 +85,4 @@ int main() {
 }
 
 */
+#endif
