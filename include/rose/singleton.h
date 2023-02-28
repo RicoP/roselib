@@ -79,7 +79,7 @@ struct RoseSingletonImpl : RoseSingletonImplBase {
 template <typename T>
 struct RoseSingletonGetter {
   static T& instance() { 
-    static T & obj = rose::world::get_singleton<T>();
+    static T & obj = rose::world::template get_singleton<T>();
     return obj; 
   }
 };
