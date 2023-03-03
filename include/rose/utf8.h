@@ -4,53 +4,71 @@
 #include <rose/assert.h>
 
 namespace rose {
-typedef int utf8code;
+typedef std::int32_t utf8code;
+constexpr utf8code utf8code_end = 0;
 constexpr utf8code utf8code_invalid = 0xFFFD;
 
-struct SimpleSpan {
-  const char * s = nullptr;
-  int size = 0;
+struct utf8walker {
+  const char * head = nullptr;
+  int remaining_bytes = 0;
+
+  utf8code next() {
+    //https://github.com/RandyGaul/cute_framework/blob/5f68097c836802daad208f2fcb85256ddd136745/src/cute_string.cpp#LL553C48-L553C57
+    if(remaining_bytes == 0) {
+      return utf8code_end;
+    } 
+
+    unsigned char c = *head++;
+    remaining_bytes--;
+
+    utf8code codepoint = 0;
+    utf8code codepoint_min = 0;
+    int extra_bytes = 0;
+    if (c >= 0xF0)      { codepoint = c & 0x07; extra_bytes = 3; codepoint_min = 0x10000; }
+    else if (c >= 0xE0) { codepoint = c & 0x0F; extra_bytes = 2; codepoint_min = 0x800; }
+    else if (c >= 0xC0) { codepoint = c & 0x1F; extra_bytes = 1; codepoint_min = 0x80; }
+    else if (c >= 0x80) { codepoint = utf8code_invalid; }
+    else {
+      //simple ansii character
+      codepoint = c;
+      if(codepoint == 0) {
+        //We hit a ansii zero...
+        if(remaining_bytes != 0) {
+          //...but the tail doesn't end
+          codepoint = utf8code_invalid; 
+          head += remaining_bytes;
+          remaining_bytes = 0;
+        }
+        return codepoint;
+      }
+    }
+
+    if(extra_bytes > remaining_bytes) {
+      //we would overflow
+      head += remaining_bytes;
+      remaining_bytes = 0;
+      return utf8code_invalid;
+    }
+
+    while (extra_bytes--) {
+      c = *head++;
+      remaining_bytes--;
+      if ((c & 0xC0) != 0x80) { 
+        codepoint = utf8code_invalid;
+
+        //TODO: should we keep iterating until extra hits zero?
+        //      https://discord.com/channels/432009046833233930/876893754517241907/1081260978475368521
+        break; 
+      }
+      codepoint = ((codepoint) << 6) | (c & 0x3F); 
+    }
+
+    if (codepoint < codepoint_min) return utf8code_invalid;
+    return codepoint;
+  }
 };
 
 
-//https://github.com/RandyGaul/cute_framework/blob/5f68097c836802daad208f2fcb85256ddd136745/src/cute_string.cpp#LL553C48-L553C57
-inline utf8code cf_decode_UTF8(SimpleSpan * span) {
-  if(span->size == 0) {
-    return 0;
-  } 
-
-  SimpleSpan end;
-  end.s = span->s + span->size;
-  end.size = 0;
-
-  unsigned char c = *span->s++;
-  span->size--;
-
-  int extra = 0;
-  int min = 0;
-  int codepoint = 0;
-  if (c >= 0xF0) { codepoint = c & 0x07; extra = 3; min = 0x10000; }
-  else if (c >= 0xE0) { codepoint = c & 0x0F; extra = 2; min = 0x800; }
-  else if (c >= 0xC0) { codepoint = c & 0x1F; extra = 1; min = 0x80; }
-  else if (c >= 0x80) { codepoint = utf8code_invalid; }
-  else codepoint = c;
-
-  if(extra > span->size) {
-    *span = end;
-    return 0;
-  }
-  span->size -= extra;
-
-  while (extra--) {
-    c = *span->s++;
-    if ((c & 0xC0) != 0x80) { codepoint = utf8code_invalid; break; }
-    codepoint = ((codepoint) << 6) | (c & 0x3F);
-  }
-  if (codepoint < min) codepoint = utf8code_invalid;
-
-  if(codepoint == 0 || codepoint == utf8code_invalid) *span = end;
-  return codepoint;
-}
 
 /*
 struct utf8iterator {
@@ -94,50 +112,53 @@ struct utf8iterator {
 */
 
 struct utf8span {
-  SimpleSpan span;
+  utf8walker span;
 
   utf8code peek() const {
-    SimpleSpan copy = span;
-    return cf_decode_UTF8(&copy);
+    utf8walker copy = span;
+    return copy.next();
   }
 
   utf8code increment() {
-    return cf_decode_UTF8(&span);
+    return span.next();
   }
 
   utf8span() : span {} {}
   utf8span(const char * str, int length) : span { str, length } {}
-  SimpleSpan begin() const { return span; }
-  SimpleSpan end() const { return SimpleSpan { span.s + span.size, 0 }; }
+  utf8walker begin() const { return span; }
+  utf8walker end() const { return utf8walker { span.head + span.remaining_bytes, 0 }; }
 
   int length() const {
     int result = 0;
-    SimpleSpan it1 = begin();
+    utf8walker it1 = begin();
 
     for(;;) {
-      auto code1 = cf_decode_UTF8(&it1);
-      if(code1 == 0) return result;
-      //TODO: Is it the right thing to return zero when the string contains a invalid byte order?
-      if(code1 == utf8code_invalid) return 0;
+      auto code1 = it1.next();
+      //TODO: should we handle codepoint utf8code_invalid differently?
+      if(code1 == utf8code_end) return result;
       ++result;
     }
   }
 
-  bool operator==(const utf8span & rhs) const { 
-    if(this->span.size != rhs.span.size) return false;
-
-    SimpleSpan it1 = begin();
-    SimpleSpan it2 = rhs.begin();
+  int compare(const utf8span & rhs) const { 
+    utf8walker it1 = begin();
+    utf8walker it2 = rhs.begin();
 
     for(;;) {
-      auto code1 = cf_decode_UTF8(&it1);
-      auto code2 = cf_decode_UTF8(&it2);
-      if(code1 != code2) return false;
-      if(code1 == 0) return true;
-      if(code1 == utf8code_invalid) return false;
+      auto code1 = it1.next();
+      auto code2 = it2.next();
+      if(code1 != code2) return code1 - code2;
+      if(code1 == 0) return 0;
     }
+  } 
+
+  bool equals(const utf8span & rhs) const { 
+    if(span.remaining_bytes != rhs.span.remaining_bytes) return false;
+    return compare(rhs) == 0;
   }
-  bool operator!=(const utf8span & rhs) const { return !(*this == rhs); }
+
+  bool operator==(const utf8span & rhs) const { return equals(rhs); }
+  bool operator!=(const utf8span & rhs) const { return !equals(rhs); }
 };
 
 //https://dev.to/totally_chase/implementing-functional-type-safe-polymorphism-in-c-10b9
@@ -157,7 +178,7 @@ struct utf8vfactory {
 };
 
 struct utf8 {
-private:  
+private:
   union {
     const utf8vfactory * factory;
     const char * static_string;
@@ -270,7 +291,7 @@ public:
   */
 
   bool operator==(const utf8 & rhs) const { return get() == rhs.get(); }
-  bool operator!=(const utf8 & rhs) const { return !(*this == rhs); }
+  bool operator!=(const utf8 & rhs) const { return get() != rhs.get(); }
 };
 
 }

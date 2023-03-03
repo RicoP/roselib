@@ -50,9 +50,13 @@ static rose::utf8vfactory make_factory() {
 
 TEST_CASE("UTF8 Sanity Check", "[rose string]") {
     rose::utf8vfactory factory = make_factory();
+    
     rose::utf8 s1 = make_new_utf8(&factory, "Hello");
-    REQUIRE(5 == s1.length());
+    rose::utf8 s2 = "static";
 
+    REQUIRE(5 == s1.length());
+    REQUIRE(6 == s2.length());
+    
     {
       auto it = s1.get();
       REQUIRE('H' == it.increment());
@@ -62,9 +66,6 @@ TEST_CASE("UTF8 Sanity Check", "[rose string]") {
       REQUIRE('o' == it.increment());
       REQUIRE(0 == it.increment());
     }
-
-    rose::utf8 s2 = "static";
-    REQUIRE(6 == s2.length());
 
     {
       auto it = s2.get();
