@@ -62,4 +62,32 @@ TEST_CASE("UTF8 Sanity Check", "[rose string]") {
       REQUIRE('o' == it.increment());
       REQUIRE(0 == it.increment());
     }
+
+    rose::utf8 s2 = "static";
+    REQUIRE(6 == s2.length());
+
+    {
+      auto it = s2.get();
+      REQUIRE('s' == it.increment());
+      REQUIRE('t' == it.increment());
+      REQUIRE('a' == it.increment());
+      REQUIRE('t' == it.increment());
+      REQUIRE('i' == it.increment());
+      REQUIRE('c' == it.increment());
+      REQUIRE(0 == it.increment());
+    }
+
+    REQUIRE(s1 == s1);
+    REQUIRE(s2 == s2);
+    REQUIRE(s1 != s2);
+
+    char cbuff[] = "Hello";
+    REQUIRE(s1 == cbuff);
+    REQUIRE(s2 != cbuff);
+    
+    REQUIRE(s1 == "Hello");
+    REQUIRE(s2 == "static");
+    
+    REQUIRE(s1 != "");
+    REQUIRE(s2 != "");
 }
