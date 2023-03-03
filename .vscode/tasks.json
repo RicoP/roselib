@@ -1,0 +1,52 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "PREMAKE",
+            "command": "premake5.exe",
+            "args": [
+                "vs2019"
+            ],
+            "group": {
+                "kind": "build",
+            }
+        },
+
+        {
+            "type": "shell",
+            "label": "MSBUILD",
+            "command": "msbuild",
+            "args": [
+                "./.build/projects/roselib.sln"
+            ],
+            "group": {
+                "kind": "build",
+            },
+        },
+        
+        {
+            "type": "shell",
+            "label": "TEST",
+            "command": "./.build/bin/debug/tests.exe",
+            "group": {
+                "kind": "build",
+            },
+        },
+        
+        {
+            "type": "shell",
+            "label": "BUILD",
+            "command": "echo",
+            "args": [
+                "Build Finished",
+            ],          
+            "dependsOrder": "sequence",
+            "dependsOn": ["PREMAKE", "MSBUILD", "TEST"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+    ],
+    "version": "2.0.0"
+}
