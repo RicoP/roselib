@@ -197,8 +197,10 @@ public:
     }
     else {
       factory = rhs.factory;
-      handle = factory->copy(handle); }
+      handle = factory->copy(handle); 
     }
+  }
+
   utf8(utf8 && rhs) : factory(rhs.factory), handle(rhs.handle) { 
     if(rhs.is_static_string()) {
       static_string = rhs.static_string;
@@ -227,16 +229,19 @@ public:
 
   // Move assignment operator
   utf8& operator=(utf8&& rhs) {
-    if (this != &rhs) {
-      // First destroy the current object's resources
-      destroy();
-      // Move the factory and handle
+    assert(this != &rhs);
+    destroy();
+
+    if(rhs.is_static_string()) {
+      static_string = rhs.static_string;
+      handle = rhs.handle;
+    }
+    else {
       factory = rhs.factory;
       handle = rhs.handle;
-      // Set rhs to a valid state
-      rhs.handle = 0;
-      rhs.factory = nullptr;
     }
+    rhs.static_string = "";
+    rhs.handle = 0;
     return *this;
   }  
   
