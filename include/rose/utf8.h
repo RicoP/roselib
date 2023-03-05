@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <iterator>
 #include <rose/assert.h>
+#include <rose/testing.h>
 
 namespace rose {
 typedef std::int32_t utf8code;
@@ -295,3 +296,8 @@ public:
 };
 
 }
+
+CREATE_TEST("rose::utf8") {
+  CHECK(1 == 1);
+  CHECK(2 == 1);
+} 

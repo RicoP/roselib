@@ -42,4 +42,10 @@ project "tests"
   includedirs { "../Catch2/single_include" }
   files { "test/**.cpp" }
   removefiles { "test/refptr.cpp" }
-  
+
+project "rosetests"
+  kind "ConsoleApp"
+  language "C++"
+  warnings "Extra"
+  includedirs { "include" }
+  files { "test2/**.cpp" }
