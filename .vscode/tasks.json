@@ -27,8 +27,8 @@
         {
             "type": "shell",
             "label": "TEST",
-            //"command": "./.build/bin/debug/tests.exe",
-            "command": "./.build/bin/debug/rosetests.exe",
+            "command": "./.build/bin/debug/tests.exe",
+            //"command": "./.build/bin/debug/rosetests.exe",
             "group": {
                 "kind": "build",
             },
