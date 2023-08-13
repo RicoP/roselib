@@ -6,7 +6,7 @@
 
 namespace rose {
 //@Flag
-enum class RoseRecordingState : int {
+enum class RRecordingState : int {
     NONE = 0,
 
     Inactive,
