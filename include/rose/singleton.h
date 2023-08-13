@@ -66,7 +66,7 @@ static_assert(hash_path("A/include/Hello.h") == hash_path("A/source/Hello.h"), "
 static_assert(hash_path("A/include/A") == hash_path("A\\source\\A"), "test failed");
 static_assert(hash_path("A/include/A") != hash_path("A/source/B"), "test failed");
 
-struct RoseSingletonImplBase : rose::nocopy {};
+struct RoseSingletonImplBase : RNoCopy {};
 
 template <rose::hash_value UNIQUE_ID>
 struct RoseSingletonImpl : RoseSingletonImplBase {

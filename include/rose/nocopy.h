@@ -1,13 +1,9 @@
 #pragma once
 
-namespace rose {
-
 //helper class that prohibits copying of object
-struct nocopy {
-  nocopy() = default;
-  ~nocopy() = default;
-  nocopy(const nocopy &) = delete;
-  nocopy &operator=(const nocopy &) = delete;
+struct RNoCopy {
+  RNoCopy() = default;
+  ~RNoCopy() = default;
+  RNoCopy(const RNoCopy &) = delete;
+  RNoCopy &operator=(const RNoCopy &) = delete;
 };
-
-}
