@@ -17,7 +17,7 @@ struct CubeWorld {
   Camera camera;
   Cubehero hero;
   int max_cubes;
-  rose::hash_value seed;
+  RHash seed;
 
   bool equals(const CubeWorld & rhs) const {
     return
@@ -103,7 +103,7 @@ inline void deserialize(CubeWorld &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(CubeWorld &o, rose::hash_value & h) {
+inline void randomize(CubeWorld &o, RHash & h) {
   randomize(o.cam_position, h);
   randomize(o.cam_up, h);
   randomize(o.camera, h);
@@ -115,8 +115,8 @@ inline void randomize(CubeWorld &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const CubeWorld &o) {
-    hash_value h = hash(o.cam_position);
+  inline RHash hash(const CubeWorld &o) {
+    RHash h = hash(o.cam_position);
     h = xor64(h);
     h ^= hash(o.cam_up);
     h = xor64(h);

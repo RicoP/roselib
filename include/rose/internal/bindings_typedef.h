@@ -9,8 +9,8 @@
 #include <rose/hash.h>
 
 typedef void * (*rose_internal_create_or_fetch_worldstate_ft)(int, const rose::reflection::TypeInfo & type);
-typedef void (*rose_internal_register_singleton_class_instance_ft)(int, rose::hash_value type_id, void * instance);
-typedef void (*rose_internal_unregister_singleton_class_instance_ft)(int, rose::hash_value type_id, void * instance);
-typedef void * (*rose_internal_get_singleton_class_instance_ft)(int, rose::hash_value type_id);
+typedef void (*rose_internal_register_singleton_class_instance_ft)(int, RHash type_id, void * instance);
+typedef void (*rose_internal_unregister_singleton_class_instance_ft)(int, RHash type_id, void * instance);
+typedef void * (*rose_internal_get_singleton_class_instance_ft)(int, RHash type_id);
 typedef int (*rose_filewatcher_watch_path_ft)(int, const char * path);
 typedef bool (*rose_filewatcher_unwatch_path_ft)(int, int id);

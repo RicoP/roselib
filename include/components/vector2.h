@@ -47,7 +47,7 @@ inline void deserialize(vector2 &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(vector2 &o, rose::hash_value & h) {
+inline void randomize(vector2 &o, RHash & h) {
   randomize(o.x, h);
   randomize(o.y, h);
 }
@@ -55,8 +55,8 @@ inline void randomize(vector2 &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const vector2 &o) {
-    hash_value h = hash(o.x);
+  inline RHash hash(const vector2 &o) {
+    RHash h = hash(o.x);
     h = xor64(h);
     h ^= hash(o.y);
     return h;

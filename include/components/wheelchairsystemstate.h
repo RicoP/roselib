@@ -61,15 +61,15 @@ inline void deserialize(WheelchairSystemState &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(WheelchairSystemState &o, rose::hash_value & h) {
+inline void randomize(WheelchairSystemState &o, RHash & h) {
   randomize(o.object, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const WheelchairSystemState &o) {
-    hash_value h = hash(o.object);
+  inline RHash hash(const WheelchairSystemState &o) {
+    RHash h = hash(o.object);
     return h;
   }
 } //namespace rose

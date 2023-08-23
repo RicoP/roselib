@@ -42,15 +42,15 @@ inline void deserialize(ShaderAssetRef &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(ShaderAssetRef &o, rose::hash_value & h) {
+inline void randomize(ShaderAssetRef &o, RHash & h) {
   randomize(o.id, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const ShaderAssetRef &o) {
-    hash_value h = hash(o.id);
+  inline RHash hash(const ShaderAssetRef &o) {
+    RHash h = hash(o.id);
     return h;
   }
 } //namespace rose

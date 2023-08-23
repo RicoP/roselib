@@ -8,10 +8,8 @@
 
 #include <ctime>
 
-using hash_value = rose::hash_value;
-
 struct AssetRef {
-  hash_value id;
+  RHash id;
 };
 
 inline bool operator==(const AssetRef& lhs, const AssetRef& rhs) { return lhs.id == rhs.id; }
@@ -23,7 +21,7 @@ struct MeshAssetRef : public AssetRef {};
 struct ShaderAssetRef : public AssetRef {};
 
 struct ObjectID {
-  hash_value id;
+  RHash id;
 
   static constexpr ObjectID empty() { return ObjectID{0}; }
 };
@@ -35,7 +33,7 @@ inline void construct_defaults(ObjectID& o) { o.id = 0; }
 inline bool operator==(const ObjectID& lhs, const ObjectID& rhs) { return lhs.id == rhs.id; }
 inline bool operator!=(const ObjectID& lhs, const ObjectID& rhs) { return lhs.id != rhs.id; }
 
-constexpr rose::hash_value field_hash(const char* name, const char* type) { return rose::hash(name) ^ rose::hash(type); }
+constexpr RHash field_hash(const char* name, const char* type) { return rose::hash(name) ^ rose::hash(type); }
 
 // Helper class to serialize fixed arrays
 template <size_t MAX, class T>
@@ -54,16 +52,16 @@ struct CString {
 
 
 inline rose::GUID create_guid() {
-  static_assert(sizeof(hash_value) * 2 == sizeof(rose::GUID));
+  static_assert(sizeof(RHash) * 2 == sizeof(rose::GUID));
   union {
-    hash_value h[2];
+    RHash h[2];
     rose::GUID guid = {{0}};
   } u;
 
   std::time_t rawtime = time(nullptr);
-  hash_value h1 = rose::hash(rawtime);
+  RHash h1 = rose::hash(rawtime);
   rose::next(h1);
-  hash_value h2 = rose::hash_from_clock();
+  RHash h2 = rose::hash_from_clock();
 
   u.h[0] = h1;
   u.h[1] = h2;

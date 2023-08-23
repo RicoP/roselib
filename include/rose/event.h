@@ -8,7 +8,7 @@ namespace rose {
 // A Pointer to the current data section representing the event.
 // Keep in mind that it is only valid for the lifetime of the Queue.
 struct Event {
-  rose::hash_value event_id = 0;
+  RHash event_id = 0;
   size_t padded_event_size = 0;
   void *data = nullptr;  // pointing on first byte of event struct
 

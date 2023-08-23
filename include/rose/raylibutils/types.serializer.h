@@ -18,7 +18,7 @@ namespace rose {
 inline bool equals(const Color &lhs, const Color &rhs);
 inline bool operator==(const Color &lhs, const Color &rhs) { return equals(lhs, rhs); }
 inline bool operator!=(const Color &lhs, const Color &rhs) { return !equals(lhs, rhs); }
-inline hash_value hash(const Color &o);
+inline RHash hash(const Color &o);
 
 template <>
 struct type_id<Color>;
@@ -34,7 +34,7 @@ namespace rose {
 inline bool equals(const Vector2 &lhs, const Vector2 &rhs);
 inline bool operator==(const Vector2 &lhs, const Vector2 &rhs) { return equals(lhs, rhs); }
 inline bool operator!=(const Vector2 &lhs, const Vector2 &rhs) { return !equals(lhs, rhs); }
-inline hash_value hash(const Vector2 &o);
+inline RHash hash(const Vector2 &o);
 
 template <>
 struct type_id<Vector2>;
@@ -50,7 +50,7 @@ namespace rose {
 inline bool equals(const Vector3 &lhs, const Vector3 &rhs);
 inline bool operator==(const Vector3 &lhs, const Vector3 &rhs) { return equals(lhs, rhs); }
 inline bool operator!=(const Vector3 &lhs, const Vector3 &rhs) { return !equals(lhs, rhs); }
-inline hash_value hash(const Vector3 &o);
+inline RHash hash(const Vector3 &o);
 
 template <>
 struct type_id<Vector3>;
@@ -66,7 +66,7 @@ namespace rose {
 inline bool equals(const Vector4 &lhs, const Vector4 &rhs);
 inline bool operator==(const Vector4 &lhs, const Vector4 &rhs) { return equals(lhs, rhs); }
 inline bool operator!=(const Vector4 &lhs, const Vector4 &rhs) { return !equals(lhs, rhs); }
-inline hash_value hash(const Vector4 &o);
+inline RHash hash(const Vector4 &o);
 
 template <>
 struct type_id<Vector4>;
@@ -82,7 +82,7 @@ namespace rose {
 inline bool equals(const Matrix &lhs, const Matrix &rhs);
 inline bool operator==(const Matrix &lhs, const Matrix &rhs) { return equals(lhs, rhs); }
 inline bool operator!=(const Matrix &lhs, const Matrix &rhs) { return !equals(lhs, rhs); }
-inline hash_value hash(const Matrix &o);
+inline RHash hash(const Matrix &o);
 
 template <>
 struct type_id<Matrix>;
@@ -100,7 +100,7 @@ inline bool operator==(const Camera3D &lhs, const Camera3D &rhs) { return equals
 inline bool operator!=(const Camera3D &lhs, const Camera3D &rhs) { return !equals(lhs, rhs); }
 inline void serialize(Camera3D &o, ISerializer &s);
 inline void deserialize(Camera3D &o, IDeserializer &s);
-inline hash_value hash(const Camera3D &o);
+inline RHash hash(const Camera3D &o);
 
 template <>
 struct type_id<Camera3D>;
@@ -150,11 +150,11 @@ bool rose_parser_equals(const std::vector<T> &lhs, const std::vector<T> &rhs) {
 }
 
 template<class T>
-hash_value rose_parser_hash(const T & value) { return hash(value); }
+RHash rose_parser_hash(const T & value) { return hash(value); }
 
 template<class T>
-hash_value rose_parser_hash(const std::vector<T>& v) {
-  hash_value h = 0;
+RHash rose_parser_hash(const std::vector<T>& v) {
+  RHash h = 0;
   for (const auto& o : v) {
     h ^= rose_parser_hash(o);
     h = xor64(h);
@@ -176,8 +176,8 @@ inline bool rose::equals(const Color &lhs, const Color &rhs) {
     rose::rose_parser_equals(lhs.a, rhs.a);
 }
 
-inline rose::hash_value rose::hash(const Color &o) {
-  rose::hash_value h = 0;
+inline RHash rose::hash(const Color &o) {
+  RHash h = 0;
   h ^= rose::rose_parser_hash(o.r);
   h = rose::xor64(h);
   h ^= rose::rose_parser_hash(o.g);
@@ -190,7 +190,7 @@ inline rose::hash_value rose::hash(const Color &o) {
 
 template <>
 struct rose::type_id<Color> {
-    inline static rose::hash_value VALUE = 11375897551430744876ULL;
+    inline static RHash VALUE = 11375897551430744876ULL;
 };
 
 template <>
@@ -218,8 +218,8 @@ inline bool rose::equals(const Vector2 &lhs, const Vector2 &rhs) {
     rose::rose_parser_equals(lhs.y, rhs.y);
 }
 
-inline rose::hash_value rose::hash(const Vector2 &o) {
-  rose::hash_value h = 0;
+inline RHash rose::hash(const Vector2 &o) {
+  RHash h = 0;
   h ^= rose::rose_parser_hash(o.x);
   h = rose::xor64(h);
   h ^= rose::rose_parser_hash(o.y);
@@ -228,7 +228,7 @@ inline rose::hash_value rose::hash(const Vector2 &o) {
 
 template <>
 struct rose::type_id<Vector2> {
-    inline static rose::hash_value VALUE = 6016383611561840414ULL;
+    inline static RHash VALUE = 6016383611561840414ULL;
 };
 
 template <>
@@ -257,8 +257,8 @@ inline bool rose::equals(const Vector3 &lhs, const Vector3 &rhs) {
     rose::rose_parser_equals(lhs.z, rhs.z);
 }
 
-inline rose::hash_value rose::hash(const Vector3 &o) {
-  rose::hash_value h = 0;
+inline RHash rose::hash(const Vector3 &o) {
+  RHash h = 0;
   h ^= rose::rose_parser_hash(o.x);
   h = rose::xor64(h);
   h ^= rose::rose_parser_hash(o.y);
@@ -269,7 +269,7 @@ inline rose::hash_value rose::hash(const Vector3 &o) {
 
 template <>
 struct rose::type_id<Vector3> {
-    inline static rose::hash_value VALUE = 865855757241434760ULL;
+    inline static RHash VALUE = 865855757241434760ULL;
 };
 
 template <>
@@ -299,8 +299,8 @@ inline bool rose::equals(const Vector4 &lhs, const Vector4 &rhs) {
     rose::rose_parser_equals(lhs.w, rhs.w);
 }
 
-inline rose::hash_value rose::hash(const Vector4 &o) {
-  rose::hash_value h = 0;
+inline RHash rose::hash(const Vector4 &o) {
+  RHash h = 0;
   h ^= rose::rose_parser_hash(o.x);
   h = rose::xor64(h);
   h ^= rose::rose_parser_hash(o.y);
@@ -313,7 +313,7 @@ inline rose::hash_value rose::hash(const Vector4 &o) {
 
 template <>
 struct rose::type_id<Vector4> {
-    inline static rose::hash_value VALUE = 5281526937919724321ULL;
+    inline static RHash VALUE = 5281526937919724321ULL;
 };
 
 template <>
@@ -355,8 +355,8 @@ inline bool rose::equals(const Matrix &lhs, const Matrix &rhs) {
     rose::rose_parser_equals(lhs.m15, rhs.m15);
 }
 
-inline rose::hash_value rose::hash(const Matrix &o) {
-  rose::hash_value h = 0;
+inline RHash rose::hash(const Matrix &o) {
+  RHash h = 0;
   h ^= rose::rose_parser_hash(o.m0);
   h = rose::xor64(h);
   h ^= rose::rose_parser_hash(o.m4);
@@ -393,7 +393,7 @@ inline rose::hash_value rose::hash(const Matrix &o) {
 
 template <>
 struct rose::type_id<Matrix> {
-    inline static rose::hash_value VALUE = 17183949275312155998ULL;
+    inline static RHash VALUE = 17183949275312155998ULL;
 };
 
 template <>
@@ -464,8 +464,8 @@ inline void rose::deserialize(Camera3D &o, IDeserializer &s) {
   }
 }
 
-inline rose::hash_value rose::hash(const Camera3D &o) {
-  rose::hash_value h = 0;
+inline RHash rose::hash(const Camera3D &o) {
+  RHash h = 0;
   h ^= rose::rose_parser_hash(o.position);
   h = rose::xor64(h);
   h ^= rose::rose_parser_hash(o.target);
@@ -480,7 +480,7 @@ inline rose::hash_value rose::hash(const Camera3D &o) {
 
 template <>
 struct rose::type_id<Camera3D> {
-    inline static rose::hash_value VALUE = 17592964880055371367ULL;
+    inline static RHash VALUE = 17592964880055371367ULL;
 };
 
 template <>

@@ -88,7 +88,7 @@ inline void deserialize(Transform &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Transform &o, rose::hash_value & h) {
+inline void randomize(Transform &o, RHash & h) {
   randomize(o.mvt, h);
   randomize(o.position, h);
   randomize(o.rotation, h);
@@ -98,8 +98,8 @@ inline void randomize(Transform &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Transform &o) {
-    hash_value h = hash(o.mvt);
+  inline RHash hash(const Transform &o) {
+    RHash h = hash(o.mvt);
     h = xor64(h);
     h ^= hash(o.position);
     h = xor64(h);

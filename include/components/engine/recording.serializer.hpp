@@ -25,7 +25,7 @@ namespace rose {
 inline const char * to_string(const rose::RRecordingState & e);
 inline void serialize(rose::RRecordingState& o, ISerializer& s);
 inline void deserialize(rose::RRecordingState& o, IDeserializer& s);
-inline hash_value       hash(const rose::RRecordingState& o);
+inline RHash       hash(const rose::RRecordingState& o);
 } //namespace rose
 
 
@@ -69,11 +69,11 @@ bool rose_parser_equals(const std::vector<T> &lhs, const std::vector<T> &rhs) {
 }
 
 template<class T>
-hash_value rose_parser_hash(const T & value) { return hash(value); }
+RHash rose_parser_hash(const T & value) { return hash(value); }
 
 template<class T>
-hash_value rose_parser_hash(const std::vector<T>& v) {
-  hash_value h = 0;
+RHash rose_parser_hash(const std::vector<T>& v) {
+  RHash h = 0;
   for (const auto& o : v) {
     h ^= rose_parser_hash(o);
     h = xor64(h);
@@ -178,7 +178,7 @@ inline void rose::serialize(rose::RRecordingState& o, ISerializer& s) {
 inline void rose::deserialize(rose::RRecordingState& o, IDeserializer& s) {
   char str[64];
   deserialize(str, s);
-  rose::hash_value h = rose::hash(str);
+  RHash h = rose::hash(str);
   switch (h) {
   case rose::hash("NONE"): o = rose::RRecordingState::NONE; break;
   case rose::hash("Inactive"): o = rose::RRecordingState::Inactive; break;
@@ -196,7 +196,7 @@ inline void rose::deserialize(rose::RRecordingState& o, IDeserializer& s) {
   default: /*unknown value*/ break;
   }
 }
-inline rose::hash_value rose::hash(const rose::RRecordingState& o) {
-  return static_cast<rose::hash_value>(o);
+inline RHash rose::hash(const rose::RRecordingState& o) {
+  return static_cast<RHash>(o);
 }
 

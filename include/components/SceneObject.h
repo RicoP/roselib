@@ -97,7 +97,7 @@ inline void deserialize(SceneObject &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(SceneObject &o, rose::hash_value & h) {
+inline void randomize(SceneObject &o, RHash & h) {
   randomize(o.ID, h);
   randomize(o.collider, h);
   randomize(o.mesh, h);
@@ -108,8 +108,8 @@ inline void randomize(SceneObject &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const SceneObject &o) {
-    hash_value h = hash(o.ID);
+  inline RHash hash(const SceneObject &o) {
+    RHash h = hash(o.ID);
     h = xor64(h);
     h ^= hash(o.collider);
     h = xor64(h);

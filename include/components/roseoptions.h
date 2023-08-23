@@ -86,7 +86,7 @@ inline void deserialize(RoseOptions &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(RoseOptions &o, rose::hash_value & h) {
+inline void randomize(RoseOptions &o, RHash & h) {
   randomize(o.raytracer, h);
   randomize(o.rendering, h);
   randomize(o.window_position, h);
@@ -96,8 +96,8 @@ inline void randomize(RoseOptions &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const RoseOptions &o) {
-    hash_value h = hash(o.raytracer);
+  inline RHash hash(const RoseOptions &o) {
+    RHash h = hash(o.raytracer);
     h = xor64(h);
     h ^= hash(o.rendering);
     h = xor64(h);

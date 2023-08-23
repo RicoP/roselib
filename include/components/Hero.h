@@ -138,7 +138,7 @@ inline void deserialize(Hero &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Hero &o, rose::hash_value & h) {
+inline void randomize(Hero &o, RHash & h) {
   randomize(o.cam_offset, h);
   randomize(o.cam_speed, h);
   randomize(o.heroRunSpeed, h);
@@ -154,8 +154,8 @@ inline void randomize(Hero &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Hero &o) {
-    hash_value h = hash(o.cam_offset);
+  inline RHash hash(const Hero &o) {
+    RHash h = hash(o.cam_offset);
     h = xor64(h);
     h ^= hash(o.cam_speed);
     h = xor64(h);

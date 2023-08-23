@@ -61,8 +61,8 @@ inline void deserialize(WheelchairSystem &o, IDeserializer &s) {
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
 namespace ros {
-  inline rose::hash_value hash(WheelchairSystem &o) {
-    rose::hash_value h = rose::hash(o.object);
+  inline RHash hash(WheelchairSystem &o) {
+    RHash h = rose::hash(o.object);
     return h;
   }
 }
@@ -70,6 +70,6 @@ namespace ros {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(WheelchairSystem &o, rose::hash_value & h) {
+inline void randomize(WheelchairSystem &o, RHash & h) {
   randomize(o.object, h);
 }

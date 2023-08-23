@@ -86,7 +86,7 @@ inline void deserialize(Cubehero &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Cubehero &o, rose::hash_value & h) {
+inline void randomize(Cubehero &o, RHash & h) {
   randomize(o.destination, h);
   randomize(o.position, h);
   randomize(o.state, h);
@@ -96,8 +96,8 @@ inline void randomize(Cubehero &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Cubehero &o) {
-    hash_value h = hash(o.destination);
+  inline RHash hash(const Cubehero &o) {
+    RHash h = hash(o.destination);
     h = xor64(h);
     h ^= hash(o.position);
     h = xor64(h);

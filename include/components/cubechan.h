@@ -65,7 +65,7 @@ inline void deserialize(Cubechan &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Cubechan &o, rose::hash_value & h) {
+inline void randomize(Cubechan &o, RHash & h) {
   randomize(o.position, h);
 }
 } //namespace ecs
@@ -73,8 +73,8 @@ inline void randomize(Cubechan &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(Cubechan &o) {
-    hash_value h = hash(o.position);
+  inline RHash hash(Cubechan &o) {
+    RHash h = hash(o.position);
     return h;
   }
 } //namespace rose

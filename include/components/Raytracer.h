@@ -70,7 +70,7 @@ inline void deserialize(Raytracer &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Raytracer &o, rose::hash_value & h) {
+inline void randomize(Raytracer &o, RHash & h) {
   randomize(o.fragment, h);
   randomize(o.vertex, h);
 }
@@ -78,8 +78,8 @@ inline void randomize(Raytracer &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Raytracer &o) {
-    hash_value h = hash(o.fragment);
+  inline RHash hash(const Raytracer &o) {
+    RHash h = hash(o.fragment);
     h = xor64(h);
     h ^= hash(o.vertex);
     return h;

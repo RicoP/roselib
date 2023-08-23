@@ -67,10 +67,10 @@ namespace rose {
     assert(dest == o.data + 16);
   }
 
-  inline void randomize(GUID &o, rose::hash_value &h) {
-    static_assert(sizeof(hash_value) * 2 == sizeof(GUID));
+  inline void randomize(GUID &o, RHash &h) {
+    static_assert(sizeof(RHash) * 2 == sizeof(GUID));
     union {
-      hash_value h[2];
+      RHash h[2];
       GUID guid = {{0}};
     } u;
     next(h);
@@ -80,10 +80,10 @@ namespace rose {
     o = u.guid;
   }
 
-inline hash_value hash(GUID &o) {
-  static_assert(sizeof(hash_value) * 2 == sizeof(GUID));
+inline RHash hash(GUID &o) {
+  static_assert(sizeof(RHash) * 2 == sizeof(GUID));
   union {
-    hash_value h[2];
+    RHash h[2];
     GUID guid;
   } u;
   u.guid = o;

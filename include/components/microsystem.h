@@ -10,7 +10,7 @@
 namespace rose {
 struct MicroSystem {
   Camera camera;
-  rose::hash_value hash;
+  RHash hash;
   rose::string<64> name;
 
   bool equals(const MicroSystem & rhs) const {
@@ -75,7 +75,7 @@ inline void deserialize(MicroSystem &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(MicroSystem &o, rose::hash_value & h) {
+inline void randomize(MicroSystem &o, RHash & h) {
   randomize(o.camera, h);
   randomize(o.hash, h);
   randomize(o.name, h);
@@ -84,8 +84,8 @@ inline void randomize(MicroSystem &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const MicroSystem &o) {
-    hash_value h = hash(o.camera);
+  inline RHash hash(const MicroSystem &o) {
+    RHash h = hash(o.camera);
     h = xor64(h);
     h ^= hash(o.hash);
     h = xor64(h);

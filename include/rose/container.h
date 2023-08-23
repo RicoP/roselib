@@ -84,7 +84,7 @@ inline bool operator==(const vectorPOD<TN, T>& lhs, const vectorPOD<TM, T>& rhs)
 }
 
 template <size_t N, class T>
-inline rose::hash_value hash(const vectorPOD<N, T>& v); //TODO implement me
+inline RHash hash(const vectorPOD<N, T>& v); //TODO implement me
 
 template <class TKey, class TValue>
 struct CKeyValuePair {
@@ -94,7 +94,7 @@ struct CKeyValuePair {
 
 template <class T>
 struct RoseHasher {
-  constexpr rose::hash_value operator()(const T& val) const { return rose::hash(val); }
+  constexpr RHash operator()(const T& val) const { return rose::hash(val); }
 };
 
 // This Hashmap assumes all hashes are unique. There must be a overload
@@ -102,7 +102,7 @@ struct RoseHasher {
 // because the values will be reordered when new key-value pair is inserted.
 template <size_t MAX, class TKey, class TValue, class hasher = RoseHasher<TKey>>
 struct HashmapPOD {
-  typedef CKeyValuePair<rose::hash_value, TValue> KVP;
+  typedef CKeyValuePair<RHash, TValue> KVP;
 
   vectorPOD<MAX, KVP> map;
 
@@ -117,17 +117,17 @@ struct HashmapPOD {
 
   class search_comparator {
    public:
-    bool operator()(const KVP& a, const rose::hash_value& b) const { return a.key < b; }
-    bool operator()(const rose::hash_value& a, const KVP& b) const { return a < b.key; }
+    bool operator()(const KVP& a, const RHash& b) const { return a.key < b; }
+    bool operator()(const RHash& a, const KVP& b) const { return a < b.key; }
   };
 
-  KVP* binary_search(rose::hash_value hash) { return ROSE_CONTAINER_STD::lower_bound(map.begin(), map.end(), hash, search_comparator()); }
+  KVP* binary_search(RHash hash) { return ROSE_CONTAINER_STD::lower_bound(map.begin(), map.end(), hash, search_comparator()); }
 
   KVP& emplace_back(const TKey& key, const TValue& value) {
     return emplace_back(hashing(key), value);
   }
 
-  KVP& emplace_back(rose::hash_value hash, const TValue& value) {
+  KVP& emplace_back(RHash hash, const TValue& value) {
     auto kvpi = binary_search(hash);
     // when kvp points to first element that is bigger, so we must shift
     // all other elements back one element so we can fit in new KVP.
@@ -156,7 +156,7 @@ struct HashmapPOD {
   }
 
   TValue& getOrDefault(const TKey& key, const TValue& defaultValue) {
-    rose::hash_value hash = hashing(key);
+    RHash hash = hashing(key);
     auto kvpi = binary_search(hash);
     if (kvpi == map.end() || kvpi->key != hash) {
       return emplace_back(key, defaultValue).value;
@@ -166,7 +166,7 @@ struct HashmapPOD {
 
   TValue& operator[](const TKey& key) { return operator[](hashing(key)); }
 
-  TValue& operator[](rose::hash_value hash) {
+  TValue& operator[](RHash hash) {
     auto kvpi = binary_search(hash);
     assert(kvpi != map.end() && kvpi->key == hash);
     // C++ behaviour
@@ -178,7 +178,7 @@ struct HashmapPOD {
 
   const TValue& operator[](const TKey& key) const { return operator[](hashing(key)); }
 
-  const TValue& operator[](rose::hash_value hash) const {
+  const TValue& operator[](RHash hash) const {
     auto kvpi = binary_search(hash);
     assert(kvpi != map.end() && kvpi->key == hash);
     return kvpi->value;
@@ -196,6 +196,6 @@ namespace ros {
 
 //backwards compatible with old namespace
 template <size_t N, class T>
-inline rose::hash_value hash(const rose::vectorPOD<N, T>& v);  // TODO implement me
+inline RHash hash(const rose::vectorPOD<N, T>& v);  // TODO implement me
 
 }

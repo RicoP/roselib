@@ -12,7 +12,7 @@
 namespace rose {
 
 struct EventQueueContainerMetaInfo {
-  rose::hash_value event_id;
+  RHash event_id;
   std::size_t alligned_size;
 };
 

@@ -7,10 +7,10 @@ namespace rose::reflection {
     struct TypeInfo {
         // A unique id that should be unique for this type (for now simply 'hash(name)').
         // Could also be the hash of the absolute address of the header file.
-        rose::hash_value unique_id = 0;
+        RHash unique_id = 0;
         // a hash based on the members of that type. Changes when the members change.
         // TODO: rename to type_id
-        rose::hash_value member_hash = 0;
+        RHash member_hash = 0;
         // sizeof(T)
         std::size_t memory_footprint = 0;
         // memory alignment

@@ -94,7 +94,7 @@ inline void deserialize(Camera &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Camera &o, rose::hash_value & h) {
+inline void randomize(Camera &o, RHash & h) {
   randomize(o.far_plane, h);
   randomize(o.fov, h);
   randomize(o.lookat, h);
@@ -105,8 +105,8 @@ inline void randomize(Camera &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Camera &o) {
-    hash_value h = hash(o.far_plane);
+  inline RHash hash(const Camera &o) {
+    RHash h = hash(o.far_plane);
     h = xor64(h);
     h ^= hash(o.fov);
     h = xor64(h);

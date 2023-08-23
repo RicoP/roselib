@@ -89,7 +89,7 @@ inline void deserialize(RaylibAssetModel &o, IDeserializer &s) {
 }
 
 namespace rose {
-inline ::rose::hash_value hash(const RaylibAssetModel &o) {
+inline ::RHash hash(const RaylibAssetModel &o) {
     Path path;
     path = o.get_path();
 	return ::rose::hash(path);

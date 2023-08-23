@@ -42,15 +42,15 @@ inline void deserialize(TextureAssetRef &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(TextureAssetRef &o, rose::hash_value & h) {
+inline void randomize(TextureAssetRef &o, RHash & h) {
   randomize(o.id, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const TextureAssetRef &o) {
-    hash_value h = hash(o.id);
+  inline RHash hash(const TextureAssetRef &o) {
+    RHash h = hash(o.id);
     return h;
   }
 } //namespace rose

@@ -139,7 +139,7 @@ inline void deserialize(Scene &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Scene &o, rose::hash_value & h) {
+inline void randomize(Scene &o, RHash & h) {
   randomize(o.activeCamera, h);
   randomize(o.cameras, h);
   randomize(o.hero, h);
@@ -155,8 +155,8 @@ inline void randomize(Scene &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Scene &o) {
-    hash_value h = hash(o.activeCamera);
+  inline RHash hash(const Scene &o) {
+    RHash h = hash(o.activeCamera);
     h = xor64(h);
     h ^= hash(o.cameras);
     h = xor64(h);

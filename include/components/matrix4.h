@@ -42,15 +42,15 @@ inline void deserialize(matrix4 &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(matrix4 &o, rose::hash_value & h) {
+inline void randomize(matrix4 &o, RHash & h) {
   randomize(o.v, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const matrix4 &o) {
-    hash_value h = hash(o.v);
+  inline RHash hash(const matrix4 &o) {
+    RHash h = hash(o.v);
     return h;
   }
 } //namespace rose

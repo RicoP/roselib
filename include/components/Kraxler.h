@@ -154,7 +154,7 @@ inline void deserialize(Kraxler &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Kraxler &o, rose::hash_value & h) {
+inline void randomize(Kraxler &o, RHash & h) {
   randomize(o.barycentric, h);
   randomize(o.cam_offset, h);
   randomize(o.cam_speed, h);
@@ -172,8 +172,8 @@ inline void randomize(Kraxler &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Kraxler &o) {
-    hash_value h = hash(o.barycentric);
+  inline RHash hash(const Kraxler &o) {
+    RHash h = hash(o.barycentric);
     h = xor64(h);
     h ^= hash(o.cam_offset);
     h = xor64(h);

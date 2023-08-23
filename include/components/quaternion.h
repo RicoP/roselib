@@ -57,7 +57,7 @@ inline void deserialize(quaternion &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(quaternion &o, rose::hash_value & h) {
+inline void randomize(quaternion &o, RHash & h) {
   randomize(o.w, h);
   randomize(o.x, h);
   randomize(o.y, h);
@@ -67,8 +67,8 @@ inline void randomize(quaternion &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const quaternion &o) {
-    hash_value h = hash(o.w);
+  inline RHash hash(const quaternion &o) {
+    RHash h = hash(o.w);
     h = xor64(h);
     h ^= hash(o.x);
     h = xor64(h);

@@ -66,7 +66,7 @@ inline void deserialize(LocalDate &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(LocalDate &o, rose::hash_value & h) {
+inline void randomize(LocalDate &o, RHash & h) {
   randomize(o.date, h);
   randomize(o.time, h);
 }
@@ -74,8 +74,8 @@ inline void randomize(LocalDate &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const LocalDate &o) {
-    hash_value h = hash(o.date);
+  inline RHash hash(const LocalDate &o) {
+    RHash h = hash(o.date);
     h = xor64(h);
     h ^= hash(o.time);
     return h;

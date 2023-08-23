@@ -7,15 +7,15 @@
 #include <vector>
 #endif
 
+typedef unsigned long long RHash;
+static_assert(sizeof(RHash) == 8);
+static_assert(sizeof(RHash) == sizeof(size_t));
+static_assert(sizeof(RHash) == sizeof(void *));
+
 namespace rose {
-
-typedef unsigned long long hash_value;
-
-static_assert(sizeof(hash_value) == 8 && sizeof(hash_value) == sizeof(size_t));
-
 // http://www.jstatsoft.org/article/view/v008i14/xorshift.pdf page 4
 // https://en.wikipedia.org/wiki/Xorshift#xorshift*
-constexpr hash_value xor64(hash_value h) {
+constexpr RHash xor64(RHash h) {
   h ^= 88172645463325252ULL;  // xor with a constant so a seed of 0 will not result in a infinite loop
   h ^= h >> 12;
   h ^= h << 25;
@@ -24,34 +24,34 @@ constexpr hash_value xor64(hash_value h) {
 }
 
 // https://de.wikipedia.org/wiki/FNV_(Informatik)
-constexpr hash_value hash_fnv(const char* string) {
-  hash_value MagicPrime = 0x00000100000001b3ULL;
-  hash_value Hash = 0xcbf29ce484222325ULL;
+constexpr RHash hash_fnv(const char* string) {
+  RHash MagicPrime = 0x00000100000001b3ULL;
+  RHash Hash = 0xcbf29ce484222325ULL;
 
   for (; *string; string++) Hash = (Hash ^ *string) * MagicPrime;
 
   return Hash;
 }
 
-constexpr hash_value hash_fnv(const char* string, const char* end) {
-  hash_value MagicPrime = 0x00000100000001b3ULL;
-  hash_value Hash = 0xcbf29ce484222325ULL;
+constexpr RHash hash_fnv(const char* string, const char* end) {
+  RHash MagicPrime = 0x00000100000001b3ULL;
+  RHash Hash = 0xcbf29ce484222325ULL;
 
   for (; string != end; string++) Hash = (Hash ^ *string) * MagicPrime;
 
   return Hash;
 }
 
-constexpr void next(hash_value& h) { h = xor64(h); }
+constexpr void next(RHash& h) { h = xor64(h); }
 
-inline hash_value hash_from_clock() {
-  hash_value h = __rdtsc();
+inline RHash hash_from_clock() {
+  RHash h = __rdtsc();
   next(h);
   return h;
 }
 
 template <typename T>
-T next_range(hash_value& h, T min, T max) {
+T next_range(RHash& h, T min, T max) {
   if (max < min) return next_range(h, max, min);
   next(h);
   min += h % (max - min);
@@ -59,15 +59,15 @@ T next_range(hash_value& h, T min, T max) {
 }
 
 template <typename T1, typename T2>
-T1 next_range(hash_value& h, T1 min, T2 max) {
+T1 next_range(RHash& h, T1 min, T2 max) {
   return next_range<T1>(h, min, (T1)max);
 }
 
-inline float nextf(hash_value& h) {
+inline float nextf(RHash& h) {
   next(h);
 
   union {
-    hash_value u_x;
+    RHash u_x;
     float u_f;
   };
 
@@ -80,16 +80,16 @@ inline float nextf(hash_value& h) {
   return u_f - 1.0f;
 }
 
-inline float nextf(hash_value& h, float min, float max) {
+inline float nextf(RHash& h, float min, float max) {
   if (max < min) return nextf(h, max, min);
   return min + nextf(h) * (max - min);
 }
 
-inline int nexti(hash_value& h) {
+inline int nexti(RHash& h) {
   next(h);
 
   union {
-    hash_value u_x;
+    RHash u_x;
     int u_i;
   };
 
@@ -100,10 +100,10 @@ inline int nexti(hash_value& h) {
 
 namespace internal {
   template <class T>
-  inline hash_value hash_simple(T value) {
-    static_assert(sizeof(T) <= sizeof(hash_value), "sizeof(T) can't be bigger than sizeof(hash_value)");
+  inline RHash hash_simple(T value) {
+    static_assert(sizeof(T) <= sizeof(RHash), "sizeof(T) can't be bigger than sizeof(RHash)");
     union {
-      hash_value u_h;
+      RHash u_h;
       T u_f;
     };
     u_h = 0;
@@ -112,31 +112,31 @@ namespace internal {
   }
 }  // namespace internal
 
-constexpr hash_value hash(unsigned char v) { return v; }
-constexpr hash_value hash(unsigned int v) { return v; }
-constexpr hash_value hash(unsigned long int v) { return v; }
-constexpr hash_value hash(unsigned long long int v) { return v; }
-constexpr hash_value hash(unsigned short int v) { return v; }
+constexpr RHash hash(unsigned char v) { return v; }
+constexpr RHash hash(unsigned int v) { return v; }
+constexpr RHash hash(unsigned long int v) { return v; }
+constexpr RHash hash(unsigned long long int v) { return v; }
+constexpr RHash hash(unsigned short int v) { return v; }
 
-constexpr hash_value hash(bool v) { return v ? 1 : 0; }
+constexpr RHash hash(bool v) { return v ? 1 : 0; }
 
-inline hash_value hash(signed char v) { return internal::hash_simple(v); }
-inline hash_value hash(int v) { return internal::hash_simple(v); }
-inline hash_value hash(long int v) { return internal::hash_simple(v); }
-inline hash_value hash(long long int v) { return internal::hash_simple(v); }
-inline hash_value hash(short int v) { return internal::hash_simple(v); }
+inline RHash hash(signed char v) { return internal::hash_simple(v); }
+inline RHash hash(int v) { return internal::hash_simple(v); }
+inline RHash hash(long int v) { return internal::hash_simple(v); }
+inline RHash hash(long long int v) { return internal::hash_simple(v); }
+inline RHash hash(short int v) { return internal::hash_simple(v); }
 
-inline hash_value hash(double v) { return internal::hash_simple(v); }
-inline hash_value hash(float v) { return internal::hash_simple(v); }
-// inline hash_value hash(long double v) { return internal::hash_simple(v); }
-inline hash_value hash(wchar_t v) { return internal::hash_simple(v); }
+inline RHash hash(double v) { return internal::hash_simple(v); }
+inline RHash hash(float v) { return internal::hash_simple(v); }
+// inline RHash hash(long double v) { return internal::hash_simple(v); }
+inline RHash hash(wchar_t v) { return internal::hash_simple(v); }
 
-constexpr hash_value hash(char const* input) { return hash_fnv(input); }
+constexpr RHash hash(char const* input) { return hash_fnv(input); }
 
 #ifndef ROSE_NO_STL
 template<class T>
-constexpr hash_value hash(const std::vector<T>& v) {
-  hash_value h = 0;
+constexpr RHash hash(const std::vector<T>& v) {
+  RHash h = 0;
   for (auto& o : v) {
     h ^= hash(o);
     h = xor64(h);

@@ -37,15 +37,15 @@ static_assert(rose::hash(string_tail_end("Hello/foo/World", "/foo/")) == rose::h
 static_assert(rose::hash(string_tail_end("World", "/foo/")) == rose::hash("World"), "test failed");
 static_assert(rose::hash(string_tail_end(string_tail_end("Hello/foo/bar/World", "/foo/"), "/bar/")) == rose::hash("/World"), "test failed");
 
-constexpr rose::hash_value hash_path(const char* path, rose::hash_value line = 0) {
+constexpr RHash hash_path(const char* path, RHash line = 0) {
   path = string_tail_end(path, "/include/");
   path = string_tail_end(path, "/source/");
   path = string_tail_end(path, "\\include\\");
   path = string_tail_end(path, "\\source\\");
 
   // https://de.wikipedia.org/wiki/FNV_(Informatik)#FNV-Implementation,_64-bit-Schl%C3%BCssel
-  rose::hash_value MagicPrime = 0x00000100000001b3ULL;
-  rose::hash_value Hash = 0xcbf29ce484222325ULL;
+  RHash MagicPrime = 0x00000100000001b3ULL;
+  RHash Hash = 0xcbf29ce484222325ULL;
 
   for (; *path; path++) {
     char c = *path;
@@ -68,9 +68,9 @@ static_assert(hash_path("A/include/A") != hash_path("A/source/B"), "test failed"
 
 struct RoseSingletonImplBase : RNoCopy {};
 
-template <rose::hash_value UNIQUE_ID>
+template <RHash UNIQUE_ID>
 struct RoseSingletonImpl : RoseSingletonImplBase {
-    static inline rose::hash_value type_id = UNIQUE_ID;
+    static inline RHash type_id = UNIQUE_ID;
 
     /// all instances of RoseUtilityRegister must be virtual
     virtual ~RoseSingletonImpl() {}

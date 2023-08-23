@@ -12,9 +12,9 @@
 
 namespace subsystem_bindings {
 void * g_rose_internal_create_or_fetch_worldstate(int, const rose::reflection::TypeInfo & type);
-void g_rose_internal_register_singleton_class_instance(int, rose::hash_value type_id, void * instance);
-void g_rose_internal_unregister_singleton_class_instance(int, rose::hash_value type_id, void * instance);
-void * g_rose_internal_get_singleton_class_instance(int, rose::hash_value type_id);
+void g_rose_internal_register_singleton_class_instance(int, RHash type_id, void * instance);
+void g_rose_internal_unregister_singleton_class_instance(int, RHash type_id, void * instance);
+void * g_rose_internal_get_singleton_class_instance(int, RHash type_id);
 int g_rose_filewatcher_watch_path(int, const char * path);
 bool g_rose_filewatcher_unwatch_path(int, int id);
 }

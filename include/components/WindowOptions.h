@@ -59,15 +59,15 @@ inline void deserialize(WindowOptions &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(WindowOptions &o, rose::hash_value & h) {
+inline void randomize(WindowOptions &o, RHash & h) {
   randomize(o.popped, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const WindowOptions &o) {
-    hash_value h = hash(o.popped);
+  inline RHash hash(const WindowOptions &o) {
+    RHash h = hash(o.popped);
     return h;
   }
 } //namespace rose

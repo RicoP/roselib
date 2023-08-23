@@ -61,15 +61,15 @@ inline void deserialize(KraxlerSystemState &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(KraxlerSystemState &o, rose::hash_value & h) {
+inline void randomize(KraxlerSystemState &o, RHash & h) {
   randomize(o.object, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const KraxlerSystemState &o) {
-    hash_value h = hash(o.object);
+  inline RHash hash(const KraxlerSystemState &o) {
+    RHash h = hash(o.object);
     return h;
   }
 } //namespace rose

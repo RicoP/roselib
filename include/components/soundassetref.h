@@ -42,15 +42,15 @@ inline void deserialize(SoundAssetRef &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(SoundAssetRef &o, rose::hash_value & h) {
+inline void randomize(SoundAssetRef &o, RHash & h) {
   randomize(o.id, h);
 }
 
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const SoundAssetRef &o) {
-    hash_value h = hash(o.id);
+  inline RHash hash(const SoundAssetRef &o) {
+    RHash h = hash(o.id);
     return h;
   }
 } //namespace rose

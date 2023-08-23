@@ -86,7 +86,7 @@ inline void deserialize(Collider &o, IDeserializer &s) {
 ///////////////////////////////////////////////////////////////////
 // randomize                                                     //
 ///////////////////////////////////////////////////////////////////
-inline void randomize(Collider &o, rose::hash_value & h) {
+inline void randomize(Collider &o, RHash & h) {
   randomize(o.active, h);
   randomize(o.intersections, h);
   randomize(o.pivot, h);
@@ -96,8 +96,8 @@ inline void randomize(Collider &o, rose::hash_value & h) {
 ///////////////////////////////////////////////////////////////////
 // hashing                                                       //
 ///////////////////////////////////////////////////////////////////
-  inline hash_value hash(const Collider &o) {
-    hash_value h = hash(o.active);
+  inline RHash hash(const Collider &o) {
+    RHash h = hash(o.active);
     h = xor64(h);
     h ^= hash(o.intersections);
     h = xor64(h);
